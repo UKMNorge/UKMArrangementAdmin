@@ -20,22 +20,28 @@ class UKMArrangementAdmin extends Modul
     /**
      * Register hooks
      */
-    public static function hook(){
+    public static function hook() {
+        add_action('admin_menu', ['UKMArrangementAdmin', 'meny']);
+        self::scripts_and_styles(); // Attach scripts and styles hook
     }
 
     /**
-     * Rendre meny
-     *
+     * Render menu
      */
-    public static function meny(){
+    public static function meny() {
+        // Placeholder for menu rendering
     }
 
     /**
-     * Scripts and styles for non-network admin
-     *
+     * Scripts and styles for admin pages
      */
-    public static function scripts_and_styles(){
+    public static function scripts_and_styles() {
+        add_action('admin_enqueue_scripts', function () {
+            wp_enqueue_style('UKMArrangementAdminVueStyle', plugin_dir_url(__FILE__) . '/client/dist/assets/build.css', []);
+            wp_enqueue_script('UKMArrangementAdminVueJs', plugin_dir_url(__FILE__) . '/client/dist/assets/build.js', [], false, true);
+        });
     }
 }
 
 UKMArrangementAdmin::init(__DIR__);
+UKMArrangementAdmin::hook();
