@@ -37,6 +37,8 @@ class UKMArrangementAdmin extends Modul
      */
     public static function scripts_and_styles() {
         add_action('admin_enqueue_scripts', function () {
+        	wp_enqueue_style('UKMStatistikkVueMIDIcons', 'https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css');
+
             wp_enqueue_style('UKMArrangementAdminVueStyle', plugin_dir_url(__FILE__) . '/client/dist/assets/build.css', []);
             wp_enqueue_script('UKMArrangementAdminVueJs', plugin_dir_url(__FILE__) . '/client/dist/assets/build.js', [], false, true);
         });
