@@ -27,7 +27,7 @@
                         <!-- Påmeldingssystem -->
                         <v-tabs-window-item>
                             <div class="as-containercontainer">
-                                <h1>Komponent2</h1>
+                                <Innstillinger />
                             </div>
                         </v-tabs-window-item>
                         
@@ -72,6 +72,7 @@ import { useRouter, useRoute } from "vue-router";
 
 // Components
 import FestivalInfo from "./components/FestivalInfo.vue";
+import Innstillinger from "./components/Innstillinger.vue";
 // import KommuneStatistikk from './components/KommuneStatistikk.vue';
 // import FylkeStatistikk from './components/FylkeStatistikk.vue';
 // import GenerellStatistikk from './components/GenerellStatistikk.vue';
@@ -89,6 +90,7 @@ export default {
 
     components : {
         FestivalInfo : FestivalInfo,
+        Innstillinger : Innstillinger,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },

@@ -14,14 +14,16 @@
                     class="v-text-field-arr-sys"
                     variant="outlined">
                 </v-text-field>
-                    
-                <v-text-field 
-                    v-model="sted"
-                    label="Hvor skal arrangementet være?" 
-                    prepend-icon="mdi-map-marker"
-                    class="v-text-field-arr-sys"
-                    variant="outlined">
-                </v-text-field>
+
+                <div class="as-margin-top-space-2">
+                    <v-text-field 
+                        v-model="sted"
+                        label="Hvor skal arrangementet være?" 
+                        prepend-icon="mdi-map-marker"
+                        class="v-text-field-arr-sys"
+                        variant="outlined">
+                    </v-text-field>
+                </div>
 
                 <div class="as-display-flex">
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
@@ -156,7 +158,7 @@ export default {
             };
 
             var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-            
+
             if(results != null && results.success == true) {
                 this.spaInteraction.showMessage('Lagret', 'Arrangementet er lagret', 'success');
             } else {
