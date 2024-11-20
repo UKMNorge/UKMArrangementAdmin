@@ -8,6 +8,7 @@
                 </div>
 
                 <v-text-field 
+                    v-model="navn"
                     label="Navn på arrangementet" 
                     prepend-icon="mdi-tooltip-edit"
                     class="v-text-field-arr-sys"
@@ -15,6 +16,7 @@
                 </v-text-field>
                     
                 <v-text-field 
+                    v-model="sted"
                     label="Hvor skal arrangementet være?" 
                     prepend-icon="mdi-map-marker"
                     class="v-text-field-arr-sys"
@@ -47,6 +49,17 @@
                     item-value="id" 
                     >
                 </v-select>
+
+                <div class="as-margin-top-space-2">
+                    <v-btn
+                        class="v-btn-as v-btn-success"
+                        rounded="large"
+                        size="large"
+                        @click="save()"
+                        variant="outlined">
+                        Lagre
+                    </v-btn>
+                </div>
             </div>
         </div>
         <div class="col-xs-4">
@@ -91,11 +104,12 @@ export default {
         VueDatePicker : VueDatePicker
     },
     mounted() {
-
+        this.init();
 
     },
     data() {
         return {
+            spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
             statusTyper: [
                 new StatusType(0, 'Gjennomføres som planlagt'),
                 new StatusType(1, 'Gjennomføres men har viktig melding'),
@@ -104,6 +118,8 @@ export default {
             selectedStatus: 0, // Initialize as null first
             myObject : new MyObject(),
             timelineItems : [] as TimelineItem[],
+            navn : '' as string,
+            sted : '' as string,
             startDate : null as any,
             endDate : null as any,
         }
@@ -112,16 +128,41 @@ export default {
         handleDateChange() {
             this.getTimelineItems();
         },
-        init(){
-            this.startDate = new Date("2025-05-23T08:30:00")
-            console.log(this.generateDaysBetweenDates());
+        async init(){
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'getFestivalInfo',
+            };
 
-            console.log('ChildComponent.vue: init()');
-            var myObjMethod = this.myObject.sayHello();
-            console.log('From MyObject: ' + myObjMethod);
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+
+            if(results != null) {
+                this.startDate = new Date(results.start * 1000);
+                this.endDate = new Date(results.end * 1000);
+                this.navn = results.navn;
+                this.sted = results.sted;
+                this.selectedStatus = results.status == 'videresending_kanskje' ? 1 : (results.status == 'videresending_sikkert' ? 2 : 0);
+            }
+        },
+        async save() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'saveFestivalInfo',
+                navn: this.navn,
+                sted: this.sted,
+                start: this.startDate.getTime() / 1000,
+                end: this.endDate.getTime() / 1000,
+                status: this.selectedStatus,
+            };
+
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
             
-            // Kall super kompontent
-            this.IaMsuperMethod();
+            if(results != null && results.success == true) {
+                this.spaInteraction.showMessage('Lagret', 'Arrangementet er lagret', 'success');
+            } else {
+                this.spaInteraction.showMessage('Feil', 'Kunne ikke lagre arrangementet', 'error');
+            }
+        
         },
         getTimelineItems() {
             this.timelineItems = [];

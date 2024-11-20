@@ -22,7 +22,33 @@ class UKMArrangementAdmin extends Modul
      */
     public static function hook() {
         add_action('admin_menu', ['UKMArrangementAdmin', 'meny']);
+        add_action('wp_ajax_UKMArrangementAdmin_ajax', ['UKMArrangementAdmin', 'ajax']);
+
         // self::scripts_and_styles(); // Attach scripts and styles hook
+    }
+    /**
+     * Håndterer alle ajax-kall
+     *
+     * @return void
+     */
+    public static function ajax()
+    {   
+        $reques_method = $_SERVER['REQUEST_METHOD'];
+        $subAction = $_REQUEST['controller'];
+
+        try {
+            require_once('ajax/' . $subAction . '.ajax.php');
+
+        // Noe gikk galt
+        } catch (Exception $e) {
+            static::addResponseData('success', false);
+            static::addResponseData('message', $e->getMessage());
+            static::addResponseData('code', $e->getCode());
+        }
+
+        $data = json_encode(static::getResponseData());
+        echo $data;
+        die();
     }
 
     /**
