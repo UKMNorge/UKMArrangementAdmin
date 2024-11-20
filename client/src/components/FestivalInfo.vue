@@ -134,7 +134,7 @@ export default {
             var dayCount = 1;
             for(let day of this.generateDaysBetweenDates()) {
                 this.timelineItems.push(
-                    new TimelineItem('day'+dayCount, 'Dag '+dayCount, this.getDateFormat(day, true), '', 'No description', '', false)
+                    new TimelineItem('day'+dayCount, 'Dag '+dayCount, this.getDateFormat(day, true), '', '', '', false)
                 );
                 dayCount++;
             }
@@ -158,7 +158,7 @@ export default {
             const hour = String(date.getHours()).padStart(2, '0');
             const minute = String(date.getMinutes()).padStart(2, '0');
 
-            return `${formattedDate}` + (withoutHours == false ? `${hour}:${minute}` : '');
+            return `${formattedDate}` + (withoutHours == false ? ` ${hour}:${minute}` : '');
         },
         generateDaysBetweenDates() {
             if(this.startDate == null || this.endDate == null) {
