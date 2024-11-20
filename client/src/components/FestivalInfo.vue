@@ -24,11 +24,11 @@
                 <div class="as-display-flex">
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
                         <p class="v-label title-dato">Startdato</p>
-                        <VueDatePicker :calendar-icon="'mdi-clock-end'" v-model="startDate" />
+                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="startDate" />
                     </div>
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-left-space-2">
                         <p class="v-label title-dato">Sluttdato</p>
-                        <VueDatePicker v-model="endDate" />
+                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="endDate" />
                     </div>
                 </div>
 
@@ -52,9 +52,9 @@
         <div class="col-xs-4">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
 
-                <v-timeline :key="timelineKey" density="compact" side="end">
-                     <template v-for="tlItem in timelineItemsComputed" v-bind:key="tlItem.id">
-                        <v-timeline-item class="mb-4" dot-color="red" size="small">
+                <v-timeline density="compact" side="end">
+                     <template v-for="tlItem in getTimelineItems()" v-bind:key="tlItem.id">
+                        <v-timeline-item class="mb-4" :dot-color="tlItem.finished ? 'blue' : 'grey'" size="small">
                             <div :class="tlItem.finished ? 'finished-item' : ''" class="d-flex justify-space-between flex-grow-1 item-timeline">
                                 <div style="width: 100%">
                                     <h5>{{ tlItem.title }}</h5>
@@ -68,16 +68,7 @@
                         </v-timeline-item>
                      </template>
                 </v-timeline>
-
-
             </div>
-            <pre>
-                {{ startDate }} (Type: {{ typeof startDate }})
-                {{ endDate }}
-            </pre>
-            <pre>
-                {{ this.timelineKey }}
-            </pre>
         </div>
     </div>
 </template>
@@ -99,19 +90,9 @@ export default {
     components: {
         VueDatePicker : VueDatePicker
     },
-    computed: {
-        timelineItemsComputed() {
-            return this.getTimelineItems();
-        },
-    },
     mounted() {
-        // Initialize the date (optional)
-        // setTimeout(() => {
-        //     alert('ChildComponent.vue: mounted()');
-        //     this.init();
-        // }, 10000);
-        console.log('this');
-        console.log(this);
+
+
     },
     data() {
         return {
@@ -125,13 +106,11 @@ export default {
             timelineItems : [] as TimelineItem[],
             startDate : null as any,
             endDate : null as any,
-            timelineKey : 0,
         }
     },
     methods : {
-        handleDateChange(value: any) {
-            this.timelineKey += 1;
-            console.log('handleDateChange: ' + value);
+        handleDateChange() {
+            this.getTimelineItems();
         },
         init(){
             this.startDate = new Date("2025-05-23T08:30:00")
@@ -155,9 +134,7 @@ export default {
             var dayCount = 1;
             for(let day of this.generateDaysBetweenDates()) {
                 this.timelineItems.push(
-                    // new TimelineItem('day'+dayCount, 'Dag '+dayCount, '15:26 EDT', '17:26 EDT', 'No description', '', false)
-                new TimelineItem('40'+dayCount, 'Festivalen er ferdig '+dayCount, this.getDateFormat(this.endDate), '', '120 innslag <br>172 personer deltok', '', false),
-
+                    new TimelineItem('day'+dayCount, 'Dag '+dayCount, this.getDateFormat(day, true), '', 'No description', '', false)
                 );
                 dayCount++;
             }
@@ -166,11 +143,9 @@ export default {
                 new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.endDate), '', '120 innslag <br>172 personer deltok', '', false),
             );
 
-            console.log(this.timelineItems);
-
             return this.timelineItems;
         },
-        getDateFormat(date : Date) : string {
+        getDateFormat(date : Date, withoutHours : boolean = false) : string {
             if(date == null) {
                 return '';
             }
@@ -183,14 +158,15 @@ export default {
             const hour = String(date.getHours()).padStart(2, '0');
             const minute = String(date.getMinutes()).padStart(2, '0');
 
-            return `${formattedDate} ${hour}:${minute}`;
+            return `${formattedDate}` + (withoutHours == false ? `${hour}:${minute}` : '');
         },
         generateDaysBetweenDates() {
             if(this.startDate == null || this.endDate == null) {
                 return [];
             }
-            const start = this.startDate;
-            const end = this.endDate;
+
+            const start = new Date(this.startDate);
+            const end = new Date(this.endDate);
             const days = [];
             for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
                 days.push(new Date(date));

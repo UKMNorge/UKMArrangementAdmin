@@ -64,3 +64,8 @@ app.use(hljsVuePlugin);
 app.use(vuetify);
 
 app.mount("#app");
+
+
+// Remove general meny item in WP
+// This is a hack to remove the general meny item in WP
+(<any>window).$(".wp-submenu.wp-submenu-wrap .wp-first-item[href='index.php']").detach();
