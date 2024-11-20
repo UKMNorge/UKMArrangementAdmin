@@ -24,7 +24,8 @@
     "uuid": "^9.0.0",
     "vue": "^3.2.47",
     "vue-router": "^4.3.2",
-    "vuetify": "^3.6.4"
+    "vuetify": "^3.6.4",
+    "@vuepic/vue-datepicker": "^10.0.0"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",

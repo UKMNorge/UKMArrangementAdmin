@@ -1,4 +1,4 @@
-export class StatusType {
+class StatusType {
     id: number;
     title: string
 
@@ -7,3 +7,5 @@ export class StatusType {
         this.title = title;
     }
 }
+
+export default StatusType;

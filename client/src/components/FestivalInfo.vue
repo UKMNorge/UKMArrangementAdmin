@@ -1,7 +1,7 @@
 <template>
-    <div class="as-container container">
+    <div class="as-container main-container">
         <!-- Navn på arrangementet -->
-        <div class="col-xs-12">
+        <div class="col-xs-8">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="as-margin-bottom-space-3">
                     <h4 class="">Detaljer</h4>
@@ -22,15 +22,13 @@
                 </v-text-field>
 
                 <div class="as-display-flex">
-                    <div class="col-xs-6 nop-impt as-margin-right-space-2">
-                        <DateTimePicker
-                            icon="mdi-clock-start"
-                        ></DateTimePicker>
+                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
+                        <p class="v-label title-dato">Startdato</p>
+                        <VueDatePicker :calendar-icon="'mdi-clock-end'" v-model="startDate" />
                     </div>
-                    <div class="col-xs-6 nop-impt as-margin-left-space-2">
-                        <DateTimePicker
-                            icon="mdi-clock-end"
-                        ></DateTimePicker>
+                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-left-space-2">
+                        <p class="v-label title-dato">Sluttdato</p>
+                        <VueDatePicker v-model="endDate" />
                     </div>
                 </div>
 
@@ -51,46 +49,209 @@
                 </v-select>
             </div>
         </div>
-    </div>
-  </template>
-  <script lang="ts">
-  import MyObject from './../objects/myObject'
-  import MainComponent from './MainComponent.vue';
-  import DateTimePicker from './Utils/DateTimePicker.vue';
-  import {StatusType} from './../objects/StatusType';
+        <div class="col-xs-4">
+            <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
 
-  export default {
-      extends : MainComponent,
-      props: {
-          title: String,
-      },
-      components: {
-          DateTimePicker : DateTimePicker
-      },
-      data() {
-          return {
-                statusTyper: [
-                    new StatusType(0, 'Gjennomføres som planlagt'),
-                    new StatusType(1, 'Gjennomføres men har viktig melding'),
-                    new StatusType(2, 'Avlyses'),
-                ] as StatusType[],
-                selectedStatus: 0, // Initialize as null first
-                myObject : new MyObject()
-          }
-      },
-      mounted() {
-        this.selectedStatus = 0; // Set this after `statusTyper` is defined
-      },
-      methods : {
-          init(){
-              console.log('ChildComponent.vue: init()');
-              var myObjMethod = this.myObject.sayHello();
-              console.log('From MyObject: ' + myObjMethod);
-              
-              // Kall super kompontent
-              this.IaMsuperMethod();
-          }
-      }
-  }
-  
-  </script>
+                <v-timeline :key="timelineKey" density="compact" side="end">
+                     <template v-for="tlItem in timelineItemsComputed" v-bind:key="tlItem.id">
+                        <v-timeline-item class="mb-4" dot-color="red" size="small">
+                            <div :class="tlItem.finished ? 'finished-item' : ''" class="d-flex justify-space-between flex-grow-1 item-timeline">
+                                <div style="width: 100%">
+                                    <h5>{{ tlItem.title }}</h5>
+                                    <p v-html="tlItem.description"></p>
+
+                                </div>
+                            <div class="date-timeline flex-shrink-0">
+                                {{ tlItem.getDateToString() }}
+                            </div>
+                            </div>
+                        </v-timeline-item>
+                     </template>
+                </v-timeline>
+
+
+            </div>
+            <pre>
+                {{ startDate }} (Type: {{ typeof startDate }})
+                {{ endDate }}
+            </pre>
+            <pre>
+                {{ this.timelineKey }}
+            </pre>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+import MyObject from './../objects/myObject'
+import MainComponent from './MainComponent.vue';
+// import DateTimePicker from './Utils/DateTimePicker.vue';
+import StatusType from './../objects/StatusType';
+import TimelineItem from './../objects/TimelineItem';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
+export default {
+    extends : MainComponent,
+    props: {
+        title: String,
+    },
+    components: {
+        VueDatePicker : VueDatePicker
+    },
+    computed: {
+        timelineItemsComputed() {
+            return this.getTimelineItems();
+        },
+    },
+    mounted() {
+        // Initialize the date (optional)
+        // setTimeout(() => {
+        //     alert('ChildComponent.vue: mounted()');
+        //     this.init();
+        // }, 10000);
+        console.log('this');
+        console.log(this);
+    },
+    data() {
+        return {
+            statusTyper: [
+                new StatusType(0, 'Gjennomføres som planlagt'),
+                new StatusType(1, 'Gjennomføres men har viktig melding'),
+                new StatusType(2, 'Avlyses'),
+            ] as StatusType[],
+            selectedStatus: 0, // Initialize as null first
+            myObject : new MyObject(),
+            timelineItems : [] as TimelineItem[],
+            startDate : null as any,
+            endDate : null as any,
+            timelineKey : 0,
+        }
+    },
+    methods : {
+        handleDateChange(value: any) {
+            this.timelineKey += 1;
+            console.log('handleDateChange: ' + value);
+        },
+        init(){
+            this.startDate = new Date("2025-05-23T08:30:00")
+            console.log(this.generateDaysBetweenDates());
+
+            console.log('ChildComponent.vue: init()');
+            var myObjMethod = this.myObject.sayHello();
+            console.log('From MyObject: ' + myObjMethod);
+            
+            // Kall super kompontent
+            this.IaMsuperMethod();
+        },
+        getTimelineItems() {
+            this.timelineItems = [];
+
+            this.timelineItems = [
+                new TimelineItem('0', 'Videresending er åpen', '', '', '25 innslag ble videresendt', 'grey', true),
+                new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.startDate), '', 'grey', true),
+            ];
+            
+            var dayCount = 1;
+            for(let day of this.generateDaysBetweenDates()) {
+                this.timelineItems.push(
+                    // new TimelineItem('day'+dayCount, 'Dag '+dayCount, '15:26 EDT', '17:26 EDT', 'No description', '', false)
+                new TimelineItem('40'+dayCount, 'Festivalen er ferdig '+dayCount, this.getDateFormat(this.endDate), '', '120 innslag <br>172 personer deltok', '', false),
+
+                );
+                dayCount++;
+            }
+
+            this.timelineItems.push(
+                new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.endDate), '', '120 innslag <br>172 personer deltok', '', false),
+            );
+
+            console.log(this.timelineItems);
+
+            return this.timelineItems;
+        },
+        getDateFormat(date : Date) : string {
+            if(date == null) {
+                return '';
+            }
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(date.getDate()).padStart(2, '0');
+            const formattedDate = `${day}-${month}`;
+
+            // Extract the hour (HH format)
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+
+            return `${formattedDate} ${hour}:${minute}`;
+        },
+        generateDaysBetweenDates() {
+            if(this.startDate == null || this.endDate == null) {
+                return [];
+            }
+            const start = this.startDate;
+            const end = this.endDate;
+            const days = [];
+            for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+                days.push(new Date(date));
+            }
+            return days;
+        }
+    }
+}
+</script>
+<style scoped>
+.title-item-timeline {
+    margin-top: 6px;
+}
+.item-timeline {
+    width: 100%;
+    opacity: .35;
+}
+.item-timeline.finished-item {
+    opacity: 1;
+}
+.date-timeline {
+    max-width: 100px;
+    text-align: right !important;
+    font-weight: 300;
+    font-size: 12px;
+}
+.main-container {
+    height: 100vh;
+}
+.title-dato {
+    margin-left: 36px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+</style>
+
+<style>
+.v-timeline-item__body  {
+    width: 100%;
+}
+.v-timeline--vertical.v-timeline.v-timeline--side-end .v-timeline-item .v-timeline-item__body {
+    /* padding-top: 20px !important; */
+    padding-inline-start: 18px !important;
+}
+.finfo-date-picker input {
+    border-radius: var(--radius-normal) !important;
+    padding: 14px 16px !important;
+    font-size: 14px;
+    border-color: #aaaaaa !important;
+    margin-left: 36px !important;
+    background: #f4f4f4 !important;
+}
+.finfo-date-picker .dp__input_wrap {
+    max-width: 290px;
+    
+}
+.finfo-date-picker .dp--clear-btn {
+    right: -35px !important
+}
+.finfo-date-picker .dp__input_icon.dp__input_icons {
+    margin-left: -8px !important;
+}
+    
+</style>
