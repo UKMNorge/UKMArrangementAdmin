@@ -89,10 +89,6 @@ export default {
         return {
             spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
 
-            antallDeltakere: false,
-            openPamelding: false,
-            openVideresending: false,
-
             loadingAntallDeltakere: false as any,
             loadingApenPamelding: false as any,
             loadingApenVideresending: false as any,

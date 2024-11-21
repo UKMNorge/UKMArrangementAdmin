@@ -34,7 +34,7 @@
                         <!-- Generell statistikk -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Komponent3</h1>
+                                <Pamelding :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
                         
@@ -74,6 +74,7 @@ import Arrangement from "./objects/Arrangement";
 // Components
 import FestivalInfo from "./components/FestivalInfo.vue";
 import Innstillinger from "./components/Innstillinger.vue";
+import Pamelding from "./components/Pamelding.vue";
 // import KommuneStatistikk from './components/KommuneStatistikk.vue';
 // import FylkeStatistikk from './components/FylkeStatistikk.vue';
 // import GenerellStatistikk from './components/GenerellStatistikk.vue';
@@ -95,6 +96,7 @@ export default {
     components : {
         FestivalInfo : FestivalInfo,
         Innstillinger : Innstillinger,
+        Pamelding : Pamelding,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },
