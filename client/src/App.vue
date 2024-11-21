@@ -18,42 +18,42 @@
                 <div class="as-margin-top-space-4">
                     <v-tabs-window v-model="tab">
                         <!-- Kommunestatistikk -->
-                        <v-tabs-window-item>
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <FestivalInfo />
+                                <FestivalInfo :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
                         
                         <!-- Påmeldingssystem -->
-                        <v-tabs-window-item>
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <Innstillinger />
+                                <Innstillinger :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
                         
                         <!-- Generell statistikk -->
-                        <v-tabs-window-item>
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
                                 <h1>Komponent3</h1>
                             </div>
                         </v-tabs-window-item>
                         
                         <!--  -->
-                        <v-tabs-window-item>
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
                                 <h1>Komponent4</h1>
                             </div>
                         </v-tabs-window-item>
 
                         <!--  -->
-                        <v-tabs-window-item>
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
                                 <h1>Komponent5</h1>
                             </div>
                         </v-tabs-window-item>
                         
                         <!--  -->
-                        <v-tabs-window-item>
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
                                 <h1>Komponent6</h1>
                             </div>
@@ -70,6 +70,7 @@
 import { defineComponent, ref, watch, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import Arrangement from "./objects/Arrangement";
 // Components
 import FestivalInfo from "./components/FestivalInfo.vue";
 import Innstillinger from "./components/Innstillinger.vue";
@@ -82,9 +83,12 @@ export default {
     data() {
         return {
             tab : null as any,
-            spaInteraction : (<any>window).spaInteraction,
+            spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
             isFylkeAdmin : false as boolean,
             isSuperadmin : false as boolean,
+
+            arrangement : Arrangement.createEmpty() as Arrangement,
+            arrangementLoaded : false as boolean,
         }
     },
 
@@ -97,7 +101,7 @@ export default {
     
 
     mounted: function () {
-        this.initAuthorizations();
+        this.initArrangement();
     },
     created() {
         const router = useRouter();
@@ -117,9 +121,36 @@ export default {
     },
     
     methods: {
-        initAuthorizations() {
-            this.isFylkeAdmin = this.erFylkeAdmin();
-            this.isSuperadmin = this.erSuperAdmin();
+        async initArrangement() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'getArrangement',
+            };
+
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+
+            if(results != null) {
+                let status = results.status == 'videresending_kanskje' ? 1 : (results.status == 'videresending_sikkert' ? 2 : 0);
+
+                this.arrangement = new Arrangement(
+                    results.id,
+                    results.name,
+                    results.place,
+                    results.startDate,
+                    results.endDate,
+                    status,
+                    results.antallDeltakere,
+                    results.openPamelding,
+                    results.openVideresending,
+                );
+            }else {
+                this.spaInteraction.showMessage('Feil', 'Kunne ikke hente innstillinger', 'error');
+            }
+
+            console.log('this.arrangement');
+            console.log(this.arrangement);
+            this.arrangementLoaded = true;
+
         },
         erFylkeAdmin() : boolean {
             for(let omradeItem of (<any>window).ukm_statistikk_klient.omrade) {

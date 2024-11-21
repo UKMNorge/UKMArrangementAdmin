@@ -1,14 +1,14 @@
 <template>
     <div class="as-container main-container">
         <!-- Navn på arrangementet -->
-        <div class="col-xs-8">
+        <div v-if="arrangement != undefined" class="col-xs-8">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
-                <div class="as-margin-bottom-space-3">
+                <div class="as-margin-bottom-space-4">
                     <h4 class="">Detaljer</h4>
                 </div>
 
                 <v-text-field 
-                    v-model="navn"
+                    v-model="arrangement.name"
                     label="Navn på arrangementet" 
                     prepend-icon="mdi-tooltip-edit"
                     class="v-text-field-arr-sys"
@@ -17,7 +17,7 @@
 
                 <div class="as-margin-top-space-2">
                     <v-text-field 
-                        v-model="sted"
+                        v-model="arrangement.place"
                         label="Hvor skal arrangementet være?" 
                         prepend-icon="mdi-map-marker"
                         class="v-text-field-arr-sys"
@@ -28,25 +28,25 @@
                 <div class="as-display-flex">
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
                         <p class="v-label title-dato">Startdato</p>
-                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="startDate" />
+                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.startDate" />
                     </div>
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-left-space-2">
                         <p class="v-label title-dato">Sluttdato</p>
-                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="endDate" />
+                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.endDate" />
                     </div>
                 </div>
 
-                <div class="as-margin-top-space-3 as-margin-bottom-space-3">
+                <div class="as-margin-top-space-4 as-margin-bottom-space-3">
                     <h4 class="">Status</h4>
                 </div>
 
                 <v-select
-                    label="Velg type" 
+                    label="Status" 
                     variant="outlined" 
-                    :prepend-icon="selectedStatus == 0 ? 'mdi-check-circle' : selectedStatus == 1 ? 'mdi-alert-circle' : 'mdi-close-circle'"
+                    :prepend-icon="arrangement.status == 0 ? 'mdi-check-circle' : arrangement.status == 1 ? 'mdi-alert-circle' : 'mdi-close-circle'"
                     class="v-autocomplete-arr-sys" 
                     :items="statusTyper" 
-                    v-model="selectedStatus"
+                    v-model="arrangement.status"
                     item-text="title"
                     item-value="id" 
                     >
@@ -91,22 +91,27 @@
 <script lang="ts">
 import MyObject from './../objects/myObject'
 import MainComponent from './MainComponent.vue';
+import type Arrangement from './../objects/Arrangement';
 // import DateTimePicker from './Utils/DateTimePicker.vue';
 import StatusType from './../objects/StatusType';
 import TimelineItem from './../objects/TimelineItem';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import type { PropType } from 'vue';  // Use type-only import for PropType
+
 
 export default {
     extends : MainComponent,
     props: {
-        title: String,
+        arrangement: {
+            type: Object as PropType<Arrangement>,
+            required: true
+        },
     },
     components: {
         VueDatePicker : VueDatePicker
     },
     mounted() {
-        this.init();
 
     },
     data() {
@@ -120,58 +125,24 @@ export default {
             selectedStatus: 0, // Initialize as null first
             myObject : new MyObject(),
             timelineItems : [] as TimelineItem[],
-            navn : '' as string,
-            sted : '' as string,
-            startDate : null as any,
-            endDate : null as any,
+        
+
+            arrangement : this.arrangement,
         }
     },
     methods : {
         handleDateChange() {
             this.getTimelineItems();
         },
-        async init(){
-            var data = {
-                action: 'UKMArrangementAdmin_ajax',
-                controller: 'getFestivalInfo',
-            };
-
-            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-
-            if(results != null) {
-                this.startDate = new Date(results.start * 1000);
-                this.endDate = new Date(results.end * 1000);
-                this.navn = results.navn;
-                this.sted = results.sted;
-                this.selectedStatus = results.status == 'videresending_kanskje' ? 1 : (results.status == 'videresending_sikkert' ? 2 : 0);
-            }
-        },
-        async save() {
-            var data = {
-                action: 'UKMArrangementAdmin_ajax',
-                controller: 'saveFestivalInfo',
-                navn: this.navn,
-                sted: this.sted,
-                start: this.startDate.getTime() / 1000,
-                end: this.endDate.getTime() / 1000,
-                status: this.selectedStatus,
-            };
-
-            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-
-            if(results != null && results.success == true) {
-                this.spaInteraction.showMessage('Lagret', 'Arrangementet er lagret', 'success');
-            } else {
-                this.spaInteraction.showMessage('Feil', 'Kunne ikke lagre arrangementet', 'error');
-            }
-        
+        save() {
+                this.arrangement.save();
         },
         getTimelineItems() {
             this.timelineItems = [];
 
             this.timelineItems = [
                 new TimelineItem('0', 'Videresending er åpen', '', '', '25 innslag ble videresendt', 'grey', true),
-                new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.startDate), '', 'grey', true),
+                new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.arrangement.startDate), '', 'grey', true),
             ];
             
             var dayCount = 1;
@@ -183,15 +154,12 @@ export default {
             }
 
             this.timelineItems.push(
-                new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.endDate), '', '120 innslag <br>172 personer deltok', '', false),
+                new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.arrangement.endDate), '', '120 innslag <br>172 personer deltok', '', false),
             );
 
             return this.timelineItems;
         },
         getDateFormat(date : Date, withoutHours : boolean = false) : string {
-            if(date == null) {
-                return '';
-            }
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
             const day = String(date.getDate()).padStart(2, '0');
@@ -204,12 +172,12 @@ export default {
             return `${formattedDate}` + (withoutHours == false ? ` ${hour}:${minute}` : '');
         },
         generateDaysBetweenDates() {
-            if(this.startDate == null || this.endDate == null) {
+            if(this.arrangement.startDate == null || this.arrangement.endDate == null) {
                 return [];
             }
 
-            const start = new Date(this.startDate);
-            const end = new Date(this.endDate);
+            const start = new Date(this.arrangement.startDate);
+            const end = new Date(this.arrangement.endDate);
             const days = [];
             for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
                 days.push(new Date(date));

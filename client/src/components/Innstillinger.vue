@@ -2,7 +2,7 @@
     <div class="as-container main-container">
         <!-- Navn på arrangementet -->
         <div class="col-xs-12">
-            <div class="as-card-1 as-padding-space-3">
+            <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
                     <h4 class="">Innstillinger</h4>
                 </div>
@@ -15,10 +15,10 @@
                     <div class="switch">
                         <v-switch
                             :loading="loadingAntallDeltakere"
-                            v-model="antallDeltakere"
+                            v-model="arrangement.antallDeltakere"
                             color="primary"
                             :label="antallDeltakere ? 'På' : 'Av'"
-                            @change="handleSwitchChange(0, antallDeltakere)"
+                            @change="handleSwitchChange(0, arrangement.antallDeltakere)"
                         ></v-switch>
                     </div>
                 </div>
@@ -31,10 +31,10 @@
                     <div class="switch">
                         <v-switch
                         :loading="loadingApenPamelding"
-                        v-model="openPamelding"
+                        v-model="arrangement.openPamelding"
                         color="primary"
                         :label="openPamelding ? 'På' : 'Av'"
-                        @change="handleSwitchChange(1, openPamelding)"
+                        @change="handleSwitchChange(1, arrangement.openPamelding)"
                         ></v-switch>
                     </div>
                 </div>
@@ -47,26 +47,13 @@
                     <div class="switch">
                         <v-switch
                             :loading="loadingApenVideresending"
-                            v-model="openVideresending"
+                            v-model="arrangement.openVideresending"
                             color="primary"
                             :label="openVideresending ? 'På' : 'Av'"
-                            @change="handleSwitchChange(2, openVideresending)"
+                            @change="handleSwitchChange(2, arrangement.openVideresending)"
                         ></v-switch>
                     </div>
                 </div>
-
-                
-
-                <!-- <div class="as-margin-top-space-4">
-                    <v-btn
-                        class="v-btn-as v-btn-success"
-                        rounded="large"
-                        size="large"
-                        @click="save()"
-                        variant="outlined">
-                        Lagre
-                    </v-btn>
-                </div> -->
             </div>
         </div>
         
@@ -80,17 +67,22 @@ import StatusType from '../objects/StatusType';
 import TimelineItem from '../objects/TimelineItem';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import type Arrangement from './../objects/Arrangement';
+import type { PropType } from 'vue';  // Use type-only import for PropType
+
 
 export default {
     extends : MainComponent,
     props: {
-        title: String,
+        arrangement: {
+            type: Object as PropType<Arrangement>,
+            required: true
+        },
     },
     components: {
         VueDatePicker : VueDatePicker
     },
     mounted() {
-        this.init();
 
     },
     data() {
@@ -105,6 +97,8 @@ export default {
             loadingApenPamelding: false as any,
             loadingApenVideresending: false as any,
 
+            arrangement : this.arrangement,
+
             savingOngoing: false,
         }
     },
@@ -112,9 +106,9 @@ export default {
         handleSwitchChange(type: number, value: boolean) {
             // Do not allow saving if a save is ongoing
             if(this.savingOngoing) {
-                if(type == 0) this.antallDeltakere = !value;
-                if(type == 1) this.openPamelding = !value;
-                if(type == 2) this.openVideresending = !value;
+                if(type == 0) this.arrangement.antallDeltakere = !value;
+                if(type == 1) this.arrangement.openPamelding = !value;
+                if(type == 2) this.arrangement.openVideresending = !value;
                 return;
             }
             switch(type) {
@@ -131,23 +125,6 @@ export default {
 
             this.save();
         },
-        async init(){
-            var data = {
-                action: 'UKMArrangementAdmin_ajax',
-                controller: 'getInnstillinger',
-            };
-
-            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-
-            if(results != null) {
-                this.antallDeltakere = results.antallDeltakere;
-                this.openPamelding = results.openPamelding;
-                this.openVideresending = results.openVideresending;
-            }else {
-                this.spaInteraction.showMessage('Feil', 'Kunne ikke hente innstillinger', 'error');
-            }
-            
-        },
         resetLoading() {
             this.loadingAntallDeltakere = false;
             this.loadingApenPamelding = false;
@@ -155,25 +132,12 @@ export default {
         },
         async save() {
             this.savingOngoing = true;
-            var data = {
-                action: 'UKMArrangementAdmin_ajax',
-                controller: 'saveInnstillinger',
-                antallDeltakere: this.antallDeltakere,
-                openPamelding: this.openPamelding,
-                openVideresending: this.openVideresending,
-            };
-
-            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-            
-            this.savingOngoing = false;
-            if(results != null && results.success == true) {
-                this.spaInteraction.showMessage('Lagret', 'Arrangementet er lagret', 'success');
-            } else {
-                this.spaInteraction.showMessage('Feil', 'Kunne ikke lagre arrangementet', 'error');
+           
+            let res = await this.arrangement.save();
+            if(res) {                
+                this.resetLoading();
+                this.savingOngoing = false;
             }
-
-            this.resetLoading();
-            
         },
     }
 }
