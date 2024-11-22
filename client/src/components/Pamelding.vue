@@ -7,9 +7,7 @@
                     <h4 class="">Påmeldingsfrist for de som vil vise frem noe</h4>
                 </div>
 
-                <div>
-                    <p>{{ selectedTyperVise }}</p>
-                    
+                <div>                    
                     <div v-for="type in availableTypesViseFrem" class="type-item-innslag-checkbox" :key="type.id">
                         <v-checkbox
                             v-model="selectedTyperVise"
@@ -43,9 +41,7 @@
                     <h4 class="">Påmeldingsfrist for de som vil vise frem noe</h4>
                 </div>
 
-                <div>
-                    <p>{{ selectedTyperJobbe }}</p>
-                    
+                <div>                    
                     <div v-for="type in availableTypesJobbe" class="type-item-innslag-checkbox" :key="type.id">
                         <v-checkbox
                             v-model="selectedTyperJobbe"
