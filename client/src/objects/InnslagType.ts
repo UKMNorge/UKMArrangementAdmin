@@ -4,6 +4,7 @@ class InnslagType {
     title: string;
     antall: number;
     isPerson: boolean;
+    loading: boolean = false;
 
     constructor(id : string, key : string, title : string, antall: number, isPerson: boolean) {
         this.id = id;
@@ -11,7 +12,6 @@ class InnslagType {
         this.title = title;
         this.antall = antall;
         this.isPerson = isPerson;
-
     }
 }
 

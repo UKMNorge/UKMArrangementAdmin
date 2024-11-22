@@ -17,7 +17,7 @@
                             :loading="loadingAntallDeltakere"
                             v-model="arrangement.antallDeltakere"
                             color="primary"
-                            :label="antallDeltakere ? 'På' : 'Av'"
+                            :label="arrangement.antallDeltakere ? 'På' : 'Av'"
                             @change="handleSwitchChange(0, arrangement.antallDeltakere)"
                         ></v-switch>
                     </div>
@@ -33,7 +33,7 @@
                         :loading="loadingApenPamelding"
                         v-model="arrangement.openPamelding"
                         color="primary"
-                        :label="openPamelding ? 'På' : 'Av'"
+                        :label="arrangement.openPamelding ? 'På' : 'Av'"
                         @change="handleSwitchChange(1, arrangement.openPamelding)"
                         ></v-switch>
                     </div>
@@ -49,7 +49,7 @@
                             :loading="loadingApenVideresending"
                             v-model="arrangement.openVideresending"
                             color="primary"
-                            :label="openVideresending ? 'På' : 'Av'"
+                            :label="arrangement.openVideresending ? 'På' : 'Av'"
                             @change="handleSwitchChange(2, arrangement.openVideresending)"
                         ></v-switch>
                     </div>
