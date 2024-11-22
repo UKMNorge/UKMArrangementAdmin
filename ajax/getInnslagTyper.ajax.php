@@ -23,6 +23,17 @@ try{
 
 
 $retArr = [];
+$antall_per_type = [];
+
+foreach (Typer::getAlleInkludertSkjulteTyper() as $type) {
+    $antall_personer = 0;
+    foreach ($arrangement->getInnslag()->getAllByType($type) as $innslag) {
+        $antall_personer += $innslag->getPersoner()->getAntall();
+        $innslag->getPersoner()->getAll();
+        $innslag_arr[] = $innslag;
+    }
+    $antall_per_type[$type->getKey()] = $antall_personer;
+}
 
 
 foreach($alleTyper as $type) {
@@ -30,6 +41,7 @@ foreach($alleTyper as $type) {
         'id' => $type->getId(),
         'key' => $type->getKey(),
         'navn' => $type->getNavn(),
+        'antall' => $antall_per_type[$type->getKey()],
         'erEnkeltPerson' => $type->erEnkeltPerson(),
         'erViseFrem' => $type->erViseFrem(),
         'isSelected' => $arrangement->getInnslagTyper()->har($type) != null
