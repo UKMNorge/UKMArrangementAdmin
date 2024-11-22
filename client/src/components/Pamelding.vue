@@ -60,7 +60,7 @@
                             <v-chip
                                 :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
                                 color="primary">
-                                {{ type.antall}} {{ type.isPerson ? 'personer' : 'innslag'}}
+                                {{ type.antall }} {{ type.isPerson ? 'person' + (type.antall == 1 ? '' : 'er') : 'innslag'}}
                             </v-chip>
                         </div>
                     </div>
