@@ -25,7 +25,7 @@
                         <div class="chip-antall">
                             <v-chip
                                 :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
-                                color="primary">
+                                :color="selectedTyperVise.includes(type.key) ? 'primary' : '#bebebe'">
                                 {{ type.antall}} {{ type.isPerson ? 'personer' : 'innslag'}}
                             </v-chip>
                         </div>
@@ -59,7 +59,7 @@
                         <div class="chip-antall">
                             <v-chip
                                 :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
-                                color="primary">
+                                :color="selectedTyperJobbe.includes(type.key) ? 'primary' : '#bebebe'">
                                 {{ type.antall }} {{ type.isPerson ? 'person' + (type.antall == 1 ? '' : 'er') : 'innslag'}}
                             </v-chip>
                         </div>
