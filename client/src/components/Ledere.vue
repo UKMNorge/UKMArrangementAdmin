@@ -4,11 +4,11 @@
         <div class="col-xs-12">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Videresendt ledere</h4>
+                    <h4 class="">Videresendte ledere</h4>
                 </div>
 
-                <v-list v-for="leder in ledere" :key="leder.id" lines="three">
-                    <v-list-item class="leder-item">
+                <v-list class="alle-ledere" v-for="(leder, index) in ledere" :key="leder.id" lines="three">
+                    <v-list-item class="leder-item" :class="{ 'last-leader-item': index === ledere.length - 1 }">
                         <template v-slot:prepend>
                             <v-icon size="40px" color="#386e9e">{{ leder.getIcon() }}</v-icon>
                         </template>
@@ -20,17 +20,20 @@
                                     <p><b>Epost:</b> {{ leder.epost }}</p>
                                     <p><b>Mobil:</b> {{ leder.mobil }}</p>
                                     <p><b>Type:</b> {{ leder.type }}</p>
-                                    <p><b>Beskrivelse:</b> {{ leder.beskrivelse }}</p>
                                 </div>
                                 <div>
                                     <p><b>Arrangement:</b> {{ leder.fraArrangementNavn }}</p>
                                     <p><b>Fylke:</b> {{ leder.fraFylkeNavn }}</p>
                                 </div>
+                                <hr>
+                                <div>
+                                    <p v-if="leder.beskrivelse == null || leder.beskrivelse.length < 1">Ingen beskrivelse</p>
+                                    <p v-else><b>Beskrivelse:</b> {{ leder.beskrivelse }}</p>
+                                </div>
                             </div>
 
                             <!-- Godkjenning -->
                             <div class="godkjenning-div">
-                                <p>{{ leder.godkjent }}</p>
                                 <v-switch 
                                     color="primary"
                                     v-model="leder.godkjent" 
@@ -120,12 +123,22 @@ export default {
         },
         async save(leder : Leder) {
             this.savingOngoing = true;
-           
-            let res = await leder.save();
-
-            if(res) {                
-                this.savingOngoing = false;
+        
+            let res;
+            try {
+                res = await leder.save();
+            } catch(e) {
+                this.spaInteraction.showMessage('Feil', 'En feil oppstod under lagring av godkjenning', 'error');
             }
+
+            if(res.success == true) {
+                this.spaInteraction.showMessage('Lagret', 'Godkjenningsstatus er lagret', 'success');
+            } else {
+                this.spaInteraction.showMessage('Feil', 'En feil oppstod under lagring av godkjenning', 'error');
+            }
+
+     
+            this.savingOngoing = false;
         },
     }
 }
@@ -135,8 +148,9 @@ export default {
 .godkjenning-div {
     margin: auto;
     margin-right: 0;
-    min-width: 150px;
+    padding-left: calc(var(--initial-space-box) * 4);
     display: flex;
+    min-width: 150px;
 }
 .godkjenning-div .godkjenning-switch {
     margin: auto;
@@ -144,6 +158,10 @@ export default {
 }
 .leder-item {
     border-bottom: solid 1px var(--color-primary-grey-light);
-    padding-bottom: 32px !important;
+    padding-bottom: calc(var(--initial-space-box) * 4) !important;
+}
+.leder-item.last-leader-item {
+    border-bottom: none;
+    padding-bottom: calc(var(--initial-space-box) * 2) !important;
 }
 </style>
