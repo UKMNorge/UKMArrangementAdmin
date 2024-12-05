@@ -142,7 +142,7 @@ export default {
 <style scoped>
 .switch-item-select {
     display: flex;
-    border-bottom: solid 1px #bebebe;
+    border-bottom: solid 1px var(--color-primary-grey-light);
 }
 .switch-item-select.no-border-item {
     border-bottom: none;
