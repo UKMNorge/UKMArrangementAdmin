@@ -1,0 +1,149 @@
+<template>
+    <div class="as-container main-container">
+        <!-- Navn på arrangementet -->
+        <div class="col-xs-12">
+            <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
+                <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
+                    <h4 class="">Videresendt ledere</h4>
+                </div>
+
+                <v-list v-for="leder in ledere" :key="leder.id" lines="three">
+                    <v-list-item class="leder-item">
+                        <template v-slot:prepend>
+                            <v-icon size="40px" color="#386e9e">{{ leder.getIcon() }}</v-icon>
+                        </template>
+                        <!-- Leder info -->
+                        <div class="as-display-flex">
+                            <div>
+                                <div>
+                                    <h4>{{ leder.navn ? leder.navn : 'Navn er ikke definert' }}</h4>
+                                    <p><b>Epost:</b> {{ leder.epost }}</p>
+                                    <p><b>Mobil:</b> {{ leder.mobil }}</p>
+                                    <p><b>Type:</b> {{ leder.type }}</p>
+                                    <p><b>Beskrivelse:</b> {{ leder.beskrivelse }}</p>
+                                </div>
+                                <div>
+                                    <p><b>Arrangement:</b> {{ leder.fraArrangementNavn }}</p>
+                                    <p><b>Fylke:</b> {{ leder.fraFylkeNavn }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Godkjenning -->
+                            <div class="godkjenning-div">
+                                <p>{{ leder.godkjent }}</p>
+                                <v-switch 
+                                    color="primary"
+                                    v-model="leder.godkjent" 
+                                    class="godkjenning-switch" 
+                                    :label="leder.godkjent == null ? 'Ikke besvart' : (leder.godkjent == true ? 'Godkjent' : 'Ikke godkjent')" 
+                                    :indeterminate="leder.godkjent == null"
+                                    :loading="leder.loading ? 'warning' : false"
+                                    @change="handleSwitchChange(leder)"
+                                    >
+                                </v-switch>
+                            </div>                            
+                        </div>
+                    </v-list-item>
+                </v-list>
+
+            </div>
+
+        </div>
+        
+    </div>
+</template>
+
+<script lang="ts">
+import MainComponent from './MainComponent.vue';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import type Arrangement from './../objects/Arrangement';
+import type { PropType } from 'vue';  // Use type-only import for PropType
+import Leder from './../objects/Leder';
+
+
+export default {
+    extends : MainComponent,
+    props: {
+        arrangement: {
+            type: Object as PropType<Arrangement>,
+            required: true
+        },
+    },
+    components: {
+        VueDatePicker : VueDatePicker
+    },
+    mounted() {
+        this.fetchLedere();
+    },
+    data() {
+        return {
+            spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
+            savingOngoing: false,
+            ledere : [] as Leder[],
+        }
+    },
+    methods : {
+        handleSwitchChange(leder: Leder) {
+            // Do not allow saving if a save is ongoing
+            if(this.savingOngoing) {
+                leder.godkjent = !leder.godkjent;
+                return;
+            }
+
+            this.save(leder);
+        },
+        async fetchLedere() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'getLedere',
+            };
+
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+            
+            for(let leder of results) {
+                this.ledere.push(
+                    new Leder(
+                        leder.id, 
+                        leder.navn, 
+                        leder.epost, 
+                        leder.mobil, 
+                        leder.type, 
+                        leder.fraArrangementNavn, 
+                        leder.fraFylkeNavn, 
+                        leder.beskrivelse, 
+                        leder.godkjent == null ? null : (leder.godkjent == 1 ? true : false)
+                    )
+                );
+            }
+
+
+        },
+        async save(leder : Leder) {
+            this.savingOngoing = true;
+           
+            let res = await leder.save();
+
+            if(res) {                
+                this.savingOngoing = false;
+            }
+        },
+    }
+}
+</script>
+
+<style scoped>
+.godkjenning-div {
+    margin: auto;
+    margin-right: 0;
+    min-width: 150px;
+    display: flex;
+}
+.godkjenning-div .godkjenning-switch {
+    margin: auto;
+    margin-right: 0;
+}
+.leder-item {
+    border-bottom: solid 1px var(--color-primary-grey-light);
+    padding-bottom: 32px !important;
+}
+</style>

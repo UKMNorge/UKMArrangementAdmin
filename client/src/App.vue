@@ -9,6 +9,7 @@
                 <v-tab text="Festivalinfo"></v-tab>
                 <v-tab text="Innstillinger"></v-tab>
                 <v-tab text="Påmelding"></v-tab>
+                <v-tab text="Ledere/sykerom"></v-tab>
                 <v-tab text="Kontaktpersoner"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
             </v-tabs>
@@ -37,7 +38,14 @@
                                 <Pamelding :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
-                        
+
+                        <!--  -->
+                        <v-tabs-window-item v-if="arrangementLoaded">
+                            <div class="as-containercontainer">
+                                <Ledere :arrangement="arrangement" />
+                            </div>
+                        </v-tabs-window-item>
+
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
@@ -75,6 +83,7 @@ import Arrangement from "./objects/Arrangement";
 import FestivalInfo from "./components/FestivalInfo.vue";
 import Innstillinger from "./components/Innstillinger.vue";
 import Pamelding from "./components/Pamelding.vue";
+import Ledere from "./components/Ledere.vue";
 // import KommuneStatistikk from './components/KommuneStatistikk.vue';
 // import FylkeStatistikk from './components/FylkeStatistikk.vue';
 // import GenerellStatistikk from './components/GenerellStatistikk.vue';
@@ -97,6 +106,7 @@ export default {
         FestivalInfo : FestivalInfo,
         Innstillinger : Innstillinger,
         Pamelding : Pamelding,
+        Ledere : Ledere,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },
@@ -124,34 +134,10 @@ export default {
     
     methods: {
         async initArrangement() {
-            var data = {
-                action: 'UKMArrangementAdmin_ajax',
-                controller: 'getArrangement',
-            };
-
-            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-
-            if(results != null) {
-                let status = results.status == 'videresending_kanskje' ? 1 : (results.status == 'videresending_sikkert' ? 2 : 0);
-
-                this.arrangement = new Arrangement(
-                    results.id,
-                    results.name,
-                    results.place,
-                    results.startDate,
-                    results.endDate,
-                    status,
-                    results.antallDeltakere,
-                    results.openPamelding,
-                    results.openVideresending,
-                );
-            }else {
-                this.spaInteraction.showMessage('Feil', 'Kunne ikke hente innstillinger', 'error');
-            }
-
-            console.log('this.arrangement');
-            console.log(this.arrangement);
-            this.arrangementLoaded = true;
+            Arrangement.load().then((arrangement: Arrangement) => {
+                this.arrangement = arrangement;
+                this.arrangementLoaded = true;
+            });
 
         },
         erFylkeAdmin() : boolean {
