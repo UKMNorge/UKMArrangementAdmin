@@ -9,7 +9,6 @@ use UKMNorge\Arrangement\Videresending\Ledere\Ledere;
 $handleCall = new HandleAPICall([],[], ['GET', 'POST'], false);
 
 $tilArrangement = null;
-$alleTyper = null;
 
 try{
     $tilArrangement = new Arrangement(get_option('pl_id'));
