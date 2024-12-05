@@ -48,6 +48,9 @@
                         </div>
                     </v-list-item>
                 </v-list>
+                <div v-if="ledere.length < 1">
+                    <p>Ingen ledere er videresendt</p>
+                </div>
 
             </div>
 
