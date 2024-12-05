@@ -1,4 +1,3 @@
-// Create class with properties and methods
 class Arrangement {
     id: string;
     name: string;
@@ -9,12 +8,25 @@ class Arrangement {
     antallDeltakere: boolean;
     openPamelding: boolean;
     openVideresending: boolean;
+    viseFrist: Date;
+    jobbeFrist: Date;
 
     saveOngoing: boolean = false;
     spaInteraction: any = (<any>window).spaInteraction; // Definert i main.ts
 
+    constructor(id: string,
+            name: string,
+            place: string,
+            startDate: number,
+            endDate: number,
+            status: number,
+            antallDeltakere: boolean,
+            openPamelding: boolean,
+            openVideresending: boolean,
+            viseFrist: number,
+            jobbeFrist: number
+        ) {
 
-    constructor(id: string, name: string, place: string, startDate: number, endDate: number, status: number, antallDeltakere: boolean, openPamelding: boolean, openVideresending: boolean) {
         this.id = id;
         this.name = name;
         this.place = place;
@@ -24,6 +36,8 @@ class Arrangement {
         this.antallDeltakere = antallDeltakere;
         this.openPamelding = openPamelding;
         this.openVideresending = openVideresending;
+        this.viseFrist = new Date(viseFrist * 1000);
+        this.jobbeFrist = new Date(jobbeFrist * 1000);
     }
 
     static createEmpty(): Arrangement {
@@ -36,10 +50,43 @@ class Arrangement {
             0,            // Default status
             false,        // Default for antallDeltakere
             false,        // Default for openPamelding
-            false         // Default for openVideresending
+            false,         // Default for openVideresending
+            0,
+            0,
         );
     }
+    public static async load() : Promise<Arrangement> {
+        var data = {
+            action: 'UKMArrangementAdmin_ajax',
+            controller: 'getArrangement',
+        };
 
+        var results = await (<any>window).spaInteraction.runAjaxCall('/', 'POST', data);
+
+        if(results != null) {
+            let status = results.status == 'videresending_kanskje' ? 1 : (results.status == 'videresending_sikkert' ? 2 : 0);
+
+            let arrangement = new Arrangement(
+                results.id,
+                results.name,
+                results.place,
+                results.startDate,
+                results.endDate,
+                status,
+                results.antallDeltakere,
+                results.openPamelding,
+                results.openVideresending,
+                results.viseFrist,
+                results.jobbeFrist,
+            );
+
+            return arrangement;
+        }else {
+            (<any>window).spaInteraction.showMessage('Feil', 'Kunne ikke hente innstillinger', 'error');
+        }
+
+        return Arrangement.createEmpty();        
+    }
     public async save() {
         this.saveOngoing = true;
         
@@ -54,7 +101,9 @@ class Arrangement {
             status: this.status,
             antallDeltakere: this.antallDeltakere,
             openPamelding: this.openPamelding,
-            openVideresending: this.openVideresending
+            openVideresending: this.openVideresending,
+            viseFrist: this.viseFrist.getTime() / 1000,
+            jobbeFrist: this.jobbeFrist.getTime() / 1000,
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
