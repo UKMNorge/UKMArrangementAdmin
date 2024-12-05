@@ -35,7 +35,7 @@ foreach($tilArrangement->getVideresending()->getAvsendere() as $avsender) {
     $ledere = new Ledere($fra->getId(), $tilArrangement->getId());
     foreach($ledere->getAll() as $leder) {
         if($lederId == $leder->getId()) {
-            $leder->setGodkjent($godkjenning == 'true');
+            $leder->setGodkjent($godkjenning == "true" ? true : false);
             $isSaved = Write::save( $leder );
             continue;
         }
