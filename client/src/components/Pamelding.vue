@@ -4,10 +4,22 @@
         <div class="col-xs-6">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Påmeldingsfrist for de som vil vise frem noe</h4>
+                    <h4 class="">Kreative og Kulturelle</h4>
                 </div>
 
-                <div>                    
+                <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
+                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
+                        <div class="as-margin-bottom-space-2">
+                            <p class="v-label title-dato">Påmeldingsfrist for de som vil vise frem noe</p>
+                        </div>
+                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.viseFrist" />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="as-margin-top-space-3 as-margin-bottom-space-2">
+                        <h4 class="">Typer</h4>
+                    </div>               
                     <div v-for="type in availableTypesViseFrem" class="type-item-innslag-checkbox" :key="type.id">
                         <v-checkbox
                             v-model="selectedTyperVise"
@@ -38,10 +50,22 @@
         <div class="col-xs-6">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Påmeldingsfrist for de som vil vise frem noe</h4>
+                    <h4 class="">Bidrag og Organisering</h4>
                 </div>
 
-                <div>                    
+                <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
+                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
+                        <div class="as-margin-bottom-space-2">
+                            <p class="v-label">Påmeldingsfrist for de som vil bidra som noe</p>
+                        </div>
+                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.jobbeFrist" />
+                    </div>
+                </div>
+
+                <div>     
+                    <div class="as-margin-top-space-3 as-margin-bottom-space-2">
+                        <h4 class="">Typer</h4>
+                    </div>               
                     <div v-for="type in availableTypesJobbe" class="type-item-innslag-checkbox" :key="type.id">
                         <v-checkbox
                             v-model="selectedTyperJobbe"
@@ -73,6 +97,7 @@
 
 <script lang="ts">
 import MainComponent from './MainComponent.vue';
+import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import type Arrangement from './../objects/Arrangement';
 import type { PropType } from 'vue';  // Use type-only import for PropType
@@ -87,7 +112,7 @@ export default {
         },
     },
     components: {
-
+        VueDatePicker : VueDatePicker
     },
     mounted() {
         this.fetchTypes();
@@ -106,6 +131,9 @@ export default {
         }
     },
     methods : {
+        handleDateChange() {
+
+        },
         handleCheckboxChange(type : InnslagType, isViseFrem : boolean) {
             let key = type.key;
             if(this.savingOngoing) {
@@ -197,6 +225,11 @@ export default {
 .loading-checkbox {
     margin-top: 20px;
     margin-left: 10px;
+}
+.title-dato {
+    margin-left: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 </style>
 
