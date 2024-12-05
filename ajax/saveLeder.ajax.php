@@ -8,7 +8,7 @@ use UKMNorge\Arrangement\Videresending\Ledere\Write;
 
 $handleCall = new HandleAPICall(['lederId', 'godkjenning'],[], ['GET', 'POST'], false);
 
-$godkjenning = $handleCall->getArgument('name') == 'true';
+$godkjenning = $handleCall->getArgument('godkjenning') == true || $handleCall->getArgument('godkjenning') == 'true';
 $lederId = $handleCall->getArgument('lederId');
 
 
