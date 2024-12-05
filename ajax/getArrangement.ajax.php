@@ -26,7 +26,9 @@ $retArr = [
     "status" => $arrangement->getMetaValue('avlys'),
     "antallDeltakere" => $arrangement->erDeltakereSynlig(),
     "openPamelding" => $arrangement->getPamelding() == 'apen',
-    "openVideresending" => $arrangement->harVideresending()
+    "openVideresending" => $arrangement->harVideresending(),
+    "viseFrist" => $arrangement->getFrist1()->getTimestamp(),
+    "jobbeFrist" => $arrangement->getFrist2()->getTimestamp(),
 ];
 
 $handleCall->sendToClient($retArr);
