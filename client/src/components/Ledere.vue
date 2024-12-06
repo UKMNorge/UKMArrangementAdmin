@@ -52,6 +52,15 @@
                     <p>Ingen ledere er videresendt</p>
                 </div>
 
+                <div class="ledere-beskjed-rapporter" >
+                    <PermanentNotification 
+                        typeNotification="info" 
+                        :tittel="`Oversikt over videresendte ledere`" 
+                        :isHTML="true"
+                        :description="`<p>Full oversikt over ledere finnes på <a href='?page=UKMrapporter&action=rapportVue&rapportId=ledereOversikt'>rapporter</a></p>`" 
+                    />
+                </div>
+
             </div>
 
         </div>
@@ -65,6 +74,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import type Arrangement from './../objects/Arrangement';
 import type { PropType } from 'vue';  // Use type-only import for PropType
 import Leder from './../objects/Leder';
+import { PermanentNotification } from 'ukm-components-vue3';
 
 
 export default {
@@ -76,7 +86,8 @@ export default {
         },
     },
     components: {
-        VueDatePicker : VueDatePicker
+        VueDatePicker : VueDatePicker,
+        PermanentNotification : PermanentNotification
     },
     mounted() {
         this.fetchLedere();
@@ -166,5 +177,10 @@ export default {
 .leder-item.last-leader-item {
     border-bottom: none;
     padding-bottom: calc(var(--initial-space-box) * 2) !important;
+}
+</style>
+<style>
+.ledere-beskjed-rapporter > div > div {
+    margin-bottom: 0 !important;
 }
 </style>
