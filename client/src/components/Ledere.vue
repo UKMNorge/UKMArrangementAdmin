@@ -153,7 +153,7 @@ export default {
     margin-right: 0;
     padding-left: calc(var(--initial-space-box) * 4);
     display: flex;
-    min-width: 150px;
+    min-width: 170px;
 }
 .godkjenning-div .godkjenning-switch {
     margin: auto;
