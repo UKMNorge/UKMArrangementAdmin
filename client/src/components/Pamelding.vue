@@ -4,42 +4,49 @@
         <div class="col-xs-6">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Kreative og Kulturelle</h4>
+                    <h4 class="">Kreative og kulturelle typer</h4>
                 </div>
 
-                <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
+                <!-- <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
                         <div class="as-margin-bottom-space-2">
                             <p class="v-label title-dato">Påmeldingsfrist for de som vil vise frem noe</p>
                         </div>
                         <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.viseFrist" />
                     </div>
-                </div>
+                </div> -->
 
                 <div>
-                    <div class="as-margin-top-space-3 as-margin-bottom-space-2">
-                        <h4 class="">Typer</h4>
-                    </div>               
                     <div v-for="type in availableTypesViseFrem" class="type-item-innslag-checkbox" :key="type.id">
-                        <v-checkbox
-                            v-model="selectedTyperVise"
-                            :label="type.title"
-                            :value="type.key"
-                            @change="handleCheckboxChange(type, true)"
-                        ></v-checkbox>
-                        <v-progress-circular
-                            v-if="type.loading"
-                            :size="16"
-                            :width="2"
-                            indeterminate
-                            class="loading-checkbox"
-                        ></v-progress-circular>
-                        <div class="chip-antall">
-                            <v-chip
-                                :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
-                                :color="selectedTyperVise.includes(type.key) ? 'primary' : '#bebebe'">
-                                {{ type.antall}} {{ type.isPerson ? 'personer' : 'innslag'}}
-                            </v-chip>
+                        <div class="content-type">
+                            <v-checkbox
+                                v-model="selectedTyperVise"
+                                :label="type.title"
+                                :value="type.key"
+                                @change="handleCheckboxChange(type, true)"
+                            ></v-checkbox>
+                            <v-progress-circular
+                                v-if="type.loading"
+                                :size="16"
+                                :width="2"
+                                indeterminate
+                                class="loading-checkbox"
+                            ></v-progress-circular>
+                            <div class="chip-antall">
+                                <v-chip
+                                    :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
+                                    :color="selectedTyperVise.includes(type.key) ? 'primary' : '#bebebe'">
+                                    {{ type.antall}} {{ type.isPerson ? 'personer' : 'innslag'}}
+                                </v-chip>
+                            </div>
+                        </div>
+                        <div class="paamelding-type-beskjed" v-if="!selectedTyperVise.includes(type.key) && type.antall > 0">
+                            <PermanentNotification 
+                                typeNotification="warning" 
+                                :tittel="`Deaktivering av ${type.title.toLowerCase()}`" 
+                                :isHTML="true"
+                                :description="`<p>Når du deaktiverer en type som allerede har deltakere, vil disse deltakerne fortsatt være del av arrangementet! Du må melde av deltakere på <a href='?page=UKMdeltakere'>påmeldte</a></p>`" 
+                            />
                         </div>
                     </div>
                 </div>
@@ -50,42 +57,49 @@
         <div class="col-xs-6">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Bidrag og Organisering</h4>
+                    <h4 class="">Bidrag og organisering typer</h4>
                 </div>
 
-                <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
+                <!-- <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
                     <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
                         <div class="as-margin-bottom-space-2">
                             <p class="v-label">Påmeldingsfrist for de som vil bidra som noe</p>
                         </div>
                         <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.jobbeFrist" />
                     </div>
-                </div>
+                </div> -->
 
-                <div>     
-                    <div class="as-margin-top-space-3 as-margin-bottom-space-2">
-                        <h4 class="">Typer</h4>
-                    </div>               
+                <div>            
                     <div v-for="type in availableTypesJobbe" class="type-item-innslag-checkbox" :key="type.id">
-                        <v-checkbox
-                            v-model="selectedTyperJobbe"
-                            :label="type.title"
-                            :value="type.key"
-                            @change="handleCheckboxChange(type, false)"
-                        ></v-checkbox>
-                        <v-progress-circular
-                            v-if="type.loading"
-                            :size="16"
-                            :width="2"
-                            indeterminate
-                            class="loading-checkbox"
-                        ></v-progress-circular>
-                        <div class="chip-antall">
-                            <v-chip
-                                :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
-                                :color="selectedTyperJobbe.includes(type.key) ? 'primary' : '#bebebe'">
-                                {{ type.antall }} {{ type.isPerson ? 'person' + (type.antall == 1 ? '' : 'er') : 'innslag'}}
-                            </v-chip>
+                        <div class="content-type">
+                            <v-checkbox
+                                v-model="selectedTyperJobbe"
+                                :label="type.title"
+                                :value="type.key"
+                                @change="handleCheckboxChange(type, false)"
+                            ></v-checkbox>
+                            <v-progress-circular
+                                v-if="type.loading"
+                                :size="16"
+                                :width="2"
+                                indeterminate
+                                class="loading-checkbox"
+                            ></v-progress-circular>
+                            <div class="chip-antall">
+                                <v-chip
+                                    :append-icon="type.isPerson ? 'mdi-account' : 'mdi-account-supervisor'"
+                                    :color="selectedTyperJobbe.includes(type.key) ? 'primary' : '#bebebe'">
+                                    {{ type.antall }} {{ type.isPerson ? 'person' + (type.antall == 1 ? '' : 'er') : 'innslag'}}
+                                </v-chip>
+                            </div>
+                        </div>
+                        <div class="paamelding-type-beskjed" v-if="!selectedTyperJobbe.includes(type.key) && type.antall > 0">
+                            <PermanentNotification 
+                                typeNotification="warning" 
+                                :tittel="`Deaktivering av ${type.title.toLowerCase()}`" 
+                                :isHTML="true"
+                                :description="`<p>Når du deaktiverer en type som allerede har deltakere, vil disse deltakerne fortsatt være del av arrangementet! Du må melde av deltakere på <a href='?page=UKMdeltakere'>påmeldte</a></p>`" 
+                            />
                         </div>
                     </div>
                 </div>
@@ -102,6 +116,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import type Arrangement from './../objects/Arrangement';
 import type { PropType } from 'vue';  // Use type-only import for PropType
 import InnslagType from './../objects/InnslagType';
+import { PermanentNotification } from 'ukm-components-vue3';
 
 export default {
     extends : MainComponent,
@@ -112,7 +127,8 @@ export default {
         },
     },
     components: {
-        VueDatePicker : VueDatePicker
+        VueDatePicker : VueDatePicker,
+        PermanentNotification : PermanentNotification
     },
     mounted() {
         this.fetchTypes();
@@ -212,9 +228,12 @@ export default {
     margin: 12px 0 auto auto!important
 }
 .type-item-innslag-checkbox {
+    border-bottom: solid 1px var(--color-primary-grey-light);
+}
+.type-item-innslag-checkbox .content-type {
     display: flex;
     justify-content: space-between;
-    border-bottom: solid 1px var(--color-primary-grey-light);
+    width: 100%;
 }
 .type-item-innslag-checkbox:last-child {
     border-bottom: none;
@@ -239,5 +258,8 @@ export default {
 }
 .v-label.v-label--clickable {
     margin: 0 !important;
+}
+.paamelding-type-beskjed > div > div{
+    margin-top: 0 !important;
 }
 </style>

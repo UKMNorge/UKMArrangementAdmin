@@ -89,7 +89,7 @@ export default {
         }
     },
     methods : {
-        handleSwitchChange(leder: Leder) {
+        handleSwitchChange(leder: Leder|any) {
             // Do not allow saving if a save is ongoing
             if(this.savingOngoing) {
                 leder.godkjent = !leder.godkjent;
