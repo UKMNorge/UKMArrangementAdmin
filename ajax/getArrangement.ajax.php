@@ -29,6 +29,13 @@ $retArr = [
     "openVideresending" => $arrangement->harVideresending(),
     "viseFrist" => $arrangement->getFrist1()->getTimestamp(),
     "jobbeFrist" => $arrangement->getFrist2()->getTimestamp(),
+    // Spesifikk til landsfestivalen
+    "kvote_deltakere" => $arrangement->getMetaValue("kvote_deltakere"),
+    "kvote_ledere" => $arrangement->getMetaValue("kvote_ledere"),
+    "avgift_ordinar" => $arrangement->getMetaValue("avgift_ordinar"),
+    "avgift_subsidiert" => $arrangement->getMetaValue("avgift_subsidiert"),
+    "avgift_reise" => $arrangement->getMetaValue("avgift_reise"),
+
 ];
 
 $handleCall->sendToClient($retArr);

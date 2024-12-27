@@ -1,6 +1,5 @@
 <template>
     <div class="as-container main-container">
-        <!-- Navn på arrangementet -->
         <div class="col-xs-12">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">

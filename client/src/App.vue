@@ -11,8 +11,8 @@
                 <v-tab text="Påmelding"></v-tab>
                 <v-tab text="Ledere/sykerom"></v-tab>
                 <v-tab text="Videresendte Arrangementer"></v-tab>
-                <v-tab text="Kontaktpersoner"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
+                <v-tab text="Kontaktpersoner"></v-tab>
             </v-tabs>
         </div>
         <div class="as-container">
@@ -57,14 +57,14 @@
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Kontaktpersoner</h1>
+                                <ArrangementKvoter :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
 
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Kvoter</h1>
+                                <h1>Kontaktpersoner</h1>
                             </div>
                         </v-tabs-window-item>
 
@@ -86,6 +86,7 @@ import Innstillinger from "./components/Innstillinger.vue";
 import Pamelding from "./components/Pamelding.vue";
 import Ledere from "./components/Ledere.vue";
 import VideresendteArrangementer from "./components/VideresendteArrangementer.vue";
+import ArrangementKvoter from "./components/ArrangementKvoter.vue";
 // import KommuneStatistikk from './components/KommuneStatistikk.vue';
 // import FylkeStatistikk from './components/FylkeStatistikk.vue';
 // import GenerellStatistikk from './components/GenerellStatistikk.vue';
@@ -110,6 +111,7 @@ export default {
         Pamelding : Pamelding,
         Ledere : Ledere,
         VideresendteArrangementer : VideresendteArrangementer,
+        ArrangementKvoter : ArrangementKvoter,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },
