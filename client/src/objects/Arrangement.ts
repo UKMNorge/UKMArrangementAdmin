@@ -119,6 +119,12 @@ class Arrangement {
             openVideresending: this.openVideresending,
             viseFrist: this.viseFrist.getTime() / 1000,
             jobbeFrist: this.jobbeFrist.getTime() / 1000,
+            // Spesialfelt for landsfestivalen
+            kvote_deltakere: this.kvote_deltakere,
+            kvote_ledere: this.kvote_ledere,
+            avgift_ordinar: this.avgift_ordinar,
+            avgift_subsidiert: this.avgift_subsidiert,
+            avgift_reise: this.avgift_reise,
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);

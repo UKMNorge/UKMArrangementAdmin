@@ -7,7 +7,8 @@
                 </div>
                 
                 <div class="kvote-item as-margin-top-space-2">
-                    <v-text-field 
+                    <v-text-field
+                        :rules="[rules.required, rules.isNumber]" 
                         v-model="arrangement.kvote_deltakere"
                         label="Hva er ordinær deltakerkvote?" 
                         prepend-icon="mdi-account-star"
@@ -17,7 +18,8 @@
                 </div>
 
                 <div class="kvote-item as-margin-top-space-2">
-                    <v-text-field 
+                    <v-text-field
+                        :rules="[rules.required, rules.isNumber]" 
                         v-model="arrangement.kvote_ledere"
                         label="Hva er ordinær lederkvote?" 
                         prepend-icon="mdi-account-tie"
@@ -27,7 +29,8 @@
                 </div>
                 
                 <div class="kvote-item as-margin-top-space-2">
-                    <v-text-field 
+                    <v-text-field
+                        :rules="[rules.required, rules.isNumber]" 
                         prefix="kr."
                         v-model="arrangement.avgift_ordinar"
                         label="Hva er ordinær deltakeravgift?" 
@@ -38,7 +41,8 @@
                 </div>
                
                 <div class="kvote-item as-margin-top-space-2">
-                    <v-text-field 
+                    <v-text-field
+                        :rules="[rules.required, rules.isNumber]" 
                         prefix="kr."
                         v-model="arrangement.avgift_subsidiert"
                         label="Hva er subsidiert deltakeravgift?" 
@@ -49,7 +53,8 @@
                 </div>
                
                 <div class="kvote-item as-margin-top-space-2">
-                    <v-text-field 
+                    <v-text-field
+                        :rules="[rules.required, rules.isNumber]" 
                         prefix="kr."
                         v-model="arrangement.avgift_reise"
                         label="Hva er reiseavgift?" 
@@ -90,7 +95,8 @@
 import '@vuepic/vue-datepicker/dist/main.css';
 import type Arrangement from './../objects/Arrangement';
 import type { PropType } from 'vue';  // Use type-only import for PropType
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { PermanentNotification } from 'ukm-components-vue3';
 
 const props = defineProps({ 
     arrangement: {
@@ -99,10 +105,17 @@ const props = defineProps({
     }
 });
 
+const rules = computed(() => ({
+    required: (value: string) => !!value || 'Feltet er påkrevd',
+    isNumber: (value: string) => !isNaN(Number(value)) || 'Verdien må være et tall',
+}));
+
 const save = () => {
     props.arrangement.save();
 }
-   
+
+
+
 </script>
 
 <style scoped>
