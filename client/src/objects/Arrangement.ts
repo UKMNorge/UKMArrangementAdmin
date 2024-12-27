@@ -11,6 +11,13 @@ class Arrangement {
     viseFrist: Date;
     jobbeFrist: Date;
 
+    // Spesialfelt for landsfestivalen
+    kvote_deltakere : string|null = null;
+    kvote_ledere : string|null = null;
+    avgift_ordinar : string|null = null;
+    avgift_subsidiert : string|null = null;
+    avgift_reise : string|null = null;
+
     saveOngoing: boolean = false;
     spaInteraction: any = (<any>window).spaInteraction; // Definert i main.ts
 
@@ -80,6 +87,14 @@ class Arrangement {
                 results.jobbeFrist,
             );
 
+            // Spesialfelt for landsfestivalen
+            arrangement.kvote_deltakere = results.kvote_deltakere ?? null;
+            arrangement.kvote_ledere = results.kvote_ledere ?? null;
+            arrangement.avgift_ordinar = results.avgift_ordinar ?? null;
+            arrangement.avgift_subsidiert = results.avgift_subsidiert ?? null;
+            arrangement.avgift_reise = results.avgift_reise ?? null;
+
+            console.log(arrangement);
             return arrangement;
         }else {
             (<any>window).spaInteraction.showMessage('Feil', 'Kunne ikke hente innstillinger', 'error');
