@@ -10,6 +10,7 @@
                 <v-tab text="Innstillinger"></v-tab>
                 <v-tab text="Påmelding"></v-tab>
                 <v-tab text="Ledere/sykerom"></v-tab>
+                <v-tab text="Videresendte Arrangementer"></v-tab>
                 <v-tab text="Kontaktpersoner"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
             </v-tabs>
@@ -49,21 +50,21 @@
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Komponent4</h1>
+                                <VideresendteArrangementer :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
 
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Komponent5</h1>
+                                <h1>Kontaktpersoner</h1>
                             </div>
                         </v-tabs-window-item>
-                        
+
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Komponent6</h1>
+                                <h1>Kvoter</h1>
                             </div>
                         </v-tabs-window-item>
 
@@ -84,6 +85,7 @@ import FestivalInfo from "./components/FestivalInfo.vue";
 import Innstillinger from "./components/Innstillinger.vue";
 import Pamelding from "./components/Pamelding.vue";
 import Ledere from "./components/Ledere.vue";
+import VideresendteArrangementer from "./components/VideresendteArrangementer.vue";
 // import KommuneStatistikk from './components/KommuneStatistikk.vue';
 // import FylkeStatistikk from './components/FylkeStatistikk.vue';
 // import GenerellStatistikk from './components/GenerellStatistikk.vue';
@@ -107,6 +109,7 @@ export default {
         Innstillinger : Innstillinger,
         Pamelding : Pamelding,
         Ledere : Ledere,
+        VideresendteArrangementer : VideresendteArrangementer,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },
