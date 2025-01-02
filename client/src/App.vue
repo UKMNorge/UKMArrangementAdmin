@@ -12,7 +12,7 @@
                 <v-tab text="Ledere/sykerom"></v-tab>
                 <v-tab text="Videresendte Arrangementer"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
-                <v-tab text="Kontaktpersoner"></v-tab>
+                <!-- <v-tab text="Kontaktpersoner"></v-tab> -->
             </v-tabs>
         </div>
         <div class="as-container">
@@ -62,11 +62,11 @@
                         </v-tabs-window-item>
 
                         <!--  -->
-                        <v-tabs-window-item v-if="arrangementLoaded">
+                        <!-- <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
                                 <h1>Kontaktpersoner</h1>
                             </div>
-                        </v-tabs-window-item>
+                        </v-tabs-window-item> -->
 
                     </v-tabs-window>
                 </div>

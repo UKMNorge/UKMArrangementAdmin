@@ -52,6 +52,30 @@
                     >
                 </v-select>
 
+                <div v-show="arrangement.status > 0">
+                    <div class="as-margin-top-space-2">
+                        <v-text-field 
+                            v-model="arrangement.statusKortText"
+                            label="Status beskrivelse" 
+                            prepend-icon="mdi-bullhorn-variant"
+                            class="v-text-field-arr-sys"
+                            maxlength="140"
+                            counter="140"
+                            variant="outlined">
+                        </v-text-field>
+                    </div>
+                    
+                    <div class="as-margin-top-space-2">
+                        <v-textarea 
+                            v-model="arrangement.statusLangText"
+                            class="vue-as-textarea" 
+                            prepend-icon="mdi-text-long"
+                            label="Detaljert beskrivelse av status">
+                        </v-textarea>
+                    </div>
+                </div>
+                
+
                 <div class="as-margin-top-space-2">
                     <v-btn
                         class="v-btn-as v-btn-success"
@@ -67,9 +91,9 @@
         <div class="col-xs-4">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
 
-                <v-timeline density="compact" side="end">
+                <v-timeline v-if="arrangement.isActive()" density="compact" side="end">
                      <template v-for="tlItem in getTimelineItems()" v-bind:key="tlItem.id">
-                        <v-timeline-item class="mb-4" :dot-color="tlItem.finished ? 'blue' : 'grey'" size="small">
+                        <v-timeline-item class="mb-4" :dot-color="tlItem.getColor()" size="small">
                             <div :class="tlItem.finished ? 'finished-item' : ''" class="d-flex justify-space-between flex-grow-1 item-timeline">
                                 <div style="width: 100%">
                                     <h5>{{ tlItem.title }}</h5>
@@ -83,6 +107,14 @@
                         </v-timeline-item>
                      </template>
                 </v-timeline>
+                <div v-else>
+                    <h5>Arrangementet er avlyst!</h5>
+                    <div class="as-display-flex as-margin-top-space-2">
+                        <div class="as-margin-auto">
+                            <v-icon color="warning" icon="mdi-alert" size="x-large"></v-icon>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -141,8 +173,8 @@ export default {
             this.timelineItems = [];
 
             this.timelineItems = [
-                new TimelineItem('0', 'Videresending er åpen', '', '', '25 innslag ble videresendt', 'grey', true),
-                new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.arrangement.startDate), '', 'grey', true),
+                new TimelineItem('0', 'Videresending er ' + (this.arrangement.isVideresendingOpen() ? 'åpen' : 'stengt'), '', '', '25 innslag ble videresendt', !this.arrangement.isVideresendingOpen() ? 'warning' : '', true),
+                new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.arrangement.startDate), '', '', true),
             ];
             
             var dayCount = 1;
