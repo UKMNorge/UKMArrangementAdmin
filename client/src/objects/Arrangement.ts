@@ -5,6 +5,8 @@ class Arrangement {
     startDate: Date;
     endDate: Date;
     status: number;
+    statusKortText : string = "";
+    statusLangText : string = "";
     antallDeltakere: boolean;
     openPamelding: boolean;
     openVideresending: boolean;
@@ -27,6 +29,8 @@ class Arrangement {
             startDate: number,
             endDate: number,
             status: number,
+            statusKortText: string,
+            statusLangText: string,
             antallDeltakere: boolean,
             openPamelding: boolean,
             openVideresending: boolean,
@@ -45,6 +49,8 @@ class Arrangement {
         this.openVideresending = openVideresending;
         this.viseFrist = new Date(viseFrist * 1000);
         this.jobbeFrist = new Date(jobbeFrist * 1000);
+        this.statusKortText = statusKortText ?? "";
+        this.statusLangText = statusLangText ?? "";
     }
 
     static createEmpty(): Arrangement {
@@ -55,6 +61,8 @@ class Arrangement {
             0,            // Epoch time for startDate
             0,            // Epoch time for endDate
             0,            // Default status
+            "",           // Default statusKortText
+            "",           // Default statusLangText
             false,        // Default for antallDeltakere
             false,        // Default for openPamelding
             false,         // Default for openVideresending
@@ -71,7 +79,7 @@ class Arrangement {
         var results = await (<any>window).spaInteraction.runAjaxCall('/', 'POST', data);
 
         if(results != null) {
-            let status = results.status == 'videresending_kanskje' ? 1 : (results.status == 'videresending_sikkert' ? 2 : 0);
+            let status = results.status == 'gjennomforer_med_info' ? 1 : (results.status == 'avlys' ? 2 : 0);
 
             let arrangement = new Arrangement(
                 results.id,
@@ -80,6 +88,8 @@ class Arrangement {
                 results.startDate,
                 results.endDate,
                 status,
+                results.statusKortText,
+                results.statusLangText,
                 results.antallDeltakere,
                 results.openPamelding,
                 results.openVideresending,
@@ -114,6 +124,8 @@ class Arrangement {
             startDate: this.startDate.getTime() / 1000,
             endDate: this.endDate.getTime() / 1000,
             status: this.status,
+            statusKortText: this.statusKortText,
+            statusLangText: this.statusLangText,
             antallDeltakere: this.antallDeltakere,
             openPamelding: this.openPamelding,
             openVideresending: this.openVideresending,
@@ -136,6 +148,14 @@ class Arrangement {
         }
         
         return results;
+    }
+
+    public isActive() {
+        return this.status != 2;
+    }
+
+    public isVideresendingOpen() {
+        return this.openVideresending;
     }
 
 }
