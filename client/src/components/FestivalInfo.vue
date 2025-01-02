@@ -144,7 +144,7 @@ export default {
         VueDatePicker : VueDatePicker
     },
     mounted() {
-
+        this.fetchVideresendingData();
     },
     data() {
         return {
@@ -157,9 +157,33 @@ export default {
             selectedStatus: 0, // Initialize as null first
             myObject : new MyObject(),
             timelineItems : [] as TimelineItem[],
-        
-
             arrangement : this.arrangement,
+            pameldteData : {} as any,
+        }
+    },
+    computed: {
+        antallVideresendtInnslag(): number {
+            return this.pameldteData.videresending.length;
+        },
+        antallVideresendtPersoner(): number {
+            let antallPersoner = 0;
+            for(let innslag of this.pameldteData.videresending) {
+                antallPersoner += innslag.personer ? innslag.personer.length : 0;
+            }
+            return antallPersoner;
+        },
+        videresendingText(): string {
+            return this.antallVideresendtInnslag + ' innslag ('+ this.antallVideresendtPersoner +' person'+ (this.antallVideresendtPersoner != 1 ? "er" : "") +')';
+        },
+        antallPameldtePersoner(): number {
+            let antallPersoner = 0;
+            for(let innslag of this.pameldteData.pameldte) {
+                antallPersoner += innslag.personer ? innslag.personer.length : 0;
+            }
+            return antallPersoner;
+        },
+        pameldteText(): string {
+            return this.antallPameldtePersoner +' person'+ (this.antallPameldtePersoner != 1 ? "er" : "");
         }
     },
     methods : {
@@ -173,7 +197,7 @@ export default {
             this.timelineItems = [];
 
             this.timelineItems = [
-                new TimelineItem('0', 'Videresending er ' + (this.arrangement.isVideresendingOpen() ? 'åpen' : 'stengt'), '', '', '25 innslag ble videresendt', !this.arrangement.isVideresendingOpen() ? 'warning' : '', true),
+                new TimelineItem('0', 'Videresending er ' + (this.arrangement.isVideresendingOpen() ? 'åpen' : 'stengt'), '', '', this.videresendingText + ' ble videresendt', !this.arrangement.isVideresendingOpen() ? 'warning' : '', true),
                 new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.arrangement.startDate), '', '', true),
             ];
             
@@ -186,7 +210,7 @@ export default {
             }
 
             this.timelineItems.push(
-                new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.arrangement.endDate), '', '120 innslag <br>172 personer deltok', '', false),
+                new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.arrangement.endDate), '', this.pameldteText + ' deltok', '', false),
             );
 
             return this.timelineItems;
@@ -215,6 +239,15 @@ export default {
                 days.push(new Date(date));
             }
             return days;
+        },
+        async fetchVideresendingData() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'getPameldingData',
+            };
+
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+            this.pameldteData = results;
         }
     }
 }
