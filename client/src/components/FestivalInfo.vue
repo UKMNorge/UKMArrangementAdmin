@@ -246,7 +246,9 @@ export default {
             }
 
             const start = new Date(this.arrangement.startDate);
+            start.setHours(0, 0, 0, 0);
             const end = new Date(this.arrangement.endDate);
+            end.setHours(23, 59, 59, 0);
             const days = [];
             for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
                 days.push(new Date(date));
