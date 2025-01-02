@@ -24,6 +24,8 @@ $handleCall = new HandleAPICall(
         "avgift_ordinar",
         "avgift_subsidiert",
         "avgift_reise",
+        "statusKortText",
+        "statusLangText",
     ], ['GET', 'POST'], false);
 
 $name = $handleCall->getArgument('name');
@@ -40,6 +42,9 @@ $kvote_ledere = (int)$handleCall->getOptionalArgument('kvote_ledere') ?? null;
 $avgift_ordinar = (int)$handleCall->getOptionalArgument('avgift_ordinar') ?? null;
 $avgift_subsidiert = (int)$handleCall->getOptionalArgument('avgift_subsidiert') ?? null;
 $avgift_reise = (int)$handleCall->getOptionalArgument('avgift_reise') ?? null;
+
+$statusLangText = $handleCall->getOptionalArgument('statusLangText') ?? null;
+$statusKortText = $handleCall->getOptionalArgument('statusKortText') ?? null;
 
 
 $arrangement = null;
@@ -89,13 +94,21 @@ try {
 
     // Lagrer status
     // 0 = gjennomføres 1 = kanskje, 2 = avlyses, 
-    $statusText = $status == 1 ? 'videresending_kanskje' : ($status == 2 ? 'videresending_sikkert' : 'gjennomforer');
+    $statusText = $status == 1 ? 'gjennomforer_med_info' : ($status == 2 ? 'avlys' : 'gjennomforer');
     $meta = $arrangement->getMeta('avlys')->set($statusText);
+    
+    // status-tekster
+    $metaStatusKortText = $arrangement->getMeta('avlys_status_lang')->set($statusLangText);
+    $metaStatusLangText = $arrangement->getMeta('avlys_status_kort')->set($statusKortText);
+
 
     if($status == 0) {
         WriteMeta::delete($meta);
     } else {
         WriteMeta::set($meta);
+        WriteMeta::set($metaStatusKortText);
+        WriteMeta::set($metaStatusLangText);
+
     }
 
 } catch (Exception $e) {

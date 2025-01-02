@@ -24,6 +24,8 @@ $retArr = [
     "startDate" => $arrangement->getStart()->getTimestamp(),
     "endDate" => $arrangement->getStop()->getTimestamp(),
     "status" => $arrangement->getMetaValue('avlys'),
+    "statusKortText" => $arrangement->getMetaValue('avlys_status_kort'),
+    "statusLangText" => $arrangement->getMetaValue('avlys_status_lang'),
     "antallDeltakere" => $arrangement->erDeltakereSynlig(),
     "openPamelding" => $arrangement->getPamelding() == 'apen',
     "openVideresending" => $arrangement->harVideresending(),
