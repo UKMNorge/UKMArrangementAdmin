@@ -23,6 +23,16 @@ class TimelineItem {
         let separator = this.start.length > 0 && this.end.length > 0 ? " - " : "";
         return `${this.start}${separator}${this.end}`;
     }
+
+    public getColor() {
+        console.warn(this.label);
+        if(this.label) {
+            if(this.label == 'warning') {
+                return 'var(--as-color-primary-warning-default)';
+            }
+        }
+        return this.finished ? 'blue' : 'grey'
+    }
 }
 
 export default TimelineItem;
