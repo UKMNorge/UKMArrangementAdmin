@@ -204,7 +204,14 @@ export default {
             var dayCount = 1;
             for(let day of this.generateDaysBetweenDates()) {
                 this.timelineItems.push(
-                    new TimelineItem('day'+dayCount, 'Dag '+dayCount, this.getDateFormat(day, true), '', '', '', false)
+                    new TimelineItem(
+                        'day'+dayCount, 
+                        'Dag '+dayCount, this.getDateFormat(day, true), 
+                        '', 
+                        '', 
+                        this.isCurrentDay(day) ? 'current' : '', 
+                        this.isDayFinished(day) || this.isCurrentDay(day) ? true : false
+                    ),
                 );
                 dayCount++;
             }
@@ -214,6 +221,12 @@ export default {
             );
 
             return this.timelineItems;
+        },
+        isDayFinished(date : Date) : boolean {
+            return date < new Date();
+        },
+        isCurrentDay(date : Date) : boolean {
+            return date.toDateString() == new Date().toDateString();
         },
         getDateFormat(date : Date, withoutHours : boolean = false) : string {
             const year = date.getFullYear();

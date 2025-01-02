@@ -25,10 +25,12 @@ class TimelineItem {
     }
 
     public getColor() {
-        console.warn(this.label);
         if(this.label) {
             if(this.label == 'warning') {
                 return 'var(--as-color-primary-warning-default)';
+            }
+            else if(this.label == 'current') {
+                return 'var(--as-color-primary-success)';
             }
         }
         return this.finished ? 'blue' : 'grey'
