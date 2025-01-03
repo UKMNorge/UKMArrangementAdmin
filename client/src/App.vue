@@ -87,9 +87,13 @@ import Pamelding from "./components/Pamelding.vue";
 import Ledere from "./components/Ledere.vue";
 import VideresendteArrangementer from "./components/VideresendteArrangementer.vue";
 import ArrangementKvoter from "./components/ArrangementKvoter.vue";
+import { Director } from 'ukm-spa/Director';
+
 // import KommuneStatistikk from './components/KommuneStatistikk.vue';
 // import FylkeStatistikk from './components/FylkeStatistikk.vue';
 // import GenerellStatistikk from './components/GenerellStatistikk.vue';
+
+const director = new Director();
 
 export default {
 
@@ -118,26 +122,26 @@ export default {
     
 
     mounted: function () {
+        let tab = director.getParam('tab');
+
+        if(tab) {
+            this.openTab(tab);
+        }
+        else {
+            this.openTab(0);
+        }
+
         this.initArrangement();
-    },
-    created() {
-        const router = useRouter();
-        const route = useRoute();
-        this.tab = route.query.tab || '1';
         
         watch(() => this.tab, (newTab) => {
-            const url = new URL(window.location.href);
-            url.searchParams.set('tab', newTab);
-            window.history.pushState({}, '', url.toString());
+            this.openTab(newTab);
         });
-    
-        onMounted(() => {
-            const url = new URL(window.location.href);
-            this.tab = url.searchParams.get('tab') || '1';
-        });
-    },
-    
+    },    
     methods: {
+        openTab(tabId: number) {
+            director.addParam('tab', tabId);
+            this.tab = tabId;
+        },
         async initArrangement() {
             Arrangement.load().then((arrangement: Arrangement) => {
                 this.arrangement = arrangement;
