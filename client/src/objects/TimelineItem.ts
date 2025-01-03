@@ -33,7 +33,20 @@ class TimelineItem {
                 return 'var(--as-color-primary-success)';
             }
         }
-        return this.finished ? 'blue' : 'grey'
+        return this.finished ? 'var(--color-primary-bla-200)' : 'var(--color-primary-grey-medium)';
+    }
+
+    public getIcon() : string {
+        if(this.label == 'current') {
+            return 'mdi-clock-check'
+        }
+        else if(this.label == 'warning') {
+            return 'mdi-alert'
+        }
+        else if(this.label == 'error') {
+            return 'mdi-alert-decagram'
+        }
+        return this.finished ? 'mdi-check-bold' : '';
     }
 }
 

@@ -93,7 +93,13 @@
 
                 <v-timeline v-if="arrangement.isActive()" density="compact" side="end">
                      <template v-for="tlItem in getTimelineItems()" v-bind:key="tlItem.id">
-                        <v-timeline-item class="mb-4" :dot-color="tlItem.getColor()" size="small">
+                        <v-timeline-item 
+                            class="mb-4" 
+                            :dot-color="tlItem.getColor()" 
+                            :icon="tlItem.getIcon()"
+                            icon-color="white"
+                            size="small"
+                        >
                             <div :class="tlItem.finished ? 'finished-item' : ''" class="d-flex justify-space-between flex-grow-1 item-timeline">
                                 <div class="title-desc-timeline">
                                     <h5>{{ tlItem.title }}</h5>
@@ -198,7 +204,15 @@ export default {
 
             this.timelineItems = [
                 new TimelineItem('0', 'Videresending er ' + (this.arrangement.isVideresendingOpen() ? 'åpen' : 'stengt'), '', '', this.videresendingText + ' ble videresendt', !this.arrangement.isVideresendingOpen() ? 'warning' : '', true),
-                new TimelineItem('10', 'Festivalen starter', '', this.getDateFormat(this.arrangement.startDate), '', '', true),
+                new TimelineItem(
+                    '10',
+                    'Festivalen starter',
+                    '',
+                    this.getDateFormat(this.arrangement.startDate),
+                    '',
+                    '',
+                    this.isDayFinished(this.arrangement.startDate)
+                ),
             ];
             
             var dayCount = 1;
@@ -210,14 +224,23 @@ export default {
                         '', 
                         '', 
                         this.isCurrentDay(day) ? 'current' : '', 
-                        this.isDayFinished(day) || this.isCurrentDay(day) ? true : false
+                        this.isDayFinished(day)
                     ),
                 );
                 dayCount++;
             }
 
             this.timelineItems.push(
-                new TimelineItem('40', 'Festivalen er ferdig', this.getDateFormat(this.arrangement.endDate), '', this.pameldteText + ' deltok', '', false),
+                new TimelineItem(
+                    '40',
+                    'Festivalen er ferdig',
+                    this.getDateFormat(this.arrangement.endDate),
+                    '',
+                    this.pameldteText + ' deltok',
+                    '',
+                    this.isDayFinished(this.arrangement.endDate)
+                    
+                ),
             );
 
             return this.timelineItems;
