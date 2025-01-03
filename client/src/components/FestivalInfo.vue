@@ -206,7 +206,7 @@ export default {
                 new TimelineItem('0', 'Videresending er ' + (this.arrangement.isVideresendingOpen() ? 'åpen' : 'stengt'), '', '', this.videresendingText + ' ble videresendt', !this.arrangement.isVideresendingOpen() ? 'warning' : '', true),
                 new TimelineItem(
                     '10',
-                    'Festivalen starter',
+                    'Festivalen startet',
                     '',
                     this.getDateFormat(this.arrangement.startDate),
                     '',
