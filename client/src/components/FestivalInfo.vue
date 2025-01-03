@@ -210,7 +210,7 @@ export default {
                     '',
                     this.getDateFormat(this.arrangement.startDate),
                     '',
-                    '',
+                    this.isCurrentDay(this.arrangement.startDate) ? 'current' : '', 
                     this.isDayFinished(this.arrangement.startDate)
                 ),
             ];
