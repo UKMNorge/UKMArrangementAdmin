@@ -303,6 +303,8 @@ export default {
     .finfo-date-picker {
         margin-left: 0 !important;
         margin-right: 0 !important;
+        width: 100%;
+        max-width: 100%;
     }
     .finfo-date-picker:nth-child(2) {
         margin-top: calc(2 * var(--initial-space-box)) !important;
