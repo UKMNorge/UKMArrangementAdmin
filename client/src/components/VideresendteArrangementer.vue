@@ -1,9 +1,11 @@
 <template>
     <div class="as-container main-container">
         <div class="col-sm-8 col-xs-12">
-            <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
+            <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="">
-                    <h4 class="">Videresendte Arrangemener</h4>
+                    <div class="as-margin-bottom-space-4">
+                        <h4>Videresendte Arrangemener</h4>
+                    </div>
     
                     <div v-if="videresendteArrangementer.length < 1" class="as-card-2 videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
                         <p>Ingen arrangementer er videresendt</p>
@@ -12,13 +14,13 @@
                     <div>
                         <div v-for="vArr in videresendteArrangementer">
                             <div class="as-card-2 as-display-flex videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
-                                <div class="left-side-arrangement">
+                                <div class="left-side-arrangement as-margin-right-space-1">
                                     <h5>{{ vArr.arrangementName }}</h5>
                                     <p>{{ vArr.fylkeName }}</p>
                                 </div>
                                 <div class="right-side-arrangement">
                                     <v-btn
-                                        class="v-btn-as v-btn-bla"
+                                        class="ga-til-arrang-btn v-btn-as v-btn-bla"
                                         append-icon="mdi-chevron-right"
                                         rounded="large"
                                         @click="goTilArrangement(vArr.link)"
@@ -135,5 +137,18 @@ fetchData();
     border-bottom: none;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
+}
+@media(max-width: 767px) {
+    .videresendt-arrangement {
+        display: block;
+    }
+    .right-side-arrangement{
+        margin-top: var(--initial-space-box);
+    }
+}
+@media(max-width: 576px) {
+    .ga-til-arrang-btn {
+        width: 100%;
+    }
 }
 </style>

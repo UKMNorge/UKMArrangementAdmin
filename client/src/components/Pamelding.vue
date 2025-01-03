@@ -1,8 +1,8 @@
 <template>
     <div class="as-container main-container">
         <!-- Left -->
-        <div class="col-xs-6">
-            <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
+        <div class="col-sm-6 col-xs-12">
+            <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
                     <h4 class="">Kreative og kulturelle typer</h4>
                 </div>
@@ -54,7 +54,7 @@
         </div>
         
         <!-- Right -->
-        <div class="col-xs-6">
+        <div class="col-sm-6 col-xs-12">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
                     <h4 class="">Bidrag og organisering typer</h4>

@@ -16,7 +16,7 @@
             </v-tabs>
         </div>
         <div class="as-container">
-            <div class="container">        
+            <div class="container arrangement-admin-container">        
                 <div class="as-margin-top-space-4">
                     <v-tabs-window v-model="tab">
                         <!-- Kommunestatistikk -->
@@ -162,3 +162,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+.arrangement-admin-container {
+    padding: 0;
+    max-width: 100%;
+}
+</style>

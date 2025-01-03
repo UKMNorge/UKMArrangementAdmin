@@ -1,7 +1,7 @@
 <template>
     <div class="as-container main-container">
         <!-- Navn på arrangementet -->
-        <div v-if="arrangement != undefined" class="col-xs-8">
+        <div v-if="arrangement != undefined" class="col-sm-8 col-xs-12">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="as-margin-bottom-space-4">
                     <h4 class="">Detaljer</h4>
@@ -25,12 +25,12 @@
                     </v-text-field>
                 </div>
 
-                <div class="as-display-flex">
-                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
+                <div class="as-display-flex datepicker-festivalinfo">
+                    <div class="col-sm-6 col-xs-12 nop-impt finfo-date-picker as-margin-right-space-2">
                         <p class="v-label title-dato">Startdato</p>
                         <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.startDate" />
                     </div>
-                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-left-space-2">
+                    <div class="col-sm-6 col-xs-12 nop-impt finfo-date-picker as-margin-left-space-2">
                         <p class="v-label title-dato">Sluttdato</p>
                         <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.endDate" />
                     </div>
@@ -88,14 +88,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-sm-4 col-xs-12">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
 
                 <v-timeline v-if="arrangement.isActive()" density="compact" side="end">
                      <template v-for="tlItem in getTimelineItems()" v-bind:key="tlItem.id">
                         <v-timeline-item class="mb-4" :dot-color="tlItem.getColor()" size="small">
                             <div :class="tlItem.finished ? 'finished-item' : ''" class="d-flex justify-space-between flex-grow-1 item-timeline">
-                                <div style="width: 100%">
+                                <div class="title-desc-timeline">
                                     <h5>{{ tlItem.title }}</h5>
                                     <p v-html="tlItem.description"></p>
 
@@ -291,6 +291,22 @@ export default {
     margin-left: 36px;
     font-weight: bold;
     margin-bottom: 8px;
+}
+.title-desc-timeline {
+    width: 100%; 
+    margin-right: var(--initial-space-box) !important;
+}
+@media(max-width: 1200px) {
+    .datepicker-festivalinfo {
+        display: grid !important;
+    }
+    .finfo-date-picker {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .finfo-date-picker:nth-child(2) {
+        margin-top: calc(2 * var(--initial-space-box)) !important;
+    }
 }
 </style>
 

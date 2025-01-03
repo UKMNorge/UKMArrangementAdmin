@@ -13,6 +13,7 @@
                     </div>
                     <div class="switch">
                         <v-switch
+                            class="v-switch-item"
                             :loading="loadingAntallDeltakere"
                             v-model="arrangement.antallDeltakere"
                             color="primary"
@@ -29,6 +30,7 @@
                     </div>
                     <div class="switch">
                         <v-switch
+                            class="v-switch-item"
                         :loading="loadingApenPamelding"
                         v-model="arrangement.openPamelding"
                         color="primary"
@@ -45,6 +47,7 @@
                     </div>
                     <div class="switch">
                         <v-switch
+                            class="v-switch-item"
                             :loading="loadingApenVideresending"
                             v-model="arrangement.openVideresending"
                             color="primary"
@@ -162,5 +165,14 @@ export default {
 .switch-item-select .text-switch .beskrivelse-switch {
     font-size: 12px;
     font-weight: 300;
+}
+.switch {
+    display: flex;
+    min-width: 100px;
+}
+.v-switch-item {
+    margin: auto;
+    margin-right: 0;
+    padding-left: var(--initial-space-box);
 }
 </style>

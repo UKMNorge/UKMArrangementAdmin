@@ -6,7 +6,7 @@
                     <h4 class="">Videresendte ledere</h4>
                 </div>
 
-                <v-list class="alle-ledere" v-for="(leder, index) in ledere" :key="leder.id" lines="three">
+                <v-list class="alle-ledere as-nop-impt" v-for="(leder, index) in ledere" :key="leder.id" lines="three">
                     <v-list-item class="leder-item" :class="{ 'last-leader-item': index === ledere.length - 1 }">
                         <template v-slot:prepend>
                             <v-icon size="40px" color="#386e9e">{{ leder.getIcon() }}</v-icon>
@@ -15,7 +15,7 @@
                         <div class="as-display-flex">
                             <div>
                                 <div>
-                                    <h4>{{ leder.navn ? leder.navn : 'Navn er ikke definert' }}</h4>
+                                    <h5>{{ leder.navn ? leder.navn : 'Navn er ikke definert' }}</h5>
                                     <p><b>Epost:</b> {{ leder.epost }}</p>
                                     <p><b>Mobil:</b> {{ leder.mobil }}</p>
                                     <p><b>Type:</b> {{ leder.type }}</p>
@@ -56,7 +56,7 @@
                         typeNotification="info" 
                         :tittel="`Oversikt over videresendte ledere`" 
                         :isHTML="true"
-                        :description="`<p>Full oversikt over ledere finnes på <a href='?page=UKMrapporter&action=rapportVue&rapportId=ledereOversikt'>rapporter</a></p>`" 
+                        :description="`<p>Full oversikt over ledere finnes på <a class='as-btn-ahref' href='?page=UKMrapporter&action=rapportVue&rapportId=ledereOversikt'>rapporter</a></p>`" 
                     />
                 </div>
 
@@ -177,9 +177,21 @@ export default {
     border-bottom: none;
     padding-bottom: calc(var(--initial-space-box) * 2) !important;
 }
+@media(max-width: 767px) {
+    .leder-item {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
 </style>
 <style>
 .ledere-beskjed-rapporter > div > div {
     margin-bottom: 0 !important;
+}
+@media(max-width: 767px) {
+    .leder-item .v-list-item__prepend {
+        display: none !important;
+    }
 }
 </style>
