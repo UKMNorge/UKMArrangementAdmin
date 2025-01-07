@@ -52,12 +52,21 @@
                     </div>
                 </div>
             </div>
+
+            <div class="as-margin-top-space-4 as-margin-bottom-space-4">
+                <PermanentNotification 
+                    typeNotification="info" 
+                    :tittel="`Flere arrangement som kan videresende til deg?`" 
+                    :isHTML="true"
+                    :description="`<p>For å legge til flere arrangementer som kan videresendes til deg, klikk på <a class='as-btn-ahref' href='?page=UKMarrangement_videresending'>videresending</a></p>`" 
+                />
+            </div>
         </div>
 
         <div class="col-lg-4 col-sm-12">
             <div class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-4">
-                    <h4>Fylke videresending oversikt</h4>
+                    <h4>Fylker videresending oversikt</h4>
                 </div>
                 <div v-for="fylke in alleFylker" :key="fylke.fylkeId" class="as-display-flex fylke-arr as-padding-bottom-space-1 as-margin-bottom-space-1">
                     <div class="as-margin-auto as-margin-left-none">
@@ -97,6 +106,8 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import type Arrangement from './../objects/Arrangement';
 import type { PropType } from 'vue';  // Use type-only import for PropType
 import { ref } from 'vue';
+import { PermanentNotification } from 'ukm-components-vue3';
+
 
 const videresendteArrangementer = ref([] as any);
 const alleFylker = ref([] as any);
