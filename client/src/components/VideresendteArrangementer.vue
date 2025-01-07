@@ -1,6 +1,6 @@
 <template>
     <div class="as-container main-container">
-        <div class="col-sm-8 col-xs-12">
+        <div class="col-lg-8 col-sm-12">
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="">
                     <div class="as-margin-bottom-space-4">
@@ -18,18 +18,23 @@
                                     <h5>{{ vArr.arrangementName }}</h5>
                                     <p>{{ vArr.fylkeName }}</p>
                                 </div>
-                                <div class="midle-side-arrangement">
-                                    
-                                    <!-- <v-chip
-                                        size="small"
-                                        class="innslag-antall-chip as-margin-auto"
-                                    >12 innslag ble videresendt</v-chip> -->
+                                <div class="middle-side-arrangement">
                                     <v-chip
                                         :append-icon="vArr.antallVideresendteInnslag > 0 ? 'mdi-checkbox-marked-circle' : 'mdi-alert'"
                                         class="innslag-antall-chip as-margin-auto"
                                         :color="vArr.antallVideresendteInnslag > 0 ? 'success' : 'warning'"
                                         >
                                         {{ vArr.antallVideresendteInnslag }} innslag videresendt
+                                    </v-chip>
+                                    <v-chip
+                                        :append-icon="vArr.antallVideresendteInnslag > 0 ? 'mdi-checkbox-marked-circle' : 'mdi-alert'"
+                                        class="innslag-antall-chip show-on-xs as-margin-auto"
+                                        :color="vArr.antallVideresendteInnslag > 0 ? 'success' : 'warning'"
+                                        >
+                                        <v-tooltip open-delay="200" activator="parent" location="start">
+                                            {{ vArr.antallVideresendteInnslag }} innslag videresendt
+                                        </v-tooltip>
+                                        {{ vArr.antallVideresendteInnslag }}
                                     </v-chip>
                                 </div>
                                 <div class="right-side-arrangement">
@@ -49,7 +54,7 @@
             </div>
         </div>
 
-        <div class="col-sm-4 col-xs-12">
+        <div class="col-lg-4 col-sm-12">
             <div class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-4">
                     <h4>Fylke videresending oversikt</h4>
@@ -175,23 +180,23 @@ fetchData();
 .videresendt-arrangement {
     background: var(--color-primary-grey-lightest);
 }
-.left-side-arrangement {
+.left-side-arrangement, 
+.right-side-arrangement,
+.middle-side-arrangement {
     width: 33%;
 }
-.midle-side-arrangement {
-    padding-left: 16px;
+.middle-side-arrangement {
+    padding-left: calc(var(--initial-space-box) * 2);
     border-left: solid 1px #dfdfdf;
-    margin-left: 16px;
-    padding-right: 16px;
-    margin-right: 16px;
+    margin-left: calc(var(--initial-space-box) * 2);
+    padding-right: calc(var(--initial-space-box) * 2);;
+    margin-right: calc(var(--initial-space-box) * 2);
     border-right: solid 1px #dfdfdf;
-    width: 33%;
     display: flex
 }
 .right-side-arrangement {
     margin: auto;
     margin-right: 0;
-    width: 33%;
     display: flex;
 }
 .fylke-arr {
@@ -210,17 +215,61 @@ fetchData();
     margin: auto;
     margin-right: 0;
 }
+.innslag-antall-chip.show-on-xs {
+    display: none;
+}
 @media(max-width: 767px) {
     .videresendt-arrangement {
         display: block;
+        position: relative;
+        min-height: 140px;
     }
     .right-side-arrangement{
-        margin-top: var(--initial-space-box);
+        position: absolute;
+        width: 100%;
+        padding: calc(var(--initial-space-box) * 2);
+        padding-top: calc(var(--initial-space-box) * 1);
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
-}
-@media(max-width: 576px) {
+    .middle-side-arrangement {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto !important;
+        padding-right: 0;
+        padding-top: 8px;
+        border: none !important;
+    }
+    .middle-side-arrangement .innslag-antall-chip {
+        margin-top: var(--initial-space-box);
+        margin-bottom: var(--initial-space-box);
+        margin-left: 0;
+        margin-right: auto;
+    }
+    .left-side-arrangement, 
+    .right-side-arrangement,
+    .middle-side-arrangement {
+        width: 100%;
+    }
+    .left-side-arrangement {
+        max-width: 80%;
+    }
     .ga-til-arrang-btn {
         width: 100%;
     }
 }
+@media(max-width: 576px) {
+    .left-side-arrangement {
+        max-width: 48vw;
+    }
+    .innslag-antall-chip {
+        display: none;
+    }
+    .innslag-antall-chip.show-on-xs {
+        display: flex;
+    }
+}
+
 </style>
