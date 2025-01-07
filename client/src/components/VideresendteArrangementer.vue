@@ -4,7 +4,7 @@
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="">
                     <div class="as-margin-bottom-space-4">
-                        <h4>Videresendte Arrangemener</h4>
+                        <h4>Arrangementer som har sendt noe videre</h4>
                     </div>
     
                     <div v-if="videresendteArrangementer.length < 1" class="as-card-2 videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
@@ -18,6 +18,20 @@
                                     <h5>{{ vArr.arrangementName }}</h5>
                                     <p>{{ vArr.fylkeName }}</p>
                                 </div>
+                                <div class="midle-side-arrangement">
+                                    
+                                    <!-- <v-chip
+                                        size="small"
+                                        class="innslag-antall-chip as-margin-auto"
+                                    >12 innslag ble videresendt</v-chip> -->
+                                    <v-chip
+                                        :append-icon="vArr.antallVideresendteInnslag > 0 ? 'mdi-checkbox-marked-circle' : 'mdi-alert'"
+                                        class="innslag-antall-chip as-margin-auto"
+                                        :color="vArr.antallVideresendteInnslag > 0 ? 'success' : 'warning'"
+                                        >
+                                        {{ vArr.antallVideresendteInnslag }} innslag videresendt
+                                    </v-chip>
+                                </div>
                                 <div class="right-side-arrangement">
                                     <v-btn
                                         class="ga-til-arrang-btn v-btn-as v-btn-bla"
@@ -25,7 +39,7 @@
                                         rounded="large"
                                         @click="goTilArrangement(vArr.link)"
                                         variant="outlined">
-                                        Gå til arrangement
+                                        Til arrangement
                                     </v-btn>
                                 </div>
                             </div>
@@ -37,14 +51,34 @@
 
         <div class="col-sm-4 col-xs-12">
             <div class="as-card-1 as-padding-space-3">
+                <div class="as-margin-bottom-space-4">
+                    <h4>Fylke videresending oversikt</h4>
+                </div>
                 <div v-for="fylke in alleFylker" :key="fylke.fylkeId" class="as-display-flex fylke-arr as-padding-bottom-space-1 as-margin-bottom-space-1">
                     <div class="as-margin-auto as-margin-left-none">
                         <p>{{ fylke.fylkeName }}</p>
                     </div>
                     <div class="as-margin-auto as-margin-right-none">
                         <v-chip 
-                            :color="fylkeVideresendt(fylke.fylkeId) > 0 ? 'success' : 'error'">
-                            {{ fylkeVideresendt(fylke.fylkeId) }}
+                            v-bind="props"
+                            :color="fylkeColor(fylke.fylkeId)">
+                            {{ faktiskeAntallVideresendte(fylke.fylkeId) + ' av ' + antallFylkeVideresendt(fylke.fylkeId) }}
+                            <v-tooltip open-delay="200" activator="parent" location="start">
+                                <template v-if="antallFylkeVideresendt(fylke.fylkeId) > 0">
+                                    <template v-if="faktiskeAntallVideresendte(fylke.fylkeId) == antallFylkeVideresendt(fylke.fylkeId)">
+                                        Alle arrangementer har videresendt innslag
+                                    </template>
+                                    <template v-else-if="faktiskeAntallVideresendte(fylke.fylkeId) == 0">
+                                        Ingen av arrangementene har videresendt innslag
+                                    </template>
+                                    <template v-else>
+                                        {{ faktiskeAntallVideresendte(fylke.fylkeId) + ' av ' + antallFylkeVideresendt(fylke.fylkeId) + ' arrangementer har videresendt innslag' }}
+                                    </template>
+                                </template>
+                                <template v-else>
+                                    Du har ikke åpnet videresending for {{ fylke.fylkeName }}
+                                </template>
+                            </v-tooltip>
                         </v-chip>
                     </div>
                 </div>
@@ -69,9 +103,28 @@ const props = defineProps({
     }
 }); 
 
-const fylkeVideresendt = (fylkeId : number) : number => {
+const antallFylkeVideresendt = (fylkeId : number) : number => {
     return videresendteArrangementer.value.filter((arrangement : any) => arrangement.fylkeId == fylkeId).length;
 }
+
+const faktiskeAntallVideresendte = (fylkeId : number) : number => {
+    return videresendteArrangementer.value.filter((arrangement : any) => arrangement.fylkeId == fylkeId && arrangement.antallVideresendteInnslag > 0).length;
+}
+
+const fylkeColor = (fylkeId : number) : string => {
+    let faktiskeVideresendte = faktiskeAntallVideresendte(fylkeId);
+    let muligeVideresendte = antallFylkeVideresendt(fylkeId);
+    
+    if(muligeVideresendte == 0) {
+        return 'error';
+    }
+
+    if(faktiskeVideresendte > 0 && faktiskeVideresendte < muligeVideresendte) {
+        return 'warning';
+    }
+    return faktiskeVideresendte == muligeVideresendte ? 'success' : 'error';
+}
+
 
 const fetchFylker = async () => {
     var data = {
@@ -122,9 +175,24 @@ fetchData();
 .videresendt-arrangement {
     background: var(--color-primary-grey-lightest);
 }
+.left-side-arrangement {
+    width: 33%;
+}
+.midle-side-arrangement {
+    padding-left: 16px;
+    border-left: solid 1px #dfdfdf;
+    margin-left: 16px;
+    padding-right: 16px;
+    margin-right: 16px;
+    border-right: solid 1px #dfdfdf;
+    width: 33%;
+    display: flex
+}
 .right-side-arrangement {
     margin: auto;
     margin-right: 0;
+    width: 33%;
+    display: flex;
 }
 .fylke-arr {
     border-bottom: solid 1px var(--color-primary-grey-light);
@@ -137,6 +205,10 @@ fetchData();
     border-bottom: none;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
+}
+.ga-til-arrang-btn {
+    margin: auto;
+    margin-right: 0;
 }
 @media(max-width: 767px) {
     .videresendt-arrangement {

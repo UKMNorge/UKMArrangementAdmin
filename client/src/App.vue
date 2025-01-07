@@ -10,7 +10,7 @@
                 <v-tab text="Innstillinger"></v-tab>
                 <v-tab text="Påmelding"></v-tab>
                 <v-tab text="Ledere/sykerom"></v-tab>
-                <v-tab text="Videresendte Arrangementer"></v-tab>
+                <v-tab text="Videresending oversikt"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
                 <!-- <v-tab text="Kontaktpersoner"></v-tab> -->
             </v-tabs>

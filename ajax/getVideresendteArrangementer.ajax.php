@@ -18,6 +18,7 @@ try{
 }
 
 $retArr = [];
+$innslagArrangement = [];
 
 foreach($arrangement->getVideresending()->getAvsendere() as $arrangAvsender) {
     $arrang = $arrangAvsender->getArrangement();
@@ -28,7 +29,8 @@ foreach($arrangement->getVideresending()->getAvsendere() as $arrangAvsender) {
         'fylkeId' => $fylke->getId(), 
         'arrangementName' => $arrang->getNavn(),
         'festivalId' => $arrang->getId(),
-        'link' => $arrang->getLink()
+        'link' => $arrang->getLink(),
+        'antallVideresendteInnslag' => $arrang->getVideresendte($arrangement->getId())->getAntall(),
     );
 }
 
