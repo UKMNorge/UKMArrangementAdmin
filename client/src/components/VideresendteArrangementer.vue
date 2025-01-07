@@ -4,7 +4,7 @@
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="">
                     <div class="as-margin-bottom-space-4">
-                        <h4>Arrangementer som har sendt noe videre</h4>
+                        <h4>Arrangementer som har blitt åpnet for videresending</h4>
                     </div>
     
                     <div v-if="videresendteArrangementer.length < 1" class="as-card-2 videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
