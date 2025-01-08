@@ -4,7 +4,7 @@
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="">
                     <div class="as-margin-bottom-space-4">
-                        <h4>Arrangementer som har blitt åpnet for videresending</h4>
+                        <h4>Arrangementer som er klarert for å videresende</h4>
                     </div>
     
                     <div v-if="videresendteArrangementer.length < 1" class="as-card-2 videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
@@ -56,7 +56,7 @@
             <div class="as-margin-top-space-4 as-margin-bottom-space-4">
                 <PermanentNotification 
                     typeNotification="info" 
-                    :tittel="`Flere arrangement som kan videresende til deg?`" 
+                    :tittel="`Er det flere arrangementer som skal videresende?`" 
                     :isHTML="true"
                     :description="`<p>For å legge til flere arrangementer som kan videresendes til deg, klikk på <a class='as-btn-ahref' href='?page=UKMarrangement_videresending'>videresending</a></p>`" 
                 />
@@ -65,8 +65,21 @@
 
         <div class="col-lg-4 col-sm-12">
             <div class="as-card-1 as-padding-space-3">
-                <div class="as-margin-bottom-space-4">
-                    <h4>Fylker videresending oversikt</h4>
+                <div class="as-margin-bottom-space-4 as-display-flex">
+                    <h4>Fylkesoversikt</h4>
+                    <div class="as-margin-auto as-margin-right-none">
+                        <v-btn @click="fylkeInfo = !fylkeInfo" class="vuetify-icon-button as-margin-auto as-margin-right-none" density="compact" icon variant="tonal">
+                            <v-icon>mdi-information-slab-symbol</v-icon>
+                        </v-btn>
+                    </div>
+                </div>
+                <div v-show="fylkeInfo">
+                    <PermanentNotification 
+                        typeNotification="info" 
+                        :tittel="`Forklaring av tall`" 
+                        :isHTML="true"
+                        :description="`<p><b>Tall 1</b>= Arr. i fylket som har startet videresending</p><p><b>Tall 2</b>= Arr. i fylket klarert for videresending</p>`" 
+                    />
                 </div>
                 <div v-for="fylke in alleFylker" :key="fylke.fylkeId" class="as-display-flex fylke-arr as-padding-bottom-space-1 as-margin-bottom-space-1">
                     <div class="as-margin-auto as-margin-left-none">
@@ -111,6 +124,7 @@ import { PermanentNotification } from 'ukm-components-vue3';
 
 const videresendteArrangementer = ref([] as any);
 const alleFylker = ref([] as any);
+const fylkeInfo = ref(false);
 
 const props = defineProps({ 
     arrangement: {
