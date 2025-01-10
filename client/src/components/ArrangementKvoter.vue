@@ -131,6 +131,11 @@ const save = () => {
 .arrangement-kvoter-msg > .vue-componment-notification-message {
     margin: 0 !important;
 }
+@media(max-width: 782px) {
+    .v-text-field-arr-sys .v-text-field__prefix {
+        min-height: 40px !important;
+    }
+}
 
     
 </style>
