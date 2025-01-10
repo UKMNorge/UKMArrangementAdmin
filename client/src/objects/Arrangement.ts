@@ -113,6 +113,9 @@ class Arrangement {
         return Arrangement.createEmpty();        
     }
     public async save() {
+        if(!this.canBeSaved()) {
+            return;
+        }
         this.saveOngoing = true;
         
         var data = {
@@ -148,6 +151,14 @@ class Arrangement {
         }
         
         return results;
+    }
+
+    private canBeSaved() : boolean {
+        if(this.startDate.getTime() > this.endDate.getTime()) {
+            this.spaInteraction.showMessage('Feil', 'Startdato kan ikke være etter sluttdato', 'error');
+            return false;
+        }
+        return true;
     }
 
     public isActive() {
