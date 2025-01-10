@@ -28,11 +28,11 @@
                 <div class="as-display-flex datepicker-festivalinfo">
                     <div class="col-sm-6 col-xs-12 nop-impt finfo-date-picker as-margin-right-space-2">
                         <p class="v-label title-dato">Startdato</p>
-                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.startDate" />
+                        <VueDatePicker :format="customFormat" @update:model-value="handleDateChange" v-model="arrangement.startDate" />
                     </div>
                     <div class="col-sm-6 col-xs-12 nop-impt finfo-date-picker as-margin-left-space-2">
                         <p class="v-label title-dato">Sluttdato</p>
-                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.endDate" />
+                        <VueDatePicker :format="customFormat" @update:model-value="handleDateChange" v-model="arrangement.endDate" />
                     </div>
                 </div>
 
@@ -193,6 +193,18 @@ export default {
         }
     },
     methods : {
+        customFormat(date : Date) {
+            // Format date as "DD-MM-YYYY HH:mm"
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const year = date.getFullYear();
+
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+
+            return `${day}.${month}.${year}, kl. ${hours}:${minutes}`;
+        },
         handleDateChange() {
             this.getTimelineItems();
         },
@@ -350,13 +362,10 @@ export default {
     border-color: #aaaaaa !important;
     margin-left: 36px !important;
     background: #f4f4f4 !important;
+    width: calc(100% - 36px);
 }
 .finfo-date-picker .dp__input_wrap {
-    max-width: 290px;
-    
-}
-.finfo-date-picker .dp--clear-btn {
-    right: -35px !important
+    width: 100%;
 }
 .finfo-date-picker .dp__input_icon.dp__input_icons {
     margin-left: -8px !important;
