@@ -12,6 +12,7 @@
                 <v-tab text="Ledere/sykerom"></v-tab>
                 <v-tab text="Videresending oversikt"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
+                <v-tab text="Aktiviteter"></v-tab>
                 <!-- <v-tab text="Kontaktpersoner"></v-tab> -->
             </v-tabs>
         </div>
@@ -61,6 +62,13 @@
                             </div>
                         </v-tabs-window-item>
 
+                        <!-- Aktiviteter -->
+                        <v-tabs-window-item v-if="arrangementLoaded">
+                            <div class="as-containercontainer">
+                                <Aktiviteter :arrangement="arrangement" />
+                            </div>
+                        </v-tabs-window-item>
+
                         <!--  -->
                         <!-- <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
@@ -85,6 +93,7 @@ import FestivalInfo from "./components/FestivalInfo.vue";
 import Innstillinger from "./components/Innstillinger.vue";
 import Pamelding from "./components/Pamelding.vue";
 import Ledere from "./components/Ledere.vue";
+import Aktiviteter from "./components/Aktiviteter.vue";
 import VideresendteArrangementer from "./components/VideresendteArrangementer.vue";
 import ArrangementKvoter from "./components/ArrangementKvoter.vue";
 import { Director } from 'ukm-spa/Director';
@@ -116,6 +125,7 @@ export default {
         Ledere : Ledere,
         VideresendteArrangementer : VideresendteArrangementer,
         ArrangementKvoter : ArrangementKvoter,
+        Aktiviteter : Aktiviteter,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },
