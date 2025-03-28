@@ -36,8 +36,11 @@ class Aktivitet {
         
         var data = {
             action: 'UKMArrangementAdmin_ajax',
-            controller: 'saveLeder',
-            tidspunktId: this.id,
+            controller: 'aktivitet/saveAktivitet',
+            aktivitetId: this.id,
+            navn: this.navn,
+            sted: this.sted,
+            beskrivelse: this.beskrivelse,
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
@@ -48,6 +51,7 @@ class Aktivitet {
         
         return results;
     }
+    
 }
 
 export default Aktivitet;

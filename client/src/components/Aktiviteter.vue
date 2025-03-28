@@ -128,7 +128,9 @@ export default {
                             tidspunkt.maksAntall,
                             tidspunkt.hendelseId,
                             aktivitetObj,
-                            deltakere)
+                            deltakere,
+                            tidspunkt.harPaamelding,
+                            tidspunkt.erSammeStedSomAktivitet)
                     );
 
                     console.log(tidspunkter);

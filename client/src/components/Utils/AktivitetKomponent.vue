@@ -12,6 +12,12 @@
                     <InputTextOverlay :placeholder="'Sted'" v-model="aktivitet.sted" />
                 </div>
             </div>
+            
+            <div class="col-xs-10 as-margin-top-space-4 nop-impt">    
+                <div class="col-xs-12 nop-impt">
+                    <v-textarea class="vue-as-textarea" label="Beskrivelse av aktivitet" v-model="aktivitet.beskrivelse"></v-textarea>
+                </div>
+            </div>
         </div>
         
         <div class="col-xs-12 as-margin-top-space-2 nop-impt">
@@ -143,13 +149,22 @@
 
 
                 <div class="col-xs-12 nop-impt as-margin-top-space-2">
-                    <v-btn
+                    <v-btn v-show="tidspunkt.id != -1"
                         class="v-btn-as v-btn-success"
                         rounded="large"
                         size="large"
-                        @click="tidspunkt.save()"
+                        @click="saveAktivitetOgTidspunkter(tidspunkt)"
                         variant="outlined">
                         Lagre
+                    </v-btn>
+
+                    <v-btn v-show="tidspunkt.id == -1"
+                        class="v-btn-as v-btn-default"
+                        rounded="large"
+                        size="large"
+                        @click="saveAktivitetOgTidspunkter(tidspunkt)"
+                        variant="outlined">
+                        Opprett
                     </v-btn>
                 </div>
                         
@@ -194,7 +209,7 @@ export default {
             retTidspunkter = [...retTidspunkter];
             
             // Add a "new item" element at the end
-            retTidspunkter.push(new AktivitetTidspunkt(-1, '', '', 0, 0, null, this.aktivitet, []));
+            retTidspunkter.push(new AktivitetTidspunkt(-1, '', '', 0, 0, null, this.aktivitet, [], false, false));
             
             return retTidspunkter;
         },
@@ -219,7 +234,7 @@ export default {
             
             // Convert timestamp to date
             const startDate = new Date(tidspunkt.start.replace(" ", "T")); // Replace space with "T" for proper ISO format
-            const endDate = new Date(startDate.getTime() + tidspunkt.varighetMinutter * 60000);
+            const endDate = new Date(tidspunkt.slutt.replace(" ", "T"));
             
             return [startDate, endDate];
         },
@@ -244,6 +259,10 @@ export default {
             tidspunkt.start = data[0].toISOString().replace("T", " ").replace("Z", "");
             tidspunkt.slutt = data[1].toISOString().replace("T", " ").replace("Z", "");
             // this.getTimelineItems();
+        },
+        async saveAktivitetOgTidspunkter(tidspunkt : AktivitetTidspunkt) {
+            tidspunkt.aktivitet.save();
+            tidspunkt.save()
         },
         init() {
             if (this.aktivitet.tidspunkter.length > 0) {

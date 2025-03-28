@@ -26,7 +26,17 @@ class AktivitetTidspunkt {
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
 
-    constructor(id : number, sted : string, start : string, varighetMinutter : number, maksAntall : number, hendelseId : number|null, aktivitet : Aktivitet, deltakere : AktivitetDeltaker[]) {
+    constructor(id : number, 
+        sted : string, 
+        start : string, 
+        varighetMinutter : number, 
+        maksAntall : number, 
+        hendelseId : number|null, 
+        aktivitet : Aktivitet, 
+        deltakere : AktivitetDeltaker[],
+        harPaamelding : boolean,
+        erSammeStedSomAktivitet : boolean,
+    ) {
         if(id == -1) {
             this.isReal = false;
         }
@@ -38,13 +48,12 @@ class AktivitetTidspunkt {
         this.varighetMinutter = varighetMinutter;
         this.maksAntall = maksAntall;
 
-        // get it from API
-        this.harPaamelding = true;
+        this.harPaamelding = harPaamelding;
+        this.erSammeStedSomAktivitet = erSammeStedSomAktivitet;
         
-        // get it from API
-        this.erSammeStedSomAktivitet = true;
-        
-        if(maksAntall > 0) {
+        console.log('maksAntall');
+        console.log(maksAntall);
+        if(maksAntall >= 999999) {
             this.hasMaksAntall = true;
         }
         else {
@@ -113,10 +122,20 @@ class AktivitetTidspunkt {
         
         var data = {
             action: 'UKMArrangementAdmin_ajax',
-            controller: 'saveLeder',
-            lederId: this.id,
-            godkjenning: this.godkjent,
+            controller: 'aktivitet/saveAktivitetTidspunkt',
+            tidspunktId: this.id,
+            sted: this.sted,
+            start: this.start,
+            slutt: this.slutt,
+            varighet: this.varighetMinutter,
+            maksAntall: this.hasMaksAntall ? 999999 : this.maksAntall,
+            aktivitetId: this.aktivitet.id,
+            harPaamelding: this.harPaamelding,
+            erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
         };
+        if(this.hendelseId) {
+            (<any>data).hendelseId = this.hendelseId;
+        }
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
         
