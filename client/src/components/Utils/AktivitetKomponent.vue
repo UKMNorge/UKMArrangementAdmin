@@ -1,47 +1,119 @@
 <template>
-    <div class="aktivitet-komponent">
+    <div class="aktivitet-komponent main-container">
+        <InputTextOverlay :placeholder="'Aktivitet navn'" v-model="aktivitet.navn" />
+        <hr>
+
         <div>
-            <v-card>
-                <v-card-text>
+
                     <!-- Chip Group to Replace Tabs -->
                     <v-chip-group v-model="tab" selected-class="text-white">
                         <v-chip
-                            v-for="tidspunkt in aktivitet.tidspunkter"
+                            v-for="tidspunkt in tidspunkter "
                             :key="tidspunkt.id"
-                            :value="tidspunkt.id"
+                            :value="tidspunkt.navn"
                             color="primary"
                         >
-                            {{ tidspunkt.getStartHuman() }}
+                            {{ tidspunkt.getTittel() }}
                         </v-chip>
                     </v-chip-group>
 
                     <!-- Content Display for Selected Chip -->
                     <v-window v-model="tab">
-                        <v-window-item v-for="tidspunkt in aktivitet.tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
-                            <v-card>
-                                <v-card-title>{{ tidspunkt.getStartHuman() }}</v-card-title>
-                                <v-card-text>
-                                    <p>{{ tidspunkt.getStartHuman() }} - {{ tidspunkt.varighetMinutter }}</p>
-                                    <p>Maks antall: {{ tidspunkt.maksAntall }}</p>
-                                    <p>HendelseId: {{ tidspunkt.hendelseId }}</p>
-                                    <div class="deltakere">
-                                        <h5>Deltakere: </h5>
-                                        <p v-for="deltaker in tidspunkt.deltakere">
-                                            {{  deltaker.mobil }}
-                                        </p>
+                        <v-window-item v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
+                    
+                                    <div class="col-xs-12 nop-impt">
+                                        <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                            <h5>Velg start og slutt</h5>
+                                        </div>
+                                        
+                                        <div class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
+                                            <VueDatePicker 
+                                                :model-value="getStartSluttDate(tidspunkt)" 
+                                                @update:model-value="(newDates : [Date, Date]) => handleDateChange(newDates, tidspunkt)" 
+                                                :range="{ showLastInRange: false }"
+                                                :hide-input-icon="true" 
+                                                :clearable="false" />
+                                        </div>
                                     </div>
-                                </v-card-text>
-                            </v-card>
+                                    
+                                    <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+                                        <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                            <h5>Velg sted og antall deltakere</h5>
+                                        </div>
+
+                                        <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                            <InputTextOverlay :placeholder="'Sted'" v-model="tidspunkt.sted" />
+                                        </div>
+                                        <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                            <InputTextOverlay 
+                                                :placeholder="'Begrenset antall deltakere'" 
+                                                :model-value="tidspunkt.maksAntall?.toString()" 
+                                                @update:model-value="val => tidspunkt.maksAntall = Number(val)"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+                                        <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                            <h5>Velg hendelse og tag</h5>
+                                        </div>
+                                        
+                                        <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                            <v-select
+                                                label="Hendelse" 
+                                                variant="outlined" 
+                                                class="v-autocomplete-arr-sys" 
+                                                :items="hendelser" 
+                                                v-model="tidspunkt.hendelseId"
+                                                item-text="title"
+                                                item-value="id" 
+                                                >
+                                            </v-select>
+                                        </div>
+
+                                        <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                            <v-select
+                                                label="Tags"
+                                                multiple
+                                                variant="outlined" 
+                                                class="v-autocomplete-arr-sys" 
+                                                :items="hendelser" 
+                                                v-model="tidspunkt.tags"
+                                                item-text="title"
+                                                item-value="id" 
+                                                chips
+                                                closable-chips
+                                                >
+                                            </v-select>
+                                        </div>
+                                    </div>
+
+
+                        <div class="as-margin-top-space-2">
+                            <v-btn
+                                class="v-btn-as v-btn-success"
+                                rounded="large"
+                                size="large"
+                                @click="tidspunkt.save()"
+                                variant="outlined">
+                                Lagre
+                            </v-btn>
+                        </div>
+                               
                         </v-window-item>
                     </v-window>
-                </v-card-text>
-            </v-card>
+                
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import Aktivitet from '../../objects/Aktivitet';
+import AktivitetTidspunkt from '../../objects/AktivitetTidspunkt';
+import { InputTextOverlay } from 'ukm-components-vue3';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import Hendelse from './../../objects/Hendelse';
+import AktivitetTag from './../../objects/AktivitetTag';
 
 export default {
     props: {
@@ -50,15 +122,71 @@ export default {
             required: true,
         },
     },
+    components: {
+        InputTextOverlay : InputTextOverlay,
+        VueDatePicker : VueDatePicker
+    },
     data() {
         return {
-            tab: null, // Set to null so no chip is selected by default
+            tab : null, // Set to null so no chip is selected by default
+            hendelser : [] as Hendelse[],
+            tags : [] as AktivitetTag[],
         };
     },
+    computed: {
+        tidspunkter() {
+            let retTidspunkter = this.aktivitet.tidspunkter || [];
+            
+            // Create a new array with all existing items
+            retTidspunkter = [...retTidspunkter];
+            
+            // Add a "new item" element at the end
+            retTidspunkter.push(new AktivitetTidspunkt(-1, '', '', 0, 0, null, this.aktivitet, []));
+            
+            return retTidspunkter;
+        },
+    },
     mounted() {
+        // Test data
+        this.hendelser = [
+            new Hendelse(1, 'Hendelse 1'),
+            new Hendelse(2, 'Hendelse 2'),
+            new Hendelse(3, 'Hendelse 3'),
+        ];
+        this.tags = [
+            new AktivitetTag(1, 'Tag 1'),
+            new AktivitetTag(2, 'Tag 2'),
+            new AktivitetTag(3, 'Tag 3'),
+        ];
         this.init();
     },
     methods: {
+        getStartSluttDate(tidspunkt: AktivitetTidspunkt): [Date, Date] {
+            if (!tidspunkt.start) return [new Date(), new Date()];
+            
+            // Convert timestamp to date
+            const startDate = new Date(tidspunkt.start.replace(" ", "T")); // Replace space with "T" for proper ISO format
+            const endDate = new Date(startDate.getTime() + tidspunkt.varighetMinutter * 60000);
+            
+            return [startDate, endDate];
+        },
+        customFormat(date : Date) {
+            // Format date as "DD-MM-YYYY HH:mm"
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const year = date.getFullYear();
+
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+
+            return `${day}.${month}.${year}, kl. ${hours}:${minutes}`;
+        },
+        handleDateChange(data: [Date, Date], tidspunkt: AktivitetTidspunkt) {
+            tidspunkt.start = data[0].toISOString().replace("T", " ").replace("Z", "");
+            tidspunkt.slutt = data[1].toISOString().replace("T", " ").replace("Z", "");
+            // this.getTimelineItems();
+        },
         init() {
             if (this.aktivitet.tidspunkter.length > 0) {
                 this.tab = this.aktivitet.tidspunkter[0].id; // Select first item by default
@@ -71,6 +199,13 @@ export default {
 <style scoped>
 .aktivitet-komponent {
     background-color: #fff;
-    padding: 16px;
+}
+
+.tidspunkt-date-picker >>> .dp__pointer {
+    margin: 0 !important;
+    width: 100%;
+}
+.tidspunkt-date-picker >>> .dp--menu-wrapper {
+    position: sticky;
 }
 </style>

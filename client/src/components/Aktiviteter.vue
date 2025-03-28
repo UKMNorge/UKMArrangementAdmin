@@ -1,37 +1,41 @@
 <template>
     <div class="as-container main-container">
 
-        <v-card class="mx-auto">
-            <v-list lines="three">
-                <template v-for="aktivitet in aktiviteter" :key="aktivitet.id">
-                    <v-list-item
-                    :subtitle="aktivitet.subtitle"
-                    :title="aktivitet.title"
-                    >
-                    <template v-slot:prepend>
-                        <v-avatar color="grey-lighten-1">
-                        <v-icon color="white">mdi-folder</v-icon>
-                        </v-avatar>
-                    </template>
-
-                    <template v-slot:append>
-                        <v-btn 
-                        icon 
-                        variant="text" 
-                        @click="toggleExpand(aktivitet)"
+        <v-card class="mx-auto aktivitet-card">
+            <v-list lines="three" class="aktivitet-list">
+                <div class="yoyob">
+                    <div class="yoyoc as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id">
+                        <v-list-item
+                        :title="aktivitet.title"
+                        :subtitle="aktivitet.subtitle"
+                        class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
-                        <v-icon>{{ aktivitet.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                        </v-btn>
-                    </template>
-                    </v-list-item>
+                        <template v-slot:prepend>
+                            <v-avatar color="grey-lighten-1">
+                            <v-icon color="white">mdi-folder</v-icon>
+                            </v-avatar>
+                        </template>
 
-                    <!-- Expandable Content BELOW the item -->
-                    <v-expand-transition>
-                        <div v-if="aktivitet.expanded" class="">
-                            <AktivitetKomponent :aktivitet="aktivitet" />
-                        </div>
-                    </v-expand-transition>
-                </template>
+                        <template v-slot:append>
+                            <v-btn 
+                            icon 
+                            variant="text" 
+                            @click="toggleExpand(aktivitet)"
+                            >
+                                <v-icon>{{ aktivitet.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                            </v-btn>
+                        </template>
+                        </v-list-item>
+
+                        <!-- Expandable Content BELOW the item -->
+                        <v-expand-transition>
+                            
+                            <div v-if="aktivitet.expanded">
+                                <AktivitetKomponent :aktivitet="aktivitet" />
+                            </div>
+                        </v-expand-transition>
+                    </div>
+                </div>
             </v-list>
         </v-card>
 
@@ -49,6 +53,8 @@ import Aktivitet from './../objects/Aktivitet';
 import AktivitetKomponent from './Utils/AktivitetKomponent.vue';
 import AktivitetTidspunkt from './../objects/AktivitetTidspunkt';
 import AktivitetDeltaker from './../objects/AktivitetDeltaker';
+import { InputTextOverlay } from 'ukm-components-vue3';
+
 
 export default {
     extends : MainComponent,
@@ -61,7 +67,9 @@ export default {
     components: {
         VueDatePicker : VueDatePicker,
         PermanentNotification : PermanentNotification,
-        AktivitetKomponent : AktivitetKomponent
+        AktivitetKomponent : AktivitetKomponent,
+        InputTextOverlay : InputTextOverlay,
+
     },
     mounted() {
         this.fetch();
@@ -70,7 +78,6 @@ export default {
         return {
             spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
             savingOngoing: false,
-            ledere : [] as Leder[],
             aktiviteter : [] as Aktivitet[],
         }
     },
@@ -78,19 +85,10 @@ export default {
         toggleExpand(aktivitet : Aktivitet) {
             aktivitet.expanded = !aktivitet.expanded;
         },
-        handleSwitchChange(leder: Leder|any) {
-            // Do not allow saving if a save is ongoing
-            if(this.savingOngoing) {
-                leder.godkjent = !leder.godkjent;
-                return;
-            }
-
-            this.save(leder);
-        },
         async fetch() {
             var data = {
                 action: 'UKMArrangementAdmin_ajax',
-                controller: 'getAlleAktiviteter',
+                controller: 'aktivitet/getAlleAktiviteter',
             };
 
             var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
@@ -121,10 +119,6 @@ export default {
                         );
                     }
                     
-                    console.log('-----');
-                    console.log(tidspunkt);
-                    console.log(deltakere);
-                    console.log('-----');
                     tidspunkter.push(
                         new AktivitetTidspunkt(
                             tidspunkt.id,
@@ -168,40 +162,17 @@ export default {
 </script>
 
 <style scoped>
-.godkjenning-div {
-    margin: auto;
-    margin-right: 0;
-    padding-left: calc(var(--initial-space-box) * 4);
-    display: flex;
-    min-width: 170px;
+.aktivitet-list,
+.aktivitet-card {
+    background: transparent;
 }
-.godkjenning-div .godkjenning-switch {
-    margin: auto;
-    margin-right: 0;
-}
-.leder-item {
-    border-bottom: solid 1px var(--color-primary-grey-light);
-    padding-bottom: calc(var(--initial-space-box) * 4) !important;
-}
-.leder-item.last-leader-item {
-    border-bottom: none;
-    padding-bottom: calc(var(--initial-space-box) * 2) !important;
+.aktivitet-item {
+    border: none;
+    box-shadow: none !important;
+    min-height: 56px;
 }
 @media(max-width: 767px) {
-    .leder-item {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
+
 }
 
-</style>
-<style>
-.ledere-beskjed-rapporter > div > div {
-    margin-bottom: 0 !important;
-}
-@media(max-width: 767px) {
-    .leder-item .v-list-item__prepend {
-        display: none !important;
-    }
-}
 </style>
