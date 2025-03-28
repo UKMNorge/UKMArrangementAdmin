@@ -12,6 +12,9 @@ class AktivitetTidspunkt {
     slutt : string;
     varighetMinutter : number;
     maksAntall : number;
+    hasMaksAntall : boolean;
+    harPaamelding : boolean;
+    erSammeStedSomAktivitet : boolean;
 
     hendelseId : number|null; // Foreign key til Hendelse. Kan være null : string;
    
@@ -34,6 +37,20 @@ class AktivitetTidspunkt {
         this.slutt = start;
         this.varighetMinutter = varighetMinutter;
         this.maksAntall = maksAntall;
+
+        // get it from API
+        this.harPaamelding = true;
+        
+        // get it from API
+        this.erSammeStedSomAktivitet = true;
+        
+        if(maksAntall > 0) {
+            this.hasMaksAntall = true;
+        }
+        else {
+            this.hasMaksAntall = false;
+        }
+
         this.hendelseId = hendelseId;
         this.aktivitet = aktivitet;
         this.deltakere = deltakere;
