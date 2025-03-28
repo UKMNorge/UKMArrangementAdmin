@@ -56,6 +56,7 @@ foreach(Aktivitet::getAllByArrangement(123) as $aktivitet) {
         $tidspunkter[] = array(
             'id' => $tidspunkt->getId(),
             'start' => $tidspunkt->getStart()->format('Y-m-d H:i:s'),
+            'sted' => $tidspunkt->getSted(),
             'varighet' => $tidspunkt->getVarighetMinutter(),
             'maksAntall' => $tidspunkt->getMaksAntall(),
             'deltakere' => $deltakere,
