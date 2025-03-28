@@ -38,42 +38,9 @@ $maxAntall = 10;
 $retArr = [];
 
 
-foreach(Aktivitet::getAllByArrangement(123) as $aktivitet) {
-    $tidspunkter = [];
-
-    foreach($aktivitet->getTidspunkter()->getAll() as $tidspunkt) {
-        $deltakere = [];
-
-        foreach($tidspunkt->getDeltakere()->getAll() as $deltaker) {
-            if($deltaker->erAktiv()) {
-                $deltakere[] = array(
-                    'mobil' => $deltaker->getMobil(),
-                    'aktiv' => $deltaker->erAktiv(),
-                );
-            }
-        }
-
-        $tidspunkter[] = array(
-            'id' => $tidspunkt->getId(),
-            'start' => $tidspunkt->getStart()->format('Y-m-d H:i:s'),
-            'sted' => $tidspunkt->getSted(),
-            'varighet' => $tidspunkt->getVarighetMinutter(),
-            'maksAntall' => $tidspunkt->getMaksAntall(),
-            'deltakere' => $deltakere,
-            'hendelseId' => $tidspunkt->getHendelseId(),
-        );
-    }
-
-    $retArr[] = array(
-        'id' => $aktivitet->getId(),
-        'navn' => $aktivitet->getNavn(),
-        'sted' => $aktivitet->getSted(),
-        'beskrivelse' => $aktivitet->getBeskrivelse(),
-        'plId' => $aktivitet->getPlId(),
-        'tidspunkter' => $tidspunkter,
-    );
+foreach(Aktivitet::getAllByArrangement($arrangement->getId()) as $aktivitet) {
+    $retArr[] = $aktivitet->getArrObj();
 }
-
 
 
 $handleCall->sendToClient($retArr);
