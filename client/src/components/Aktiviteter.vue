@@ -169,7 +169,7 @@ export default {
 .aktivitet-item {
     border: none;
     box-shadow: none !important;
-    min-height: 56px;
+    min-height: 56px !important;
 }
 @media(max-width: 767px) {
 
