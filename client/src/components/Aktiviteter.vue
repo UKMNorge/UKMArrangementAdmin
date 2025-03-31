@@ -1,10 +1,21 @@
 <template>
     <div class="as-container main-container">
-
+        <div class="aktiviteter-buttons">
+            <v-btn
+                class="v-btn-as v-btn-hvit"
+                prepend-icon="mdi-plus"
+                color="#000"
+                rounded="large"
+                :size="isMobile ? 'large' : 'x-large'"
+                @click="leggTilAktivitet"
+                variant="outlined" >
+                Legg til Aktivitet
+            </v-btn>
+        </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
-                <div class="yoyob">
-                    <div class="yoyoc as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id">
+                <div class="">
+                    <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id">
                         <v-list-item
                         :title="aktivitet.title"
                         :subtitle="aktivitet.subtitle"
@@ -57,7 +68,11 @@ import { InputTextOverlay } from 'ukm-components-vue3';
 
 
 export default {
-    extends : MainComponent,
+    computed: {
+        isMobile() {
+            return window.innerWidth < 576; // Adjust the breakpoint as needed
+        }
+    },
     props: {
         arrangement: {
             type: Object as PropType<Arrangement>,
@@ -84,6 +99,27 @@ export default {
     methods : {
         toggleExpand(aktivitet : Aktivitet) {
             aktivitet.expanded = !aktivitet.expanded;
+        },
+        leggTilAktivitet() {
+            // Check if there is already an empty aktivitet
+            for(let aktivitet of this.aktiviteter) {
+                if(aktivitet.id == -1) {
+                    aktivitet.expanded = true;
+                    return;
+                }
+            }
+            
+            let newAktivitet = new Aktivitet(
+                -1, 
+                '', 
+                '', 
+                '',
+                -1,
+                []
+            );
+            
+            this.aktiviteter.unshift(newAktivitet);
+            newAktivitet.expanded = true;
         },
         async fetch() {
             var data = {
@@ -124,6 +160,7 @@ export default {
                             tidspunkt.id,
                             tidspunkt.sted,
                             tidspunkt.start,
+                            tidspunkt.slutt,
                             tidspunkt.varighet,
                             tidspunkt.maksAntall,
                             tidspunkt.hendelseId,
@@ -167,11 +204,16 @@ export default {
 .aktivitet-list,
 .aktivitet-card {
     background: transparent;
+    box-shadow: none !important;
 }
 .aktivitet-item {
     border: none;
     box-shadow: none !important;
     min-height: 56px !important;
+}
+.aktivitet-list,
+.aktiviteter-buttons {
+    padding: var(--initial-space-box) !important;
 }
 @media(max-width: 767px) {
 

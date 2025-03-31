@@ -28,15 +28,56 @@ class Aktivitet {
         this.beskrivelse = beskrivelse;
         this.plId = plId;
         this.tidspunkter = tidspunkter;
+
+        this.addNewTidspubktInTheList();
     }
 
-    public async save() {
+    private addNewTidspubktInTheList() {
+        // Only if id -1 is not in the list
+        if(this.tidspunkter.find(tidspunkt => tidspunkt.id == -1) != null) {
+            return;
+        }
+
+        this.tidspunkter.push(new AktivitetTidspunkt(
+            -1,     // : number,
+            '',     // : string, 
+            "",     // : string, 
+            "",     // : string, 
+            0,     // : number, 
+            100,     // : number, 
+            null,     // : number|null, 
+            this,     // : Aktivitet, 
+            [],     // : AktivitetDeltaker[],
+            true,     // : boolean,
+            true,     // : boolean,)
+        ));
+    }
+
+    public async create() {
+        let results : any = await this.save('aktivitet/createAktivitet');
+
+        this.id = results.id;
+        this.navn = results.navn;
+        this.title = results.navn;
+        this.subtitle = results.sted;
+        this.sted = results.sted;
+        this.beskrivelse = results.beskrivelse;
+        this.plId = results.plId;
+        this.tidspunkter = []; // Assuming the last parameter
+
+        console.log('this');
+        console.log(this);
+
+        return results;
+    }
+
+    public async save(controllerArg : string|null = null) {
         this.loading = true;
         // Save to database via API
         
         var data = {
             action: 'UKMArrangementAdmin_ajax',
-            controller: 'aktivitet/saveAktivitet',
+            controller: controllerArg ?? 'aktivitet/saveAktivitet',
             aktivitetId: this.id,
             navn: this.navn,
             sted: this.sted,

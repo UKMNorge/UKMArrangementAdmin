@@ -13,165 +13,177 @@
                 </div>
             </div>
             
-            <div class="col-xs-10 as-margin-top-space-4 nop-impt">    
+            <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-4 nop-impt">
                 <div class="col-xs-12 nop-impt">
                     <v-textarea class="vue-as-textarea" label="Beskrivelse av aktivitet" v-model="aktivitet.beskrivelse"></v-textarea>
                 </div>
             </div>
         </div>
-        
-        <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-            <hr>
-        </div>
 
-        <div class="col-xs-12 nop-impt">
-            <div class="as-margin-top-space-2 as-margin-bottom-space-2">
-                <h4>Tidspunkter</h4>
+        <v-btn v-show="aktivitet.id == -1"
+            class="v-btn-as v-btn-success"
+            rounded="large"
+            size="large"
+            @click="createAktivitet(aktivitet)"
+            variant="outlined">
+            Opprett
+        </v-btn>
+
+        <template v-if="aktivitet.id != -1">
+            <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+                <hr>
             </div>
-            <!-- Chip Group to Replace Tabs -->
-            <v-chip-group v-model="tab" selected-class="text-white">
-                <v-chip
-                    v-for="tidspunkt in tidspunkter "
-                    :key="tidspunkt.id"
-                    :value="tidspunkt.navn"
-                    color="primary"
-                >
-                    {{ tidspunkt.getTittel() }}
-                </v-chip>
-            </v-chip-group>
 
-            <!-- Content Display for Selected Chip -->
-            <v-window v-model="tab">
-                <v-window-item v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
-            
-                            <div class="col-xs-12 nop-impt">
-                                <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
-                                    <h5>Velg start og slutt</h5>
-                                </div>
-                                
-                                <div class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
-                                    <VueDatePicker 
-                                        :model-value="getStartSluttDate(tidspunkt)" 
-                                        @update:model-value="(newDates : [Date, Date]) => handleDateChange(newDates, tidspunkt)" 
-                                        :range="{ showLastInRange: false }"
-                                        :hide-input-icon="true" 
-                                        :clearable="false" />
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-                                <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
-                                    <h5>Velg sted</h5>
-                                </div>
-                                <div class="col-sm-2 nop-impt as-margin-right-space-2">
-                                    <v-checkbox
-                                        v-model="tidspunkt.erSammeStedSomAktivitet"
-                                        label="Samme sted"
-                                    ></v-checkbox>
-                                </div>
-                                <div v-show="!tidspunkt.erSammeStedSomAktivitet" class="col-sm-5 nop-impt as-margin-right-space-2">
-                                        <InputTextOverlay :placeholder="'Sted'" v-model="tidspunkt.sted" />
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-                                <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
-                                    <h5>Velg hendelse og tag</h5>
-                                </div>
-                                
-                                <div class="col-sm-5 nop-impt as-margin-right-space-2">
-                                    <v-select
-                                        label="Hendelse" 
-                                        variant="outlined" 
-                                        class="v-autocomplete-arr-sys" 
-                                        :items="hendelser" 
-                                        v-model="tidspunkt.hendelseId"
-                                        item-text="title"
-                                        item-value="id" 
-                                        >
-                                    </v-select>
-                                </div>
-
-                                <div class="col-sm-5 nop-impt as-margin-right-space-2">
-                                    <v-select
-                                        label="Tags"
-                                        multiple
-                                        variant="outlined" 
-                                        class="v-autocomplete-arr-sys" 
-                                        :items="hendelser" 
-                                        v-model="tidspunkt.tags"
-                                        item-text="title"
-                                        item-value="id" 
-                                        chips
-                                        closable-chips
-                                        >
-                                    </v-select>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-                                <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
-                                    <h5>Påmelding og deltakere</h5>
-                                    <div class="col-sm-3 nop-impt as-margin-right-space-2">
-                                        <v-checkbox
-                                            v-model="tidspunkt.harPaamelding"
-                                            label="Har påmelding"
-                                        ></v-checkbox>
-                                    </div>
-                                    <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
-                                        <v-checkbox
-                                            v-model="tidspunkt.hasMaksAntall"
-                                            label="Ubegrenset antall deltakere"
-                                        ></v-checkbox>
-                                    </div>
-                                    <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
-                                        <InputTextOverlay v-show="!tidspunkt.hasMaksAntall"
-                                        :placeholder="'Begrenset antall deltakere'" 
-                                        :model-value="tidspunkt.maksAntall?.toString()" 
-                                        @update:model-value="val => tidspunkt.maksAntall = Number(val)"
-                                        />
-                                    </div>
-
-                                    <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
-                                        <v-chip-group v-model="tidspunkt.deltakere" selected-class="text-white">
-                                            <v-chip
-                                                v-for="deltaker in tidspunkt.deltakere"
-                                                :key="deltaker.mobil"
-                                                :value="deltaker.mobil"
-                                                color="primary"
-                                            >
-                                                {{ deltaker.mobil }}
-                                            </v-chip>
-                                        </v-chip-group>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                <div class="col-xs-12 nop-impt as-margin-top-space-2">
-                    <v-btn v-show="tidspunkt.id != -1"
-                        class="v-btn-as v-btn-success"
-                        rounded="large"
-                        size="large"
-                        @click="saveAktivitetOgTidspunkter(tidspunkt)"
-                        variant="outlined">
-                        Lagre
-                    </v-btn>
-
-                    <v-btn v-show="tidspunkt.id == -1"
-                        class="v-btn-as v-btn-default"
-                        rounded="large"
-                        size="large"
-                        @click="saveAktivitetOgTidspunkter(tidspunkt)"
-                        variant="outlined">
-                        Opprett
-                    </v-btn>
+            <div class="col-xs-12 nop-impt">
+                <div class="as-margin-top-space-2 as-margin-bottom-space-2">
+                    <h4>Tidspunkter</h4>
                 </div>
-                        
-                </v-window-item>
-            </v-window>
+                <!-- Chip Group to Replace Tabs -->
+                <v-chip-group v-model="tab" selected-class="text-white">
+                    <v-chip
+                        v-for="tidspunkt in tidspunkter "
+                        :key="tidspunkt.id"
+                        :value="tidspunkt.navn"
+                        color="primary"
+                    >
+                        {{ tidspunkt.getTittel() }}
+                    </v-chip>
+                </v-chip-group>
+
+                <!-- Content Display for Selected Chip -->
+                <v-window v-model="tab">
+                    <v-window-item v-if="tidspunkter.length > 0" v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
                 
-        </div>
+                                <div class="col-xs-12 nop-impt">
+                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                        <h5>Velg start og slutt</h5>
+                                    </div>
+                                    
+                                    <div class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
+                                        <VueDatePicker 
+                                            :model-value="getStartSluttDate(tidspunkt)" 
+                                            @update:model-value="(newDates : [Date, Date]) => handleDateChange(newDates, tidspunkt)" 
+                                            :range="{ showLastInRange: false }"
+                                            :hide-input-icon="true" 
+                                            :clearable="false" />
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                        <h5>Velg sted</h5>
+                                    </div>
+                                    <div class="col-sm-2 nop-impt as-margin-right-space-2">
+                                        <v-checkbox
+                                            v-model="tidspunkt.erSammeStedSomAktivitet"
+                                            label="Samme sted som aktivitet"
+                                        ></v-checkbox>
+                                    </div>
+                                    <div v-show="!tidspunkt.erSammeStedSomAktivitet" class="col-sm-5 nop-impt as-margin-right-space-2">
+                                            <InputTextOverlay :placeholder="'Sted'" v-model="tidspunkt.sted" />
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                        <h5>Velg hendelse og tag</h5>
+                                    </div>
+                                    
+                                    <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                        <v-select
+                                            label="Hendelse" 
+                                            variant="outlined" 
+                                            class="v-autocomplete-arr-sys" 
+                                            :items="hendelser" 
+                                            v-model="tidspunkt.hendelseId"
+                                            item-text="title"
+                                            item-value="id" 
+                                            >
+                                        </v-select>
+                                    </div>
+
+                                    <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                        <v-select
+                                            label="Tags"
+                                            multiple
+                                            variant="outlined" 
+                                            class="v-autocomplete-arr-sys" 
+                                            :items="hendelser" 
+                                            v-model="tidspunkt.tags"
+                                            item-text="title"
+                                            item-value="id" 
+                                            chips
+                                            closable-chips
+                                            >
+                                        </v-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                        <h5>Påmelding og deltakere</h5>
+                                        <div class="col-sm-3 nop-impt as-margin-right-space-2">
+                                            <v-checkbox
+                                                v-model="tidspunkt.harPaamelding"
+                                                label="Har påmelding"
+                                            ></v-checkbox>
+                                        </div>
+                                        <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
+                                            <v-checkbox
+                                                v-model="tidspunkt.hasMaksAntall"
+                                                label="Ubegrenset antall deltakere"
+                                            ></v-checkbox>
+                                        </div>
+                                        <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
+                                            <InputTextOverlay v-show="!tidspunkt.hasMaksAntall"
+                                            :placeholder="'Begrenset antall deltakere'" 
+                                            :model-value="tidspunkt.maksAntall?.toString()" 
+                                            @update:model-value="val => tidspunkt.maksAntall = Number(val)"
+                                            />
+                                        </div>
+
+                                        <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
+                                            <v-chip-group v-model="tidspunkt.deltakere" selected-class="text-white">
+                                                <v-chip
+                                                    v-for="deltaker in tidspunkt.deltakere"
+                                                    :key="deltaker.mobil"
+                                                    :value="deltaker.mobil"
+                                                    color="primary"
+                                                >
+                                                    {{ deltaker.mobil }}
+                                                </v-chip>
+                                            </v-chip-group>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                    <div class="col-xs-12 nop-impt as-margin-top-space-2">
+                        <v-btn v-show="tidspunkt.id != -1"
+                            class="v-btn-as v-btn-success"
+                            rounded="large"
+                            size="large"
+                            @click="saveAktivitetOgTidspunkter(tidspunkt)"
+                            variant="outlined">
+                            Lagre
+                        </v-btn>
+
+                        <v-btn v-show="tidspunkt.id == -1"
+                            class="v-btn-as v-btn-success"
+                            rounded="large"
+                            size="large"
+                            @click="createTidspunkt(tidspunkt)"
+                            variant="outlined">
+                            Opprett tidspunkt
+                        </v-btn>
+                    </div>
+                            
+                    </v-window-item>
+                </v-window>
+                    
+            </div>
+        </template>
+        
     </div>
 </template>
 
@@ -204,12 +216,6 @@ export default {
     computed: {
         tidspunkter() {
             let retTidspunkter = this.aktivitet.tidspunkter || [];
-            
-            // Create a new array with all existing items
-            retTidspunkter = [...retTidspunkter];
-            
-            // Add a "new item" element at the end
-            retTidspunkter.push(new AktivitetTidspunkt(-1, '', '', 0, 0, null, this.aktivitet, [], false, false));
             
             return retTidspunkter;
         },
@@ -264,6 +270,12 @@ export default {
             tidspunkt.aktivitet.save();
             tidspunkt.save()
         },
+        async createAktivitet(aktivitet : Aktivitet) {
+            let results = await aktivitet.create();
+        },
+        async createTidspunkt(tidspunkt : AktivitetTidspunkt) {
+            let results = await tidspunkt.create();
+        },
         init() {
             if (this.aktivitet.tidspunkter.length > 0) {
                 this.tab = this.aktivitet.tidspunkter[0].id; // Select first item by default
@@ -284,5 +296,8 @@ export default {
 }
 .tidspunkt-date-picker >>> .dp--menu-wrapper {
     position: sticky;
+}
+.col-xs-10-with-margin {
+    width: calc(83.3% + calc(var(--initial-space-box) * 2)) !important;
 }
 </style>

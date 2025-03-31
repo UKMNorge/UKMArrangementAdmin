@@ -26,9 +26,11 @@ class AktivitetTidspunkt {
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
 
-    constructor(id : number, 
+    constructor(
+        id : number, 
         sted : string, 
         start : string, 
+        slutt : string,
         varighetMinutter : number, 
         maksAntall : number, 
         hendelseId : number|null, 
@@ -44,15 +46,13 @@ class AktivitetTidspunkt {
         this.id = id;
         this.sted = sted ?? "";
         this.start = start;
-        this.slutt = start;
+        this.slutt = slutt;
         this.varighetMinutter = varighetMinutter;
         this.maksAntall = maksAntall;
 
         this.harPaamelding = harPaamelding;
         this.erSammeStedSomAktivitet = erSammeStedSomAktivitet;
         
-        console.log('maksAntall');
-        console.log(maksAntall);
         if(maksAntall >= 999999) {
             this.hasMaksAntall = true;
         }
@@ -116,13 +116,21 @@ class AktivitetTidspunkt {
         return ret;
     }
 
-    public async save() {
+    public async create() {
+        let tidspunkt = this.save('aktivitet/createTidspunkt');
+
+        this.isReal = true;
+
+        return tidspunkt;
+    }
+
+    public async save(controllerArg : string|null = null) {
         this.loading = true;
         // Save to database via API
         
         var data = {
             action: 'UKMArrangementAdmin_ajax',
-            controller: 'aktivitet/saveAktivitetTidspunkt',
+            controller: controllerArg ?? 'aktivitet/saveAktivitetTidspunkt',
             tidspunktId: this.id,
             sted: this.sted,
             start: this.start,
