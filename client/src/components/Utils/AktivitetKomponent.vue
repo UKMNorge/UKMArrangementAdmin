@@ -41,19 +41,40 @@
                 <!-- Chip Group to Replace Tabs -->
                 <v-chip-group v-model="tab" selected-class="text-white">
                     <v-chip
-                        v-for="tidspunkt in tidspunkter "
+                        v-for="tidspunkt in tidspunkter"
                         :key="tidspunkt.id"
                         :value="tidspunkt.navn"
                         color="primary"
                     >
-                        {{ tidspunkt.getTittel() }}
+                        <span>{{ tidspunkt.getTittel() }}</span>
+                        <v-icon 
+                            class="as-margin-left-space-1 mdi-close-circle" 
+                            v-if="tidspunkt.id > 0" 
+                            size="20" 
+                            @click.stop="openDeleteDialog(tidspunkt)">
+                            mdi-close
+                        </v-icon>
                     </v-chip>
                 </v-chip-group>
+
+                <!-- Vuetify Delete Confirmation Dialog -->
+                <v-dialog v-model="deleteDialog" max-width="400">
+                    <v-card>
+                        <v-card-title>Bekreft sletting</v-card-title>
+                        <v-card-text>
+                            Er du sikker på at du vil slette tidspunktet: <b>{{ selectedTidspunkt?.getTittel() }}</b>?
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="grey" @click="deleteDialog = false">Avbryt</v-btn>
+                            <v-btn color="red" @click="confirmDelete" :loading="deleting">Slett</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
 
                 <!-- Content Display for Selected Chip -->
                 <v-window v-model="tab">
                     <v-window-item v-if="tidspunkter.length > 0" v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
-                
                                 <div class="col-xs-12 nop-impt">
                                     <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
                                         <h5>Velg start og slutt</h5>
@@ -61,6 +82,7 @@
                                     
                                     <div class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
                                         <VueDatePicker 
+                                            :format="(dates) => customFormat(dates)"
                                             :model-value="getStartSluttDate(tidspunkt)" 
                                             @update:model-value="(newDates : [Date, Date]) => handleDateChange(newDates, tidspunkt)" 
                                             :range="{ showLastInRange: false }"
@@ -73,7 +95,7 @@
                                     <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
                                         <h5>Velg sted</h5>
                                     </div>
-                                    <div class="col-sm-2 nop-impt as-margin-right-space-2">
+                                    <div class="col-sm-3 nop-impt as-margin-right-space-2">
                                         <v-checkbox
                                             v-model="tidspunkt.erSammeStedSomAktivitet"
                                             label="Samme sted som aktivitet"
@@ -194,7 +216,7 @@ import { InputTextOverlay } from 'ukm-components-vue3';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import Hendelse from './../../objects/Hendelse';
 import AktivitetTag from './../../objects/AktivitetTag';
-
+import { nextTick } from 'vue';
 export default {
     props: {
         aktivitet: {
@@ -211,16 +233,25 @@ export default {
             tab : null, // Set to null so no chip is selected by default
             hendelser : [] as Hendelse[],
             tags : [] as AktivitetTag[],
+            spaInteraction: (<any>window).spaInteraction, // Definert i main.ts
+            
+            // Dialog
+            deleteDialog: false,
+            selectedTidspunkt: null as AktivitetTidspunkt|null,
+            deleting: false,
         };
     },
     computed: {
         tidspunkter() {
             let retTidspunkter = this.aktivitet.tidspunkter || [];
-            
             return retTidspunkter;
         },
     },
     mounted() {
+        nextTick(() => {
+            this.init();
+        });
+
         // Test data
         this.hendelser = [
             new Hendelse(1, 'Hendelse 1'),
@@ -232,7 +263,7 @@ export default {
             new AktivitetTag(2, 'Tag 2'),
             new AktivitetTag(3, 'Tag 3'),
         ];
-        this.init();
+        
     },
     methods: {
         getStartSluttDate(tidspunkt: AktivitetTidspunkt): [Date, Date] {
@@ -249,17 +280,23 @@ export default {
             console.log(tidspunkt);
 
         },
-        customFormat(date : Date) {
-            // Format date as "DD-MM-YYYY HH:mm"
-            const day = String(date.getDate()).padStart(2, "0");
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const year = date.getFullYear();
+        customFormat(dates: [Date, Date] | null): string {
+            if (!dates || dates.length !== 2) return "";
 
-            const hours = String(date.getHours()).padStart(2, "0");
-            const minutes = String(date.getMinutes()).padStart(2, "0");
-            const seconds = String(date.getSeconds()).padStart(2, "0");
+            const formatDate = (date: Date) => {
+                const day = String(date.getDate()).padStart(2, "0");
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const year = date.getFullYear();
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
 
-            return `${day}.${month}.${year}, kl. ${hours}:${minutes}`;
+                const daysOfWeek = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
+
+
+                return `${daysOfWeek[date.getDay()]}, kl. ${hours}:${minutes}`;
+            };
+
+            return `Fra ${formatDate(dates[0])} til ${formatDate(dates[1])}`;
         },
         handleDateChange(data: [Date, Date], tidspunkt: AktivitetTidspunkt) {
             tidspunkt.start = data[0].toISOString().replace("T", " ").replace("Z", "");
@@ -276,10 +313,39 @@ export default {
         async createTidspunkt(tidspunkt : AktivitetTidspunkt) {
             let results = await tidspunkt.create();
         },
-        init() {
-            if (this.aktivitet.tidspunkter.length > 0) {
-                this.tab = this.aktivitet.tidspunkter[0].id; // Select first item by default
+        openDeleteDialog(tidspunkt : AktivitetTidspunkt) {
+            this.selectedTidspunkt = tidspunkt;
+            this.deleteDialog = true;
+        },
+        async confirmDelete() {
+            if(this.selectedTidspunkt == null){ return };
+
+            
+            this.deleting = true; // Show loading state
+            try {
+                
+                await this.deleteTidspunkt(this.selectedTidspunkt);
+                this.tidspunkter = this.tidspunkter.filter((t : AktivitetTidspunkt) => t.id !== (<AktivitetTidspunkt>this.selectedTidspunkt).id);
+                this.deleteDialog = false; // Close dialog
+            } catch (error) {
+                alert("Kunne ikke slette tidspunktet. Prøv igjen.");
+                console.error(error);
+            } finally {
+                this.deleting = false;
             }
+        },
+        async deleteTidspunkt(tidspunkt : AktivitetTidspunkt|null) {
+            if (tidspunkt == null) { return; }
+
+            let results = await tidspunkt.delete();
+            if(results && results.completed) {
+                tidspunkt.aktivitet.removeTidspunkt(tidspunkt);
+                this.tab = null; // Reset tab
+            }
+
+        },
+        init() {
+            this.tab = null;
         },
     },
 };

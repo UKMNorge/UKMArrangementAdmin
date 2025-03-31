@@ -16,7 +16,8 @@ class Aktivitet {
     tidspunkter : AktivitetTidspunkt[] = [];
 
     public expanded : boolean = false;  
-
+    public expandedTidspunkter : boolean = false;
+    
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
     constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[]) {
@@ -32,7 +33,19 @@ class Aktivitet {
         this.addNewTidspubktInTheList();
     }
 
-    private addNewTidspubktInTheList() {
+    public openOrClose() {
+
+        this.expanded = !this.expanded
+    }
+
+    public removeTidspunkt(tidspunkt : AktivitetTidspunkt) {
+        var index = this.tidspunkter.indexOf(tidspunkt);
+        if(index > -1) {
+            this.tidspunkter.splice(index, 1);
+        }
+    }
+
+    public addNewTidspubktInTheList() {
         // Only if id -1 is not in the list
         if(this.tidspunkter.find(tidspunkt => tidspunkt.id == -1) != null) {
             return;

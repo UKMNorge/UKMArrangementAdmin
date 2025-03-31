@@ -39,6 +39,8 @@ interactionObjectInstance.use(vuetify);
 const interactionInstance = interactionObjectInstance.mount(document.createElement('div'));
 
 // Append the interactionObjectInstance to the body
+console.log('interactionInstance.$el');
+console.log(interactionInstance.$el);
 document.body.appendChild(interactionInstance.$el);
 
 console.log('interactionInstance');
@@ -51,6 +53,8 @@ if(ajaxurl == undefined || ajaxurl == null) {
 }
 
 (<any>window).spaInteraction = new SPAInteraction(interactionInstance, ajaxurl);
+console.log('SPAInteraction');
+console.log((<any>window).spaInteraction);
 
 const app = createApp(App);
 

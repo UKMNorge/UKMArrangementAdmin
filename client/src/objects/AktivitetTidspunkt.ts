@@ -117,10 +117,14 @@ class AktivitetTidspunkt {
     }
 
     public async create() {
-        let tidspunkt = this.save('aktivitet/createTidspunkt');
+        let tidspunkt = await this.save('aktivitet/createTidspunkt');
 
         this.isReal = true;
-
+        
+        // Legg til placeholder for nyt tidspunkt
+        if(tidspunkt) {
+            this.aktivitet.addNewTidspubktInTheList();
+        }
         return tidspunkt;
     }
 
@@ -144,6 +148,25 @@ class AktivitetTidspunkt {
         if(this.hendelseId) {
             (<any>data).hendelseId = this.hendelseId;
         }
+
+        var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+        
+        if(results != null) {
+            this.loading = false;
+        }
+        
+        return results;
+    }
+
+    public async delete() {
+        this.loading = true;
+        // Save to database via API
+        
+        var data = {
+            action: 'UKMArrangementAdmin_ajax',
+            controller: 'aktivitet/deleteTidspunkt',
+            tidspunktId: this.id,
+        };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
         
