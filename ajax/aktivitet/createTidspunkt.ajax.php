@@ -6,8 +6,7 @@ use UKMNorge\Arrangement\Aktivitet\Write;
 use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\OAuth2\HandleAPICall;
 
-$requiredArguments = [
-    'tidspunktId', 
+$requiredArguments = [  
     'start', 
     'slutt',
     'varighet', 
@@ -24,13 +23,10 @@ $optionalArguments = [
 
 $handleCall = new HandleAPICall($requiredArguments, $optionalArguments, ['POST'], false);
 
-
-$tidspunktId = $handleCall->getArgument('tidspunktId');
-
 $startDateTime = new DateTime($handleCall->getArgument('start'));
 $slutDateTime = new DateTime($handleCall->getArgument('slutt'));
-$varighet = $handleCall->getArgument('varighet');
-$maksAntall = $handleCall->getArgument('maksAntall');
+$varighet = $handleCall->getArgument('varighet') ?? 0;
+$maksAntall = (int)$handleCall->getArgument('maksAntall') ?? 0;
 $aktivitetId = $handleCall->getArgument('aktivitetId');
 $harPaamelding = $handleCall->getArgument('harPaamelding') == 'true' ?? false;
 $erSammeStedSomAktivitet = $handleCall->getArgument('erSammeStedSomAktivitet') == 'true' ?? false;
@@ -43,14 +39,15 @@ if(!$erSammeStedSomAktivitet && strlen(trim($sted)) < 1) {
     die;
 }
 
+
 try{
-    $tidspunkt = new AktivitetTidspunkt($tidspunktId);
-    $tryintAccessPlId = $tidspunkt->getAktivitet()->getPlId();
+    $aktivitet = new Aktivitet($aktivitetId);
+    $tryintAccessPlId = $aktivitet->getPlId();
 
     $arrangement = new Arrangement(get_option('pl_id'));
 
     if($tryintAccessPlId != $arrangement->getId()) {
-        $handleCall->sendErrorToClient('Du har ikke tilgang til dette arrangementet', 401);
+        $handleCall->sendErrorToClient('Du har ikke tilgang til denne aktiviteten', 401);
     }
 
 } catch(Exception $e) {
@@ -60,17 +57,17 @@ try{
     $handleCall->sendErrorToClient('Kunne ikke hente arrangementet', 401);
 }
 
-$aktTidspunkt = Write::updateAktivitetTidspunkt(
-    $tidspunktId,
-    $sted,
-    $startDateTime,
-    $slutDateTime,
-    $varighet,
-    $maksAntall,
-    $hendelseId,
+$aktivitetTidspunkt = Write::createAktivitetTidspunkt(
+    $sted, 
+    $startDateTime, 
+    $slutDateTime, 
+    $varighet, 
+    $maksAntall, 
+    $aktivitetId, 
+    $hendelseId, 
     $harPaamelding,
-    $erSammeStedSomAktivitet,
+    $erSammeStedSomAktivitet
 );
 
 
-$handleCall->sendToClient($aktTidspunkt->getArrObj());
+$handleCall->sendToClient($aktivitetTidspunkt->getArrObj());
