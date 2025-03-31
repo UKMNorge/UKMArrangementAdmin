@@ -34,7 +34,7 @@ $erSammeStedSomAktivitet = $handleCall->getArgument('erSammeStedSomAktivitet') =
 $sted = $handleCall->getOptionalArgument('sted') ?? ' ';
 $hendelseId = $handleCall->getOptionalArgument('hendelseId') ?? null;
 
-if(!$erSammeStedSomAktivitet && strlen(trim($sted)) < 1) {
+if(!$erSammeStedSomAktivitet && $sted->trim()->length < 1) {
     $handleCall->sendErrorToClient('Argumentet sted er ugyldig!', 400);
     die;
 }
