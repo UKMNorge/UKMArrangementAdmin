@@ -30,6 +30,15 @@
         </v-btn>
 
         <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+            <v-btn
+                class="v-btn-as v-btn-success as-margin-right-space-1"
+                rounded="large"
+                size="large"
+                @click="saveAktivitet(aktivitet)"
+                variant="outlined">
+                Lagre aktiviteten
+            </v-btn>
+
             <v-btn v-show="tab == null && aktivitet.id != -1"
                 class="v-btn-as v-btn-error"
                 rounded="large"
@@ -47,7 +56,7 @@
 
             <div class="col-xs-12 nop-impt">
                 <div class="as-margin-top-space-2 as-margin-bottom-space-2">
-                    <h4>Tidspunkter</h4>
+                    <h4>Forekomster</h4>
                 </div>
                 <!-- Chip Group to Replace Tabs -->
                 <v-chip-group v-model="tab" selected-class="text-white">
@@ -79,7 +88,7 @@
                     <v-card>
                         <v-card-title>Bekreft sletting</v-card-title>
                         <v-card-text>
-                            Er du sikker på at du vil slette tidspunktet: <b>{{ selectedTidspunkt?.getTittel() }}</b>?
+                            Er du sikker på at du vil slette forekomsten: <b>{{ selectedTidspunkt?.getTittel() }}</b>?
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -125,7 +134,7 @@
 
                                 <div class="col-xs-12 as-margin-top-space-2 nop-impt">
                                     <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
-                                        <h5>Velg hendelse og tag</h5>
+                                        <h5>Legg forekomsten i en hendelse</h5>
                                     </div>
                                     
                                     <div class="col-sm-5 nop-impt as-margin-right-space-2">
@@ -164,7 +173,7 @@
                                         <div class="col-sm-3 nop-impt as-margin-right-space-2">
                                             <v-checkbox
                                                 v-model="tidspunkt.harPaamelding"
-                                                label="Har påmelding"
+                                                label="Krev påmelding"
                                             ></v-checkbox>
                                         </div>
                                         <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
@@ -213,7 +222,7 @@
                             size="large"
                             @click="createTidspunkt(tidspunkt)"
                             variant="outlined">
-                            Opprett tidspunkt
+                            Opprett forekomst
                         </v-btn>
 
                         <v-btn
@@ -322,7 +331,8 @@ export default {
             };
 
             if(dates[0].getDay() == dates[1].getDay()) {
-                return `På ${formatDate(dates[0])} til ${formatDate(dates[1], true)}`;
+                let from = formatDate(dates[0]).charAt(0).toUpperCase() + formatDate(dates[0]).slice(1);
+                return `${from} til ${formatDate(dates[1], true)}`;
             }
             return `Fra ${formatDate(dates[0])} til ${formatDate(dates[1])}`;
         },
@@ -353,6 +363,11 @@ export default {
             
 
         },
+        async saveAktivitet(aktivitet : Aktivitet) {
+            let resAktivitet = await aktivitet.save();
+            
+            return resAktivitet
+        },
         async createAktivitet(aktivitet : Aktivitet) {
             let results = await aktivitet.create();
         },
@@ -374,8 +389,7 @@ export default {
                 this.tidspunkter = this.tidspunkter.filter((t : AktivitetTidspunkt) => t.id !== (<AktivitetTidspunkt>this.selectedTidspunkt).id);
                 this.deleteDialog = false; // Close dialog
             } catch (error) {
-                alert("Kunne ikke slette tidspunktet. Prøv igjen.");
-                console.error(error);
+                this.spaInteraction.showMessage('Noe gikk galt', 'Kunne ikke slette forekomsten. Prøv igjen', 'error');
             } finally {
                 this.deleting = false;
             }
@@ -388,7 +402,7 @@ export default {
                 tidspunkt.aktivitet.removeTidspunkt(tidspunkt);
                 this.tab = null; // Reset tab
                 
-                this.spaInteraction.showMessage('Tidspunkt slettet', 'Tidspunkt er slettet', 'success');
+                this.spaInteraction.showMessage('Forekomst slettet', 'Forekomst er slettet', 'success');
             } else {
                 this.spaInteraction.showMessage('Noe gikk galt', results, 'error');
             }

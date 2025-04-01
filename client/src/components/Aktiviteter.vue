@@ -18,12 +18,12 @@
                     <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted">
                         <v-list-item v-if="!aktivitet.deleted"
                         :title="aktivitet.title"
-                        :subtitle="aktivitet.subtitle"
+                        :subtitle="getAntallTidspunkter(aktivitet)"
                         class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
                         <template v-slot:prepend>
                             <v-avatar color="grey-lighten-1">
-                            <v-icon color="white">mdi-folder</v-icon>
+                            <v-icon color="white">mdi-calendar-star</v-icon>
                             </v-avatar>
                         </template>
 
@@ -71,7 +71,7 @@ export default {
     computed: {
         isMobile() {
             return window.innerWidth < 576; // Adjust the breakpoint as needed
-        }
+        },
     },
     props: {
         arrangement: {
@@ -97,6 +97,9 @@ export default {
         }
     },
     methods : {
+        getAntallTidspunkter(aktivitet : Aktivitet) {
+            return 'Antall forekomster: ' + (aktivitet.tidspunkter.length-1);  
+        },
         toggleExpand(aktivitet : Aktivitet) {
             aktivitet.expanded = !aktivitet.expanded;
         },
