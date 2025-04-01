@@ -46,7 +46,13 @@
                         :value="tidspunkt.navn"
                         color="primary"
                     >
-                        <span>{{ tidspunkt.getTittel() }}</span>
+                        <span v-if="tidspunkt.id > 0">{{ tidspunkt.getTittel() }}</span>
+                        <v-icon v-else
+                            class=""  
+                            size="20">
+                            mdi-plus
+                        </v-icon>
+
                         <v-icon 
                             class="as-margin-left-space-1 mdi-close-circle" 
                             v-if="tidspunkt.id > 0" 
@@ -217,6 +223,8 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import Hendelse from './../../objects/Hendelse';
 import AktivitetTag from './../../objects/AktivitetTag';
 import { nextTick } from 'vue';
+
+
 export default {
     props: {
         aktivitet: {
@@ -313,8 +321,17 @@ export default {
             tidspunkt.slutt = formatLocalDate(data[1]);
         },
         async saveAktivitetOgTidspunkter(tidspunkt : AktivitetTidspunkt) {
-            tidspunkt.aktivitet.save();
-            tidspunkt.save()
+
+            let resAktivitet = await tidspunkt.aktivitet.save();
+            let resTidspunkt = await tidspunkt.save();
+
+            if(resAktivitet && resTidspunkt) {
+                this.spaInteraction.showMessage('Data er lagret!', 'Aktivitet og tidspunkt er lagret', 'success');
+            } else {
+                this.spaInteraction.showMessage('Noe gikk galt', resAktivitet + resTidspunkt, 'error');
+            }
+            
+
         },
         async createAktivitet(aktivitet : Aktivitet) {
             let results = await aktivitet.create();
@@ -350,7 +367,12 @@ export default {
             if(results && results.completed) {
                 tidspunkt.aktivitet.removeTidspunkt(tidspunkt);
                 this.tab = null; // Reset tab
+                
+                this.spaInteraction.showMessage('Tidspunkt slettet', 'Tidspunkt er slettet', 'success');
+            } else {
+                this.spaInteraction.showMessage('Noe gikk galt', results, 'error');
             }
+            
 
         },
         init() {

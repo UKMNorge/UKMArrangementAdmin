@@ -119,12 +119,33 @@ class AktivitetTidspunkt {
     public async create() {
         let tidspunkt = await this.save('aktivitet/createTidspunkt');
 
-        this.isReal = true;
-        
-        // Legg til placeholder for nyt tidspunkt
         if(tidspunkt) {
+            this.isReal = true;
+
+            this.id = tidspunkt.id;
+            this.sted = tidspunkt.sted ?? "";
+            this.start = tidspunkt.start;
+            this.slutt = tidspunkt.slutt;
+            this.varighetMinutter = tidspunkt.varighetMinutter;
+            this.maksAntall = tidspunkt.maksAntall;
+    
+            this.harPaamelding = tidspunkt.harPaamelding;
+            this.erSammeStedSomAktivitet = tidspunkt.erSammeStedSomAktivitet;
+            
+            if(tidspunkt.maksAntall >= 999999) {
+                this.hasMaksAntall = true;
+            }
+            else {
+                this.hasMaksAntall = false;
+            }
+    
+            this.hendelseId = tidspunkt.hendelseId;
+            this.deltakere = [];
+
+            // Add placeholder for new tidspunkt
             this.aktivitet.addNewTidspubktInTheList();
         }
+        
         return tidspunkt;
     }
 

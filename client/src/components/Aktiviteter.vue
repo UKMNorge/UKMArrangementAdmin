@@ -41,7 +41,7 @@
                         <!-- Expandable Content BELOW the item -->
                         <v-expand-transition>
                             
-                            <div v-if="aktivitet.expanded">
+                            <div v-if="aktivitet.expanded" class="as-display-flex">
                                 <AktivitetKomponent :aktivitet="aktivitet" />
                             </div>
                         </v-expand-transition>

@@ -17,7 +17,7 @@ class Aktivitet {
 
     public expanded : boolean = false;  
     public expandedTidspunkter : boolean = false;
-    
+
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
     constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[]) {
@@ -46,12 +46,15 @@ class Aktivitet {
     }
 
     public addNewTidspubktInTheList() {
+        console.log(this.tidspunkter);
         // Only if id -1 is not in the list
         if(this.tidspunkter.find(tidspunkt => tidspunkt.id == -1) != null) {
             return;
         }
 
-        this.tidspunkter.push(new AktivitetTidspunkt(
+        console.log('point ALFA');
+
+        this.tidspunkter.unshift(new AktivitetTidspunkt(
             -1,     // : number,
             '',     // : string, 
             "",     // : string, 
@@ -78,8 +81,8 @@ class Aktivitet {
         this.plId = results.plId;
         this.tidspunkter = []; // Assuming the last parameter
 
-        console.log('this');
-        console.log(this);
+        // Add new tidspunkt placeholder
+        this.addNewTidspubktInTheList();
 
         return results;
     }
