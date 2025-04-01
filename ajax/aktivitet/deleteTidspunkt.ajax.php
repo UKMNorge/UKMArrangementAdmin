@@ -26,7 +26,6 @@ try{
     if($e->getCode() == 401) {
         $handleCall->sendErrorToClient($e->getMessage(), 401);
     }
-    var_dump($e->getMessage());
     $handleCall->sendErrorToClient('Kunne ikke hente arrangementet', 401);
 }
 
