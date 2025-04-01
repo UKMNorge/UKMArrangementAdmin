@@ -1,8 +1,8 @@
 <template>
     <div class="as-container main-container">
-        <div class="aktiviteter-buttons">
+        <div class="aktiviteter-buttons as-display-flex">
             <v-btn
-                class="v-btn-as v-btn-hvit"
+                class="v-btn-as v-btn-hvit as-margin-right-space-2"
                 prepend-icon="mdi-plus"
                 color="#000"
                 rounded="large"
@@ -11,6 +11,7 @@
                 variant="outlined" >
                 Legg til Aktivitet
             </v-btn>
+            <AktivitetTags :dialogVisible="tagsDialogVisible"/>
         </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
@@ -65,7 +66,8 @@ import AktivitetKomponent from './Utils/AktivitetKomponent.vue';
 import AktivitetTidspunkt from './../objects/AktivitetTidspunkt';
 import AktivitetDeltaker from './../objects/AktivitetDeltaker';
 import { InputTextOverlay } from 'ukm-components-vue3';
-
+import AktivitetTag from '../objects/AktivitetTag';
+import AktivitetTags from './Utils/AktivitetTags.vue';
 
 export default {
     computed: {
@@ -84,7 +86,7 @@ export default {
         PermanentNotification : PermanentNotification,
         AktivitetKomponent : AktivitetKomponent,
         InputTextOverlay : InputTextOverlay,
-
+        AktivitetTags : AktivitetTags,
     },
     mounted() {
         this.fetch();
@@ -94,6 +96,7 @@ export default {
             spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
             savingOngoing: false,
             aktiviteter : [] as Aktivitet[],
+            tagsDialogVisible : false as boolean,
         }
     },
     methods : {
@@ -175,10 +178,7 @@ export default {
 
                     console.log(tidspunkter);
                 }
-            }
-            
-
-
+            };
         },
         async save(leder : Leder) {
             this.savingOngoing = true;
