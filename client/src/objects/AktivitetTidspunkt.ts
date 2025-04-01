@@ -5,6 +5,7 @@ import AktivitetTag from "./AktivitetTag";
 class AktivitetTidspunkt {
     loading : boolean = false;
     isReal : boolean = true;
+    deleted : boolean = false;
 
     id : number;
     sted : string;
@@ -191,8 +192,11 @@ class AktivitetTidspunkt {
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
         
-        if(results != null) {
+        if(results && results.completed && results.completed == true) {
             this.loading = false;
+            this.deleted = true;
+        } else {
+            this.spaInteraction.showMessage('Feil', 'Kunne ikke slette tidspunktet: ' + (results.message ?? ''), 'error');
         }
         
         return results;

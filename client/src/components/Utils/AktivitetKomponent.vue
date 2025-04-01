@@ -29,6 +29,17 @@
             Opprett
         </v-btn>
 
+        <div class="col-xs-12 as-margin-top-space-2">
+            <v-btn v-show="tab == null"
+                class="v-btn-as v-btn-error"
+                rounded="large"
+                size="large"
+                @click="deleteAktivitet(aktivitet)"
+                variant="outlined">
+                Slett aktiviteten
+            </v-btn>
+        </div>
+
         <template v-if="aktivitet.id != -1">
             <div class="col-xs-12 as-margin-top-space-2 nop-impt">
                 <hr>
@@ -204,6 +215,15 @@
                             variant="outlined">
                             Opprett tidspunkt
                         </v-btn>
+
+                        <v-btn
+                            class="as-margin-left-space-1 v-btn-as v-btn-error"
+                            rounded="large"
+                            size="large"
+                            @click="deleteAktivitet(aktivitet)"
+                            variant="outlined">
+                            Slett aktiviteten
+                        </v-btn>
                     </div>
                             
                     </v-window-item>
@@ -374,6 +394,9 @@ export default {
             }
             
 
+        },
+        deleteAktivitet(aktivitet : Aktivitet) {
+            aktivitet.delete();
         },
         init() {
             this.tab = null;

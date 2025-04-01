@@ -2,7 +2,8 @@ import AktivitetTidspunkt from './AktivitetTidspunkt';
 
 class Aktivitet {
     loading : boolean = false;
-    
+    deleted : boolean = false;
+
     title : string;
     subtitle : string;
 
@@ -104,6 +105,27 @@ class Aktivitet {
         
         if(results != null) {
             this.loading = false;
+        }
+        
+        return results;
+    }
+
+    public async delete() {
+        this.loading = true;
+        
+        var data = {
+            action: 'UKMArrangementAdmin_ajax',
+            controller: 'aktivitet/deleteAktivitet',
+            aktivitetId: this.id,
+        };
+
+        var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+        
+        if(results && results.completed && results.completed == true) {
+            this.loading = false;
+            this.deleted = true;
+        } else {
+            this.spaInteraction.showMessage('Feil', 'Kunne ikke slette aktivitet: ' + (results.message ?? ''), 'error');
         }
         
         return results;
