@@ -9,7 +9,6 @@ use UKMNorge\OAuth2\HandleAPICall;
 $requiredArguments = [  
     'start', 
     'slutt',
-    'varighet', 
     'maksAntall', 
     'aktivitetId',
     'harPaamelding', 
@@ -25,7 +24,6 @@ $handleCall = new HandleAPICall($requiredArguments, $optionalArguments, ['POST']
 
 $startDateTime = new DateTime($handleCall->getArgument('start'));
 $slutDateTime = new DateTime($handleCall->getArgument('slutt'));
-$varighet = $handleCall->getArgument('varighet') ?? 0;
 $maksAntall = (int)$handleCall->getArgument('maksAntall') ?? 0;
 $aktivitetId = $handleCall->getArgument('aktivitetId');
 $harPaamelding = $handleCall->getArgument('harPaamelding') == 'true' ?? false;
@@ -34,7 +32,7 @@ $erSammeStedSomAktivitet = $handleCall->getArgument('erSammeStedSomAktivitet') =
 $sted = $handleCall->getOptionalArgument('sted') ?? ' ';
 $hendelseId = $handleCall->getOptionalArgument('hendelseId') ?? null;
 
-if(!$erSammeStedSomAktivitet && $sted->trim()->length < 1) {
+if(!$erSammeStedSomAktivitet && strlen(trim($sted)) < 1) {
     $handleCall->sendErrorToClient('Argumentet sted er ugyldig!', 400);
     die;
 }
@@ -61,7 +59,7 @@ $aktivitetTidspunkt = Write::createAktivitetTidspunkt(
     $sted, 
     $startDateTime, 
     $slutDateTime, 
-    $varighet, 
+    null, 
     $maksAntall, 
     $aktivitetId, 
     $hendelseId, 

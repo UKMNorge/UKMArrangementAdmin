@@ -7,10 +7,9 @@ use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\OAuth2\HandleAPICall;
 
 $requiredArguments = [
-    'tidspunktId', 
-    'start', 
+    'tidspunktId',
+    'start',
     'slutt',
-    'varighet', 
     'maksAntall', 
     'aktivitetId',
     'harPaamelding', 
@@ -29,7 +28,7 @@ $tidspunktId = $handleCall->getArgument('tidspunktId');
 
 $startDateTime = new DateTime($handleCall->getArgument('start'));
 $slutDateTime = new DateTime($handleCall->getArgument('slutt'));
-$varighet = $handleCall->getArgument('varighet');
+// $varighet = $handleCall->getArgument('varighet');
 $maksAntall = $handleCall->getArgument('maksAntall');
 $aktivitetId = $handleCall->getArgument('aktivitetId');
 $harPaamelding = $handleCall->getArgument('harPaamelding') == 'true' ?? false;
@@ -39,7 +38,7 @@ $sted = $handleCall->getOptionalArgument('sted') ?? ' ';
 $hendelseId = $handleCall->getOptionalArgument('hendelseId') ?? null;
 
 if(!$erSammeStedSomAktivitet && strlen(trim($sted)) < 1) {
-    $handleCall->sendErrorToClient('Argumentet sted er ugyldig!', 400);
+    $handleCall->sendErrorToClient(['errorMessage' => 'Argumentet sted er ugyldig!'], 400);
     die;
 }
 
@@ -50,7 +49,7 @@ try{
     $arrangement = new Arrangement(get_option('pl_id'));
 
     if($tryintAccessPlId != $arrangement->getId()) {
-        $handleCall->sendErrorToClient('Du har ikke tilgang til dette arrangementet', 401);
+        $handleCall->sendErrorToClient(['errorMessage' => 'Du har ikke tilgang til dette arrangementet'], 401);
     }
 
 } catch(Exception $e) {
@@ -65,7 +64,7 @@ $aktTidspunkt = Write::updateAktivitetTidspunkt(
     $sted,
     $startDateTime,
     $slutDateTime,
-    $varighet,
+    null,
     $maksAntall,
     $hendelseId,
     $harPaamelding,
