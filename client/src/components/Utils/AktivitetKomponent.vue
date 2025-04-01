@@ -29,8 +29,8 @@
             Opprett
         </v-btn>
 
-        <div class="col-xs-12 as-margin-top-space-2">
-            <v-btn v-show="tab == null"
+        <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+            <v-btn v-show="tab == null && aktivitet.id != -1"
                 class="v-btn-as v-btn-error"
                 rounded="large"
                 size="large"
