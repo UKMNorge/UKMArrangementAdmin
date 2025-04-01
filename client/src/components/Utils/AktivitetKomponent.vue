@@ -277,31 +277,40 @@ export default {
         },
         hasMaxAntallChanged(tidspunkt : AktivitetTidspunkt) {
             tidspunkt.hasMaksAntall = !tidspunkt.hasMaksAntall;
-            console.log(tidspunkt);
-
         },
         customFormat(dates: [Date, Date] | null): string {
             if (!dates || dates.length !== 2) return "";
 
-            const formatDate = (date: Date) => {
-                const day = String(date.getDate()).padStart(2, "0");
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const year = date.getFullYear();
+            const formatDate = (date: Date, hourOnly: boolean = false) => {
                 const hours = String(date.getHours()).padStart(2, "0");
                 const minutes = String(date.getMinutes()).padStart(2, "0");
 
                 const daysOfWeek = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
 
-
+                if(hourOnly) {
+                    return `kl. ${hours}:${minutes}`;
+                }
                 return `${daysOfWeek[date.getDay()]}, kl. ${hours}:${minutes}`;
             };
 
+            if(dates[0].getDay() == dates[1].getDay()) {
+                return `På ${formatDate(dates[0])} til ${formatDate(dates[1], true)}`;
+            }
             return `Fra ${formatDate(dates[0])} til ${formatDate(dates[1])}`;
         },
         handleDateChange(data: [Date, Date], tidspunkt: AktivitetTidspunkt) {
-            tidspunkt.start = data[0].toISOString().replace("T", " ").replace("Z", "");
-            tidspunkt.slutt = data[1].toISOString().replace("T", " ").replace("Z", "");
-            // this.getTimelineItems();
+            const formatLocalDate = (date: Date) => {
+                const day = String(date.getDate()).padStart(2, "0");
+                const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+                const year = date.getFullYear();
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+
+                return `${year}-${month}-${day} ${hours}:${minutes}`;
+            };
+
+            tidspunkt.start = formatLocalDate(data[0]);
+            tidspunkt.slutt = formatLocalDate(data[1]);
         },
         async saveAktivitetOgTidspunkter(tidspunkt : AktivitetTidspunkt) {
             tidspunkt.aktivitet.save();
