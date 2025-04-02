@@ -109,12 +109,11 @@ export default {
 
             if (results && (<any>results).id === tag.id) {
                 this.spaInteraction.showMessage('Lagret!', 'Taggen ble lagret', 'success');
-                if (isNew) {
-                    this.addNewPlaceholder();
-                }
             } else {
                 this.spaInteraction.showMessage('Noe gikk galt', 'Taggen er ikke lagret!', 'error');
             }
+
+            this.emitUpdate();
         },
         async deleteTag(tag: AktivitetTag) {
             if (tag.id === -1) {
@@ -124,14 +123,15 @@ export default {
 
             let results = await tag.delete();
             if (results && results.completed === true) {
+                this.localTags = this.localTags.filter(t => t.id !== tag.id);
                 this.deleteTagFromArray(tag);
                 this.spaInteraction.showMessage('Slettet!', 'Taggen ble slettet', 'success');
             } else {
                 this.spaInteraction.showMessage('Noe gikk galt', 'Taggen er ikke slettet!', 'error');
             }
         },
-        addNewTag() {
-            this.localTags.push(new AktivitetTag(-1, '', ''));
+        emitUpdate() {
+            // this.localTags.push(new AktivitetTag(-1, '', ''));
             this.$emit('update:tags', this.localTags);
         },
         addNewPlaceholder() {
@@ -141,7 +141,6 @@ export default {
             // }
         },
         async deleteTagFromArray(tag: AktivitetTag) {
-            this.localTags = this.localTags.filter(t => t.id !== tag.id);
             this.$emit('update:tags', this.localTags);
         },
     }

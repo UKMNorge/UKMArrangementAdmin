@@ -11,7 +11,7 @@
                 variant="outlined" >
                 Legg til Aktivitet
             </v-btn>
-            <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="tags = $event"/>
+            <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="updateTags"/>
         </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
@@ -43,7 +43,7 @@
                         <v-expand-transition>
                             
                             <div v-if="aktivitet.expanded" class="as-display-flex">
-                                <AktivitetKomponent :aktivitet="aktivitet" :tags="tags"/>
+                                <AktivitetKomponent :aktivitet="aktivitet" :tags="tags" :key="tagsKey"/>
                             </div>
                         </v-expand-transition>
                     </div>
@@ -99,6 +99,7 @@ export default {
             aktiviteter : [] as Aktivitet[],
             tagsDialogVisible : false as boolean,
             tags : [] as AktivitetTag[],
+            tagsKey: 0, // Bruker for reaktiving av AktivitetKomponent
         }
     },
     methods : {
@@ -128,6 +129,11 @@ export default {
             
             this.aktiviteter.unshift(newAktivitet);
             newAktivitet.expanded = true;
+        },
+        updateTags(newTags: AktivitetTag[]) {
+            console.log('Updating tags');
+            this.tags = newTags;
+            this.tagsKey++; // Trigger re-render of AktivitetKomponent
         },
         async fetch() {
             var data = {
