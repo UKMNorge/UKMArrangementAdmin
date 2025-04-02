@@ -21,7 +21,7 @@
                 <v-toolbar title="Alle tagger"></v-toolbar>
 
                 <div class="aktivitet-tags-div">
-                    <div v-for="tag in tags" class="as-margin-top-space-2">
+                    <div v-for="tag in localTags" class="as-margin-top-space-2">
                         <div class="col-xs-12 nop-impt">
                             <div class="col-xs-4">
                                 <InputTextOverlay :placeholder="'Navn'" v-model="tag.navn" />
@@ -70,92 +70,82 @@ import { InputTextOverlay } from 'ukm-components-vue3';
 
 
 export default {
+    props: {
+        tags: {
+            type: Array as PropType<AktivitetTag[]>,
+            required: true
+        },
+    },
     computed: {
         isMobile() {
             return window.innerWidth < 576; // Adjust the breakpoint as needed
         },
+    },
+    mounted() {
+        
     },
     components: {
         InputTextOverlay : InputTextOverlay,
     },
     data() {
         return {
-            spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
-            tags : [] as AktivitetTag[],
-        }
+            localTags: [...this.tags], // Create a copy of the array
+            spaInteraction: (<any>window).spaInteraction,
+        };
     },
-    mounted() {
-        this.init();
-    },
-    methods : {
-        init(){
-            this.fetchTags();
+    watch: {
+        tags: {
+            handler(newTags) {
+                this.localTags = [...newTags]; // Sync changes if parent updates `tags`
+                this.addNewPlaceholder();
+            },
+            deep: true,
         },
-        async saveOrCreateTag(tag : AktivitetTag) {
-            let isNew = tag.id == -1;
+    },
+    methods: {
+        async saveOrCreateTag(tag: AktivitetTag) {
+            let isNew = tag.id === -1;
+            let results = isNew ? await tag.create() : await tag.save();
 
-            let results = null;
-            if(isNew) {
-                results = await tag.create();
-            } else {
-                results = await tag.save();
-            }
-
-            if(results && (<any>results).id == tag.id) {
+            if (results && (<any>results).id === tag.id) {
                 this.spaInteraction.showMessage('Lagret!', 'Taggen ble lagret', 'success');
-                if(isNew) {
+                if (isNew) {
                     this.addNewPlaceholder();
                 }
-            }
-            else {
+            } else {
                 this.spaInteraction.showMessage('Noe gikk galt', 'Taggen er ikke lagret!', 'error');
             }
-
-            return results;
         },
-        async deleteTag(tag : AktivitetTag) {
-            if(tag.id == -1) {
-                this.tags = this.tags.filter(t => t.id != -1);
+        async deleteTag(tag: AktivitetTag) {
+            if (tag.id === -1) {
+                this.localTags = this.localTags.filter(t => t.id !== -1);
                 return;
             }
 
             let results = await tag.delete();
-
-            if(results && results.completed == true) {
-                this.tags = this.tags.filter(t => t.id != tag.id);
+            if (results && results.completed === true) {
+                this.deleteTagFromArray(tag);
                 this.spaInteraction.showMessage('Slettet!', 'Taggen ble slettet', 'success');
-            }
-            else {
+            } else {
                 this.spaInteraction.showMessage('Noe gikk galt', 'Taggen er ikke slettet!', 'error');
             }
-
-            return results;
-            
         },
-        async addNewTag() {
-            this.tags.push(new AktivitetTag(-1, '', ''));
-        },
-        async fetchTags() {
-            var data = {
-                action: 'UKMArrangementAdmin_ajax',
-                controller: 'aktivitet/getAlleTags',
-            };
-
-            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-            
-            for(let tag of results) {
-                this.tags.unshift(new AktivitetTag(tag.id, tag.navn, tag.beskrivelse))
-            }
-
-            this.addNewPlaceholder();
+        addNewTag() {
+            this.localTags.push(new AktivitetTag(-1, '', ''));
+            this.$emit('update:tags', this.localTags);
         },
         addNewPlaceholder() {
-            // If there is no tag with -1
-            if(this.tags.filter(tag => tag.id == -1).length == 0) {
-                this.tags.unshift(new AktivitetTag(-1, '', ''));
-            }
-        }
+            console.log('')
+            // if (!this.localTags.some(tag => tag.id === -1)) {
+                this.localTags.unshift(new AktivitetTag(-1, '', ''));
+            // }
+        },
+        async deleteTagFromArray(tag: AktivitetTag) {
+            this.localTags = this.localTags.filter(t => t.id !== tag.id);
+            this.$emit('update:tags', this.localTags);
+        },
     }
+
 }
 
 </script>

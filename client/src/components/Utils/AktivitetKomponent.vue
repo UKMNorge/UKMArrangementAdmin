@@ -156,7 +156,7 @@
                                             multiple
                                             variant="outlined" 
                                             class="v-autocomplete-arr-sys" 
-                                            :items="hendelser" 
+                                            :items="tags" 
                                             v-model="tidspunkt.tags"
                                             item-text="title"
                                             item-value="id" 
@@ -252,6 +252,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import Hendelse from './../../objects/Hendelse';
 import AktivitetTag from './../../objects/AktivitetTag';
 import { nextTick } from 'vue';
+import type { PropType } from 'vue';  // Use type-only import for PropType
 
 
 export default {
@@ -259,6 +260,10 @@ export default {
         aktivitet: {
             type: Aktivitet,
             required: true,
+        },
+        tags: {
+            type: Array as PropType<AktivitetTag[]>,
+            required: true
         },
     },
     components: {
@@ -269,7 +274,6 @@ export default {
         return {
             tab : null, // Set to null so no chip is selected by default
             hendelser : [] as Hendelse[],
-            tags : [] as AktivitetTag[],
             spaInteraction: (<any>window).spaInteraction, // Definert i main.ts
             
             // Dialog
@@ -294,11 +298,6 @@ export default {
             new Hendelse(1, 'Hendelse 1'),
             new Hendelse(2, 'Hendelse 2'),
             new Hendelse(3, 'Hendelse 3'),
-        ];
-        this.tags = [
-            new AktivitetTag(1, 'Tag 1'),
-            new AktivitetTag(2, 'Tag 2'),
-            new AktivitetTag(3, 'Tag 3'),
         ];
         
     },

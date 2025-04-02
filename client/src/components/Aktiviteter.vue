@@ -11,7 +11,7 @@
                 variant="outlined" >
                 Legg til Aktivitet
             </v-btn>
-            <AktivitetTags :dialogVisible="tagsDialogVisible"/>
+            <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="tags = $event"/>
         </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
@@ -43,7 +43,7 @@
                         <v-expand-transition>
                             
                             <div v-if="aktivitet.expanded" class="as-display-flex">
-                                <AktivitetKomponent :aktivitet="aktivitet" />
+                                <AktivitetKomponent :aktivitet="aktivitet" :tags="tags"/>
                             </div>
                         </v-expand-transition>
                     </div>
@@ -90,6 +90,7 @@ export default {
     },
     mounted() {
         this.fetch();
+        this.fetchAlleTags();
     },
     data() {
         return {
@@ -97,6 +98,7 @@ export default {
             savingOngoing: false,
             aktiviteter : [] as Aktivitet[],
             tagsDialogVisible : false as boolean,
+            tags : [] as AktivitetTag[],
         }
     },
     methods : {
@@ -179,6 +181,25 @@ export default {
                     console.log(tidspunkter);
                 }
             };
+        },
+        async fetchAlleTags() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'aktivitet/getAlleTags',
+            };
+
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+            
+            let tags : AktivitetTag[] = [];
+            for(let tag of results) {
+                tags.push(new AktivitetTag(
+                    tag.id, 
+                    tag.navn, 
+                    tag.beskrivelse,
+                ));
+            }
+
+            this.tags = tags;
         },
         async save(leder : Leder) {
             this.savingOngoing = true;
