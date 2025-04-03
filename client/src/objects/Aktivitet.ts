@@ -149,6 +149,9 @@ class Aktivitet {
     }
 
     private async saveTags() {
+        if(this.id == -1) {
+            return;
+        }
         this.loading = true;
         
         var data = {
