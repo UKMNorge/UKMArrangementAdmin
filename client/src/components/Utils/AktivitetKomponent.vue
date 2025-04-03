@@ -36,17 +36,18 @@
             </v-select>
         </div>
 
-        <v-btn v-show="aktivitet.id == -1"
-            class="v-btn-as v-btn-success"
-            rounded="large"
-            size="large"
-            @click="createAktivitet(aktivitet)"
-            variant="outlined">
-            Opprett
-        </v-btn>
-
         <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-            <v-btn
+            <v-btn v-show="aktivitet.id == -1"
+                class="v-btn-as v-btn-success"
+                rounded="large"
+                size="large"
+                @click="createAktivitet(aktivitet)"
+                variant="outlined">
+                Opprett
+            </v-btn>
+        </div>
+        <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+            <v-btn v-show="aktivitet.id != -1"
                 class="v-btn-as v-btn-success as-margin-right-space-1"
                 rounded="large"
                 size="large"
