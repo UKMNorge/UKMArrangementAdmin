@@ -159,9 +159,9 @@
                                             variant="outlined" 
                                             class="v-autocomplete-arr-sys" 
                                             :items="hendelser" 
-                                            v-model="tidspunkt.hendelseId"
+                                            v-model="tidspunkt.hendelse"
                                             item-text="title"
-                                            item-value="id" 
+                                            item-value="id"
                                             >
                                         </v-select>
                                     </div>
@@ -276,6 +276,10 @@ export default {
             type: Array as PropType<AktivitetTag[]>,
             required: true
         },
+        hendelser: {
+            type: Array as PropType<Hendelse[]>,
+            required: true
+        },
     },
     components: {
         InputTextOverlay : InputTextOverlay,
@@ -290,7 +294,6 @@ export default {
     data() {
         return {
             tab : null, // Set to null so no chip is selected by default
-            hendelser : [] as Hendelse[],
             spaInteraction: (<any>window).spaInteraction, // Definert i main.ts
             
             // Dialog
@@ -302,15 +305,7 @@ export default {
     mounted() {
         nextTick(() => {
             this.init();
-        });
-
-        // Test data
-        this.hendelser = [
-            new Hendelse(1, 'Hendelse 1'),
-            new Hendelse(2, 'Hendelse 2'),
-            new Hendelse(3, 'Hendelse 3'),
-        ];
-        
+        });        
     },
     methods: {
         getTags() : AktivitetTag[] {

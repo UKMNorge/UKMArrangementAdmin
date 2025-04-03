@@ -1,5 +1,6 @@
 import Aktivitet from "./Aktivitet";
 import AktivitetDeltaker from "./AktivitetDeltaker";
+import Hendelse from "./Hendelse";
 
 class AktivitetTidspunkt {
     loading : boolean = false;
@@ -17,7 +18,7 @@ class AktivitetTidspunkt {
     erSammeStedSomAktivitet : boolean;
     kunInterne : boolean;
 
-    hendelseId : number|null; // Foreign key til Hendelse. Kan være null : string;
+    hendelse : Hendelse|null = null; // Foreign key til Hendelse. Kan være null : string;
    
     aktivitet : Aktivitet; // Foreign key til Aktivite : string;
     
@@ -33,7 +34,7 @@ class AktivitetTidspunkt {
         slutt : string,
         varighetMinutter : number, 
         maksAntall : number, 
-        hendelseId : number|null, 
+        hendelse : Hendelse|null, 
         aktivitet : Aktivitet, 
         deltakere : AktivitetDeltaker[],
         harPaamelding : boolean,
@@ -62,7 +63,7 @@ class AktivitetTidspunkt {
             this.hasMaksAntall = false;
         }
 
-        this.hendelseId = hendelseId;
+        this.hendelse = hendelse;
         this.aktivitet = aktivitet;
         this.deltakere = deltakere;
     }
@@ -141,7 +142,7 @@ class AktivitetTidspunkt {
                 this.hasMaksAntall = false;
             }
     
-            this.hendelseId = tidspunkt.hendelseId;
+            this.hendelse = null;
             this.deltakere = [];
 
             // Add placeholder for new tidspunkt
@@ -169,8 +170,8 @@ class AktivitetTidspunkt {
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
             kunInterne : this.kunInterne,
         };
-        if(this.hendelseId) {
-            (<any>data).hendelseId = this.hendelseId;
+        if(this.hendelse) {
+            (<any>data).hendelseId = this.hendelse;
         }
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);

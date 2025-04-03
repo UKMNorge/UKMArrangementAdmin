@@ -43,7 +43,7 @@
                         <v-expand-transition>
                             
                             <div v-if="aktivitet.expanded" class="as-display-flex">
-                                <AktivitetKomponent :aktivitet="aktivitet" :tags="tags" :key="tagsKey"/>
+                                <AktivitetKomponent :aktivitet="aktivitet" :hendelser="hendelser" :tags="tags" :key="tagsKey"/>
                             </div>
                         </v-expand-transition>
                     </div>
@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts">
-import MainComponent from './MainComponent.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import type Arrangement from './../objects/Arrangement';
 import type { PropType } from 'vue';  // Use type-only import for PropType
@@ -68,6 +67,7 @@ import AktivitetDeltaker from './../objects/AktivitetDeltaker';
 import { InputTextOverlay } from 'ukm-components-vue3';
 import AktivitetTag from '../objects/AktivitetTag';
 import AktivitetTags from './Utils/AktivitetTags.vue';
+import Hendelse from './../objects/Hendelse';
 
 export default {
     computed: {
@@ -99,6 +99,7 @@ export default {
             tagsDialogVisible : false as boolean,
             tags : [] as AktivitetTag[],
             tagsKey: 0, // Bruker for reaktiving av AktivitetKomponent
+            hendelser: [] as Hendelse[],
         }
     },
     methods : {
@@ -184,6 +185,9 @@ export default {
                         );
                     }
                     
+                    let hendelse = this.hendelser.find((h) => h.id == tidspunkt.hendelseId);
+                    console.log('aaa');
+                    console.log(hendelse);
                     tidspunkter.push(
                         new AktivitetTidspunkt(
                             tidspunkt.id,
@@ -192,7 +196,7 @@ export default {
                             tidspunkt.slutt,
                             tidspunkt.varighet,
                             tidspunkt.maksAntall,
-                            tidspunkt.hendelseId,
+                            hendelse ?? null,
                             aktivitetObj,
                             deltakere,
                             tidspunkt.harPaamelding,
@@ -201,6 +205,28 @@ export default {
                     );
                 }
             };
+        },
+        async fetchAlleHendelser() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'aktivitet/getAlleHendelser',
+            };
+    
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+            
+            let hendelser : Hendelse[] = [];
+            for(let hendelse of results) {
+                hendelser.push(new Hendelse(
+                    hendelse.id, 
+                    hendelse.navn, 
+                ));
+            }
+
+            console.log(hendelser);
+    
+            this.hendelser = hendelser;
+    
+            return results;
         },
         async fetchAlleTags() {
             var data = {
@@ -244,9 +270,10 @@ export default {
         },
         async init() {
             let tags = await this.fetchAlleTags();
+            let hendelserRes = await this.fetchAlleHendelser();
 
             // Først må taggene hentes
-            if(tags != null) {
+            if(tags != null && hendelserRes != null) {
                 this.fetch();
             }
         }
