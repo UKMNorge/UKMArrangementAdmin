@@ -106,15 +106,22 @@ class Aktivitet {
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-        
-        if(results != null) {
+        let tagsResults = this.saveTags();
+
+        if(results != null && tagsResults != null) {
             this.loading = false;
+            this.spaInteraction.showMessage('Lagret', 'Aktiviteten er lagret!', 'success');
+
         }
         
         return results;
     }
 
     public async delete() {
+        if(this.tidspunkter.length > 0) {
+            this.spaInteraction.showMessage('Feil', 'Aktiviteten har forekomster og kan ikke slettes', 'error');
+            return;
+        }
         this.loading = true;
         
         var data = {
@@ -128,6 +135,27 @@ class Aktivitet {
         if(results && results.completed && results.completed == true) {
             this.loading = false;
             this.deleted = true;
+        } else {
+            this.spaInteraction.showMessage('Feil', 'Kunne ikke slette aktivitet: ' + (results.message ?? ''), 'error');
+        }
+        
+        return results;
+    }
+
+    private async saveTags() {
+        this.loading = true;
+        
+        var data = {
+            action: 'UKMArrangementAdmin_ajax',
+            controller: 'aktivitet/updateAktivitetTags',
+            aktivitetId: this.id,
+            tags: this.tags.length < 1 ? [] : this.tags,
+        };
+
+        var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+        
+        if(results && results.completed && results.completed == true) {
+            this.loading = false;
         } else {
             this.spaInteraction.showMessage('Feil', 'Kunne ikke slette aktivitet: ' + (results.message ?? ''), 'error');
         }

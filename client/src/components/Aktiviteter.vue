@@ -89,8 +89,7 @@ export default {
         AktivitetTags : AktivitetTags,
     },
     mounted() {
-        this.fetch();
-        this.fetchAlleTags();
+        this.init();
     },
     data() {
         return {
@@ -124,6 +123,7 @@ export default {
                 '', 
                 '',
                 -1,
+                [],
                 []
             );
             
@@ -131,9 +131,10 @@ export default {
             newAktivitet.expanded = true;
         },
         updateTags(newTags: AktivitetTag[]) {
-            console.log('Updating tags');
-            this.tags = newTags;
-            this.tagsKey++; // Trigger re-render of AktivitetKomponent
+            this.init();
+
+            // this.tags = newTags;
+            // this.tagsKey++; // Trigger re-render of AktivitetKomponent
         },
         async fetch() {
             var data = {
@@ -143,8 +144,13 @@ export default {
 
             var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
             
+            if(results) {
+                this.aktiviteter = [];
+            }
+            
             for(let aktivitet of results) {
                 let tidspunkter : AktivitetTidspunkt[] = [];
+                let aktivitetTags : AktivitetTag[] = [];
 
                 let aktivitetObj = new Aktivitet(
                     aktivitet.id, 
@@ -152,11 +158,20 @@ export default {
                     aktivitet.sted, 
                     aktivitet.beskrivelse,
                     aktivitet.plId,
-                    tidspunkter
+                    tidspunkter,
+                    aktivitetTags,
                 );
                 this.aktiviteter.push(
                     aktivitetObj
                 );
+
+                for(let tag of this.tags) {
+                    for(let aktivitetTag of aktivitet.tags) {
+                        if(tag.id == aktivitetTag.id) {
+                            aktivitetTags.push(tag);
+                        }
+                    }
+                }
             
                 for(let tidspunkt of aktivitet.tidspunkter) {
                     let deltakere : AktivitetDeltaker[] = [];
@@ -183,8 +198,6 @@ export default {
                             tidspunkt.harPaamelding,
                             tidspunkt.erSammeStedSomAktivitet)
                     );
-
-                    console.log(tidspunkter);
                 }
             };
         },
@@ -206,6 +219,8 @@ export default {
             }
 
             this.tags = tags;
+
+            return results;
         },
         async save(leder : Leder) {
             this.savingOngoing = true;
@@ -226,6 +241,14 @@ export default {
      
             this.savingOngoing = false;
         },
+        async init() {
+            let tags = await this.fetchAlleTags();
+
+            // Først må taggene hentes
+            if(tags != null) {
+                this.fetch();
+            }
+        }
     }
 }
 </script>

@@ -26,7 +26,7 @@
                 multiple
                 variant="outlined" 
                 class="v-autocomplete-arr-sys" 
-                :items="getTags()" 
+                :items="getTags()"
                 v-model="aktivitet.tags"
                 item-text="title"
                 item-value="id" 
