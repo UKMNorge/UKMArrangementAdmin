@@ -156,7 +156,7 @@
                                             multiple
                                             variant="outlined" 
                                             class="v-autocomplete-arr-sys" 
-                                            :items="tags" 
+                                            :items="getTags()" 
                                             v-model="tidspunkt.tags"
                                             item-text="title"
                                             item-value="id" 
@@ -270,6 +270,12 @@ export default {
         InputTextOverlay : InputTextOverlay,
         VueDatePicker : VueDatePicker
     },
+    computed: {
+        tidspunkter() {
+            let retTidspunkter = this.aktivitet.tidspunkter || [];
+            return retTidspunkter;
+        },
+    },
     data() {
         return {
             tab : null, // Set to null so no chip is selected by default
@@ -281,12 +287,6 @@ export default {
             selectedTidspunkt: null as AktivitetTidspunkt|null,
             deleting: false,
         };
-    },
-    computed: {
-        tidspunkter() {
-            let retTidspunkter = this.aktivitet.tidspunkter || [];
-            return retTidspunkter;
-        },
     },
     mounted() {
         nextTick(() => {
@@ -302,6 +302,10 @@ export default {
         
     },
     methods: {
+        getTags() : AktivitetTag[] {
+            // Return all but -1 (placeholder for new tag)
+            return this.tags.filter((tag : AktivitetTag) => tag.id != -1);
+        },
         getStartSluttDate(tidspunkt: AktivitetTidspunkt): [Date, Date] {
             if (!tidspunkt.start) return [new Date(), new Date()];
             

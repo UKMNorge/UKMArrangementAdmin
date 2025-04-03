@@ -136,9 +136,9 @@ export default {
         },
         addNewPlaceholder() {
             console.log('')
-            // if (!this.localTags.some(tag => tag.id === -1)) {
+            if (!this.localTags.some(tag => tag.id === -1)) {
                 this.localTags.unshift(new AktivitetTag(-1, '', ''));
-            // }
+            }
         },
         async deleteTagFromArray(tag: AktivitetTag) {
             this.$emit('update:tags', this.localTags);
