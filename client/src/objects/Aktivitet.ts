@@ -107,16 +107,13 @@ class Aktivitet {
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-        let tagResults : any = null;
-        if(this.id != -1) {
-            tagResults = this.saveTags();
-        } else {
-            tagResults = 1;
-        }
+        let tagsResults = this.saveTags();
 
-        if(results != null && tagResults != null) {
+        if(results != null && tagsResults != null) {
             this.loading = false;
-            this.spaInteraction.showMessage('Lagret', 'Aktiviteten er lagret!', 'success');
+            if(this.id != -1) {
+                this.spaInteraction.showMessage('Lagret', 'Aktiviteten er lagret!', 'success');
+            }
 
         }
         
