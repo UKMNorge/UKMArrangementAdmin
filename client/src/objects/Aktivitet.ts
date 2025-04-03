@@ -1,4 +1,5 @@
 import AktivitetTidspunkt from './AktivitetTidspunkt';
+import AktivitetTag from "./AktivitetTag";
 
 class Aktivitet {
     loading : boolean = false;
@@ -13,6 +14,8 @@ class Aktivitet {
     beskrivelse : string;
     plId : number;
 
+    tags : AktivitetTag[] = [];
+
     // Alle tidspunkter
     tidspunkter : AktivitetTidspunkt[] = [];
 
@@ -21,7 +24,7 @@ class Aktivitet {
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[]) {
+    constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[]) {
         this.id = id;
         this.navn = navn;
         this.title = navn;
@@ -30,6 +33,7 @@ class Aktivitet {
         this.beskrivelse = beskrivelse;
         this.plId = plId;
         this.tidspunkter = tidspunkter;
+        this.tags = tags;
 
         this.addNewTidspubktInTheList();
     }

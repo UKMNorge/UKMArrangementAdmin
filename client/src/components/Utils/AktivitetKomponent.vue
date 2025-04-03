@@ -20,6 +20,22 @@
             </div>
         </div>
 
+        <div class="col-sm-5 nop-impt as-margin-right-space-2">
+            <v-select
+                label="Tags"
+                multiple
+                variant="outlined" 
+                class="v-autocomplete-arr-sys" 
+                :items="getTags()" 
+                v-model="aktivitet.tags"
+                item-text="title"
+                item-value="id" 
+                chips
+                closable-chips
+                >
+            </v-select>
+        </div>
+
         <v-btn v-show="aktivitet.id == -1"
             class="v-btn-as v-btn-success"
             rounded="large"
@@ -59,7 +75,7 @@
                     <h4>Forekomster</h4>
                 </div>
                 <!-- Chip Group to Replace Tabs -->
-                <v-chip-group v-model="tab" selected-class="text-white">
+                <v-chip-group v-model="tab" class="all-chips" selected-class="text-white">
                     <v-chip
                         v-for="tidspunkt in tidspunkter"
                         :key="tidspunkt.id"
@@ -99,7 +115,7 @@
                 </v-dialog>
 
                 <!-- Content Display for Selected Chip -->
-                <v-window v-model="tab">
+                <v-window v-model="tab" class="aktivitet-window" :class="{'no-tab-open': tab == null}">
                     <v-window-item v-if="tidspunkter.length > 0" v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
                                 <div class="col-xs-12 nop-impt">
                                     <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
@@ -146,22 +162,6 @@
                                             v-model="tidspunkt.hendelseId"
                                             item-text="title"
                                             item-value="id" 
-                                            >
-                                        </v-select>
-                                    </div>
-
-                                    <div class="col-sm-5 nop-impt as-margin-right-space-2">
-                                        <v-select
-                                            label="Tags"
-                                            multiple
-                                            variant="outlined" 
-                                            class="v-autocomplete-arr-sys" 
-                                            :items="getTags()" 
-                                            v-model="tidspunkt.tags"
-                                            item-text="title"
-                                            item-value="id" 
-                                            chips
-                                            closable-chips
                                             >
                                         </v-select>
                                     </div>
@@ -436,5 +436,23 @@ export default {
 }
 .col-xs-10-with-margin {
     width: calc(83.3% + calc(var(--initial-space-box) * 2)) !important;
+}
+.all-chips {
+    background: var(--color-primary-grey-extra-lightes);
+    padding: calc(var(--initial-space-box)* 2) !important;
+    border-radius: var(--radius-high) !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.all-chips >>> .v-slide-group__container {
+    border-bottom: solid 1px #dbdbdb;
+    padding-bottom: 16px;
+}
+.aktivitet-window {
+    background: var(--color-primary-grey-extra-lightes);
+    padding: calc(var(--initial-space-box)* 2) !important;
+    border-radius: var(--radius-high) !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
 }
 </style>

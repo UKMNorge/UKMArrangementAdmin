@@ -1,6 +1,5 @@
 import Aktivitet from "./Aktivitet";
 import AktivitetDeltaker from "./AktivitetDeltaker";
-import AktivitetTag from "./AktivitetTag";
 
 class AktivitetTidspunkt {
     loading : boolean = false;
@@ -22,7 +21,6 @@ class AktivitetTidspunkt {
     aktivitet : Aktivitet; // Foreign key til Aktivite : string;
     
     deltakere : AktivitetDeltaker[] = [];
-    tags : AktivitetTag[] = [];
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
