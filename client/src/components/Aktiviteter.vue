@@ -196,7 +196,8 @@ export default {
                             aktivitetObj,
                             deltakere,
                             tidspunkt.harPaamelding,
-                            tidspunkt.erSammeStedSomAktivitet)
+                            tidspunkt.erSammeStedSomAktivitet,
+                            tidspunkt.erKunInterne)
                     );
                 }
             };

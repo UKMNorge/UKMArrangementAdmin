@@ -170,37 +170,48 @@
                                 <div class="col-xs-12 as-margin-top-space-2 nop-impt">
                                     <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
                                         <h5>Påmelding og deltakere</h5>
-                                        <div class="col-sm-3 nop-impt as-margin-right-space-2">
-                                            <v-checkbox
-                                                v-model="tidspunkt.harPaamelding"
-                                                label="Krev påmelding"
-                                            ></v-checkbox>
+                                        <div class="col-xs-12 nop-impt">
+                                            <div class="col-sm-4 nop-impt as-margin-right-space-2">
+                                                <v-checkbox
+                                                    v-model="tidspunkt.harPaamelding"
+                                                    label="Krev påmelding"
+                                                ></v-checkbox>
+                                            </div>
+                                            <div v-show="tidspunkt.harPaamelding" class="col-sm-4 nop-impt as-margin-right-space-2">
+                                                <v-checkbox
+                                                    v-model="tidspunkt.kunInterne"
+                                                    label="Kun interne deltakere"
+                                                ></v-checkbox>
+                                            </div>
                                         </div>
-                                        <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
-                                            <v-checkbox
-                                                v-model="tidspunkt.hasMaksAntall"
-                                                label="Ubegrenset antall deltakere"
-                                            ></v-checkbox>
-                                        </div>
-                                        <div v-show="tidspunkt.harPaamelding" class="col-sm-2 nop-impt as-margin-right-space-2">
-                                            <InputTextOverlay v-show="!tidspunkt.hasMaksAntall"
-                                            :placeholder="'Begrenset antall deltakere'" 
-                                            :model-value="tidspunkt.maksAntall?.toString()" 
-                                            @update:model-value="val => tidspunkt.maksAntall = Number(val)"
-                                            />
-                                        </div>
+                                        <div class="col-xs-12 nop-impt">
 
-                                        <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
-                                            <v-chip-group v-model="tidspunkt.deltakere" selected-class="text-white">
-                                                <v-chip
-                                                    v-for="deltaker in tidspunkt.deltakere"
-                                                    :key="deltaker.mobil"
-                                                    :value="deltaker.mobil"
-                                                    color="primary"
-                                                >
-                                                    {{ deltaker.mobil }}
-                                                </v-chip>
-                                            </v-chip-group>
+                                            <div v-show="tidspunkt.harPaamelding" class="col-sm-4 nop-impt as-margin-right-space-2">
+                                                <v-checkbox
+                                                    v-model="tidspunkt.hasMaksAntall"
+                                                    label="Ubegrenset antall deltakere"
+                                                ></v-checkbox>
+                                            </div>
+                                            <div v-show="tidspunkt.harPaamelding" class="col-sm-4 nop-impt as-margin-right-space-2">
+                                                <InputTextOverlay v-show="!tidspunkt.hasMaksAntall"
+                                                :placeholder="'Begrenset antall deltakere'" 
+                                                :model-value="tidspunkt.maksAntall?.toString()" 
+                                                @update:model-value="val => tidspunkt.maksAntall = Number(val)"
+                                                />
+                                            </div>
+
+                                            <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
+                                                <v-chip-group v-model="tidspunkt.deltakere" selected-class="text-white">
+                                                    <v-chip
+                                                        v-for="deltaker in tidspunkt.deltakere"
+                                                        :key="deltaker.mobil"
+                                                        :value="deltaker.mobil"
+                                                        color="primary"
+                                                    >
+                                                        {{ deltaker.mobil }}
+                                                    </v-chip>
+                                                </v-chip-group>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

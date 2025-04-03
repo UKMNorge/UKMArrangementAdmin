@@ -13,7 +13,8 @@ $requiredArguments = [
     'maksAntall', 
     'aktivitetId',
     'harPaamelding', 
-    'erSammeStedSomAktivitet'
+    'erSammeStedSomAktivitet',
+    'kunInterne',
 ];
 
 $optionalArguments = [
@@ -33,6 +34,8 @@ $maksAntall = $handleCall->getArgument('maksAntall');
 $aktivitetId = $handleCall->getArgument('aktivitetId');
 $harPaamelding = $handleCall->getArgument('harPaamelding') == 'true' ?? false;
 $erSammeStedSomAktivitet = $handleCall->getArgument('erSammeStedSomAktivitet') == 'true' ?? false;
+$kunInterne = $handleCall->getArgument('kunInterne') == 'true' ?? false;
+
 
 $sted = $handleCall->getOptionalArgument('sted') ?? ' ';
 $hendelseId = $handleCall->getOptionalArgument('hendelseId') ?? null;
@@ -69,6 +72,7 @@ $aktTidspunkt = Write::updateAktivitetTidspunkt(
     $hendelseId,
     $harPaamelding,
     $erSammeStedSomAktivitet,
+    $kunInterne,
 );
 
 

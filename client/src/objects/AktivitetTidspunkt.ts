@@ -15,6 +15,7 @@ class AktivitetTidspunkt {
     hasMaksAntall : boolean;
     harPaamelding : boolean;
     erSammeStedSomAktivitet : boolean;
+    kunInterne : boolean;
 
     hendelseId : number|null; // Foreign key til Hendelse. Kan være null : string;
    
@@ -37,6 +38,7 @@ class AktivitetTidspunkt {
         deltakere : AktivitetDeltaker[],
         harPaamelding : boolean,
         erSammeStedSomAktivitet : boolean,
+        kunInterne : boolean,
     ) {
         if(id == -1) {
             this.isReal = false;
@@ -51,7 +53,8 @@ class AktivitetTidspunkt {
 
         this.harPaamelding = harPaamelding;
         this.erSammeStedSomAktivitet = erSammeStedSomAktivitet;
-        
+        this.kunInterne = kunInterne;
+
         if(maksAntall >= 999999) {
             this.hasMaksAntall = true;
         }
@@ -164,6 +167,7 @@ class AktivitetTidspunkt {
             aktivitetId: this.aktivitet.id,
             harPaamelding: this.harPaamelding,
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
+            kunInterne : this.kunInterne,
         };
         if(this.hendelseId) {
             (<any>data).hendelseId = this.hendelseId;

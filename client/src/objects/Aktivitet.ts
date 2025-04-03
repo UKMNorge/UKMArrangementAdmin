@@ -71,6 +71,7 @@ class Aktivitet {
             [],     // : AktivitetDeltaker[],
             true,     // : boolean,
             true,     // : boolean,)
+            true,     // : boolean,
         ));
     }
 
@@ -118,7 +119,7 @@ class Aktivitet {
     }
 
     public async delete() {
-        if(this.tidspunkter.length > 0) {
+        if(this.tidspunkter.length > 1) {
             this.spaInteraction.showMessage('Feil', 'Aktiviteten har forekomster og kan ikke slettes', 'error');
             return;
         }
