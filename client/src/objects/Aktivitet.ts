@@ -107,9 +107,14 @@ class Aktivitet {
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
-        let tagsResults = this.saveTags();
+        let tagResults : any = null;
+        if(this.id != -1) {
+            tagResults = this.saveTags();
+        } else {
+            tagResults = 1;
+        }
 
-        if(results != null && tagsResults != null) {
+        if(results != null && tagResults != null) {
             this.loading = false;
             this.spaInteraction.showMessage('Lagret', 'Aktiviteten er lagret!', 'success');
 
