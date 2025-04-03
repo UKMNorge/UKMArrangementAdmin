@@ -20,9 +20,9 @@
             </div>
         </div>
 
-        <div class="col-sm-5 nop-impt as-margin-right-space-2">
+        <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
             <v-select
-                label="Tags"
+                label="Tagger"
                 multiple
                 variant="outlined" 
                 class="v-autocomplete-arr-sys" 
