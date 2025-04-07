@@ -125,7 +125,7 @@ class Aktivitet {
 
     public async delete() {
         if(this.tidspunkter.length > 1) {
-            this.spaInteraction.showMessage('Feil', 'Aktiviteten har forekomster og kan ikke slettes', 'error');
+            this.spaInteraction.showMessage('Feil', 'Aktiviteten har forekomster og kan ikke slettes. Slett forekomstene først!', 'error');
             return;
         }
         this.loading = true;
