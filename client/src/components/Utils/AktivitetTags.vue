@@ -17,7 +17,7 @@
             </template>
 
             <template v-slot:default="{ isActive }">
-            <v-card>
+            <v-card class="card-tags">
                 <v-toolbar title="Alle tagger"></v-toolbar>
 
                 <div class="aktivitet-tags-div">
@@ -157,5 +157,9 @@ export default {
 .button-tag-item-div {
     height: 60px;
     display: flex;
+}
+.card-tags {
+    width: 95vw;
+    max-width: 800px;
 }
 </style>
