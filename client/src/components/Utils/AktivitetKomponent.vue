@@ -119,7 +119,7 @@
                 <v-window v-model="tab" class="aktivitet-window" :class="{'no-tab-open': tab == null}">
                     <v-window-item v-if="tidspunkter.length > 0" v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
                                 <div class="col-xs-12 nop-impt">
-                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                    <div class="tidspunkt-tittel as-margin-bottom-space-3">
                                         <h5>Velg start og slutt</h5>
                                     </div>
                                     
@@ -135,7 +135,7 @@
                                 </div>
 
                                 <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-3">
                                         <h5>Velg sted</h5>
                                     </div>
                                     <div class="col-sm-3 nop-impt as-margin-right-space-2">
@@ -150,7 +150,7 @@
                                 </div>
 
                                 <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                    <div class="tidspunkt-tittel as-margin-top-space-1 as-margin-bottom-space-3">
                                         <h5>Legg forekomsten i en hendelse</h5>
                                     </div>
                                     
@@ -169,7 +169,7 @@
                                 </div>
 
                                 <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-                                    <div class="tidspunkt-tittel as-margin-top-space-3 as-margin-bottom-space-2">
+                                    <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                                         <h5>Påmelding og deltakere</h5>
                                         <div class="col-xs-12 nop-impt">
                                             <div class="col-sm-4 nop-impt as-margin-right-space-2">
