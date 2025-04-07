@@ -69,7 +69,7 @@ $aktTidspunkt = Write::updateAktivitetTidspunkt(
     $slutDateTime,
     null,
     $maksAntall,
-    $hendelseId,
+    is_array($hendelseId) ? $hendelseId['id'] : $hendelseId,
     $harPaamelding,
     $erSammeStedSomAktivitet,
     $kunInterne,
