@@ -142,9 +142,8 @@ class AktivitetTidspunkt {
                 this.hasMaksAntall = false;
             }
     
-            this.hendelse = null;
             this.deltakere = [];
-
+            
             // Add placeholder for new tidspunkt
             this.aktivitet.addNewTidspubktInTheList();
         }
@@ -169,10 +168,8 @@ class AktivitetTidspunkt {
             harPaamelding: this.harPaamelding,
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
             kunInterne : this.kunInterne,
+            hendelseId : this.hendelse ?? -1,
         };
-        if(this.hendelse) {
-            (<any>data).hendelseId = this.hendelse;
-        }
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
         
