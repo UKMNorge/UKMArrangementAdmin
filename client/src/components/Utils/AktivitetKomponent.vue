@@ -382,7 +382,13 @@ export default {
             let results = await aktivitet.create();
         },
         async createTidspunkt(tidspunkt : AktivitetTidspunkt) {
+            this.spaInteraction.showLoading();
+            let currentTab = this.tab;
             let results = await tidspunkt.create();
+            if(results) {
+                this.tab = currentTab == null ? null : (<any>currentTab+1);
+                this.spaInteraction.hideLoading();
+            }
         },
         openDeleteDialog(tidspunkt : AktivitetTidspunkt) {
             this.selectedTidspunkt = tidspunkt;
