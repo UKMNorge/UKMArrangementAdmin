@@ -18,10 +18,14 @@
                 <div class="">
                     <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted">
                         <v-list-item v-if="!aktivitet.deleted"
-                        :title="aktivitet.title"
-                        :subtitle="getAntallTidspunkter(aktivitet)"
                         class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
+                        <v-list-item-title class="text-h6">
+                            {{ aktivitet.title }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                            {{ getAntallTidspunkter(aktivitet) }}
+                        </v-list-item-subtitle>
                         <template v-slot:prepend>
                             <v-avatar color="grey-lighten-1">
                             <v-icon color="white">mdi-calendar-star</v-icon>

@@ -62,8 +62,8 @@ class Aktivitet {
         this.tidspunkter.unshift(new AktivitetTidspunkt(
             -1,     // : number,
             '',     // : string, 
-            "",     // : string, 
-            "",     // : string, 
+            this.getNowDate(),     // : string, 
+            this.getNowDate(30),     // : string, 
             0,     // : number, 
             100,     // : number, 
             null,     // : number|null, 
@@ -73,6 +73,22 @@ class Aktivitet {
             true,     // : boolean,)
             true,     // : boolean,
         ));
+    }
+
+    private getNowDate(plusMinuttes : number = 0) : string {
+        const now = new Date();
+
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(now.getDate()).padStart(2, '0');
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day} ${hours}:${(minutes+plusMinuttes)}:${seconds}`;
+
+            return formattedDate;
     }
 
     public async create() {
