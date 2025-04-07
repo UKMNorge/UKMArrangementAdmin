@@ -127,7 +127,7 @@ export default {
                 this.deleteTagFromArray(tag);
                 this.spaInteraction.showMessage('Slettet!', 'Taggen ble slettet', 'success');
             } else {
-                this.spaInteraction.showMessage('Noe gikk galt', 'Taggen er ikke slettet!', 'error');
+                this.spaInteraction.showMessage('Noe gikk galt', 'Taggen er ikke slettet! Du må fjerne taggen fra alle aktiviteter før du kan slette den.', 'error');
             }
         },
         emitUpdate() {
