@@ -2,8 +2,8 @@
     <div class="aktivitet-komponent container main-container">
         <div class="col-xs-12 as-margin-top-space-2 nop-impt">
             <div class="col-xs-12 nop-impt">
-                <div class="as-margin-top-space-2 as-margin-bottom-space-3">
-                    <h4>Aktivitet</h4>
+                <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+                    <h5>Aktivitet data</h5>
                 </div>
                 <div class="col-xs-5 as-margin-right-space-2 nop-impt">
                     <InputTextOverlay :placeholder="'Aktivitet navn'" v-model="aktivitet.navn" />
@@ -21,6 +21,9 @@
         </div>
 
         <div class="col-xs-12 nop-impt">
+            <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+                <h5>Tagger</h5>
+            </div>
             <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
                 <v-select
                     label="Tagger"
