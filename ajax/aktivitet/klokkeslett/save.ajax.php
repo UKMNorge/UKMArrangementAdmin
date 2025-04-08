@@ -7,6 +7,7 @@ use UKMNorge\OAuth2\HandleAPICall;
 
 $requiredArguments = [
     'id',
+    'navn',
     'fra',
     'til',
 ];
@@ -15,6 +16,7 @@ $requiredArguments = [
 $handleCall = new HandleAPICall($requiredArguments, [], ['POST'], false);
 
 $id = (int)$handleCall->getArgument('id');
+$navn = $handleCall->getArgument('navn');
 
 $fraDateTime = new DateTime($handleCall->getArgument('fra'));
 $tilDateTime = new DateTime($handleCall->getArgument('til'));
@@ -40,6 +42,7 @@ try{
 
 $kSlett = Write::updateAktivitetKlokkeslett(
     $id,
+    $navn,
     $fraDateTime,
     $tilDateTime,
     $arrangement->getId()

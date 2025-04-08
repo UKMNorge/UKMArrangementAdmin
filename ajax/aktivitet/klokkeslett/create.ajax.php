@@ -6,12 +6,14 @@ use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\OAuth2\HandleAPICall;
 
 $requiredArguments = [  
+    'navn', 
     'fra', 
     'til',
 ];
 
 $handleCall = new HandleAPICall($requiredArguments, [], ['POST'], false);
 
+$navn = $handleCall->getArgument('navn');
 $startDateTime = new DateTime($handleCall->getArgument('fra'));
 $stopDateTime = new DateTime($handleCall->getArgument('til'));
 
@@ -28,7 +30,8 @@ try{
 }
 
 $aktivitetKlokkeslett = Write::createAktivitetKlokkeslett(
-    $startDateTime, 
+    $navn,
+    $startDateTime,
     $stopDateTime,
     $arrangement->getId()
 );

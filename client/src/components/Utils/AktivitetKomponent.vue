@@ -518,6 +518,8 @@ export default {
 .tidspunkt-date-picker >>> .dp__pointer {
     margin: 0 !important;
     width: 100%;
+    height: 60px;
+    border: none !important;
 }
 .tidspunkt-date-picker >>> .dp--menu-wrapper {
     position: sticky;

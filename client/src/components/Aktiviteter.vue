@@ -284,6 +284,7 @@ export default {
             for(let kSlett of results) {
                 kSletts.push(new AktivitetKlokkeslett(
                     kSlett.id, 
+                    kSlett.navn,
                     kSlett.start, 
                     kSlett.stop,
                 ));

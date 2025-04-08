@@ -22,8 +22,8 @@
 
                 <div class="aktivitet-klokkeslett-div">
                     <div v-for="kSlett in localKlokkeslett" class="as-margin-top-space-2">
-                        <div class="col-xs-12 nop-impt">
-                            <div class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
+                        <div class="col-xs-12">
+                            <div class="col-sm-4 nop-impt tidspunkt-date-picker finfo-date-picker">
                                 <VueDatePicker 
                                     :format="(dates) => customFormat(dates)"
                                     :model-value="getStartSluttDate(kSlett)" 
@@ -31,6 +31,9 @@
                                     :range="{ showLastInRange: false }"
                                     :hide-input-icon="true" 
                                     :clearable="false" />
+                            </div>
+                            <div class="col-xs-4">
+                                <InputTextOverlay :placeholder="'Navn'" v-model="kSlett.navn" />
                             </div>
                             <div class="col-xs-3 button-kslett-item-div">
                                 <v-btn
@@ -167,7 +170,7 @@ export default {
         addNewPlaceholder() {
             console.log('')
             if (!this.localKlokkeslett.some(kSlett => kSlett.id === -1)) {
-                this.localKlokkeslett.unshift(new AktivitetKlokkeslett(-1, '', ''));
+                this.localKlokkeslett.unshift(new AktivitetKlokkeslett(-1, '', '', ''));
             }
         },
         async deleteKSlettFromArray(kSlett: AktivitetKlokkeslett) {
@@ -214,6 +217,8 @@ export default {
 .tidspunkt-date-picker >>> .dp__pointer {
     margin: 0 !important;
     width: 100%;
+    height: 60px;
+    border: none !important;
 }
 .tidspunkt-date-picker >>> .dp--menu-wrapper {
     position: sticky;

@@ -1,14 +1,16 @@
 class AktivitetKlokkeslett {
     id: number;
     title: string;
+    navn: string;
     fra: string;
     til: string;
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, fra : string, til : string) {
+    constructor(id : number, navn : string, fra : string, til : string) {
         this.id = id;
-        this.title = fra + " - " + til;
+        this.navn = navn;
+        this.title = navn + ' ' + fra + " - " + til;
         this.fra = fra;
         this.til = til;
     }
@@ -18,6 +20,7 @@ class AktivitetKlokkeslett {
             action: 'UKMArrangementAdmin_ajax',
             controller: 'aktivitet/klokkeslett/save',
             id: this.id,
+            navn: this.navn,
             fra: this.fra,
             til: this.til
         };
@@ -43,6 +46,7 @@ class AktivitetKlokkeslett {
         var data = {
             action: 'UKMArrangementAdmin_ajax',
             controller: 'aktivitet/klokkeslett/create',
+            navn: this.navn,
             id: this.id,
             fra: this.fra,
             til: this.til
