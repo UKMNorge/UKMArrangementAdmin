@@ -149,11 +149,6 @@ export default {
 
 </script>
 <style scoped>
-.aktivitet-tags-div {
-    min-width: 50vw;
-    height: 80vw;
-    max-height: 1200px;
-}
 .button-tag-item-div {
     height: 60px;
     display: flex;
@@ -161,5 +156,21 @@ export default {
 .card-tags {
     width: 95vw;
     max-width: 800px;
+}
+@media(max-width: 767px) {
+    .aktivitet-tags-div {
+        min-width: 50vw;
+        height: 80vw;
+        max-height: 1200px;
+    }
+    .button-tag-item-div {
+        display: block;
+    }
+    .button-tag-item-div button {
+        height: 25px;
+    }
+    .button-tag-item-div button:first-child {
+        margin-bottom: 10px;
+    }
 }
 </style>
