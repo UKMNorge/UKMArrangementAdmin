@@ -12,6 +12,7 @@
                 Legg til Aktivitet
             </v-btn>
             <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="updateTags"/>
+            <AktivitetKlokkesletts :dialogVisible="klokkeslettDialogVisible" :klokkeslett="klokkeslett" @update:klokkeslett="updateKlokkeslett"/>
         </div>
         <div class="as-padding-left-space-1 as-padding-right-space-1 as-margin-bottom-space-1">
             <h4>Aktiviteter</h4>
@@ -73,8 +74,10 @@ import AktivitetTidspunkt from './../objects/AktivitetTidspunkt';
 import AktivitetDeltaker from './../objects/AktivitetDeltaker';
 import { InputTextOverlay } from 'ukm-components-vue3';
 import AktivitetTag from '../objects/AktivitetTag';
-import AktivitetTags from './Utils/AktivitetTags.vue';
 import Hendelse from './../objects/Hendelse';
+import AktivitetTags from './Utils/AktivitetTags.vue';
+import AktivitetKlokkeslett from '../objects/AktivitetKlokkeslett';
+import AktivitetKlokkesletts from './Utils/AktivitetKlokkesletts.vue';
 
 export default {
     computed: {
@@ -94,6 +97,7 @@ export default {
         AktivitetKomponent : AktivitetKomponent,
         InputTextOverlay : InputTextOverlay,
         AktivitetTags : AktivitetTags,
+        AktivitetKlokkesletts : AktivitetKlokkesletts,
     },
     mounted() {
         this.init();
@@ -104,7 +108,9 @@ export default {
             savingOngoing: false,
             aktiviteter : [] as Aktivitet[],
             tagsDialogVisible : false as boolean,
+            klokkeslettDialogVisible : false as boolean,
             tags : [] as AktivitetTag[],
+            klokkeslett : [] as AktivitetKlokkeslett[],
             tagsKey: 0, // Bruker for reaktiving av AktivitetKomponent
             hendelser: [] as Hendelse[],
         }
@@ -141,6 +147,12 @@ export default {
             newAktivitet.expanded = true;
         },
         updateTags(newTags: AktivitetTag[]) {
+            this.init();
+
+            // this.tags = newTags;
+            // this.tagsKey++; // Trigger re-render of AktivitetKomponent
+        },
+        updateKlokkeslett(newTags: AktivitetKlokkeslett[]) {
             this.init();
 
             // this.tags = newTags;
@@ -260,6 +272,27 @@ export default {
 
             return results;
         },
+        async fetchAlleKlokkeslett() {
+            var data = {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'aktivitet/klokkeslett/getAlle',
+            };
+
+            var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+            
+            let kSletts : AktivitetKlokkeslett[] = [];
+            for(let kSlett of results) {
+                kSletts.push(new AktivitetKlokkeslett(
+                    kSlett.id, 
+                    kSlett.start, 
+                    kSlett.stop,
+                ));
+            }
+
+            this.klokkeslett = kSletts;
+
+            return results;
+        },
         async save(leder : Leder) {
             this.savingOngoing = true;
         
@@ -282,9 +315,10 @@ export default {
         async init() {
             let tags = await this.fetchAlleTags();
             let hendelserRes = await this.fetchAlleHendelser();
+            let klokkeslettRes = await this.fetchAlleKlokkeslett();
 
             // Først må taggene hentes
-            if(tags != null && hendelserRes != null) {
+            if(tags != null && hendelserRes != null && klokkeslettRes != null) {
                 this.fetch();
             }
         }
