@@ -1,6 +1,6 @@
 <template>
     <div class="as-container main-container">
-        <div class="aktiviteter-buttons as-display-flex">
+        <div class="aktiviteter-buttons as-margin-bottom-space-4 as-display-flex">
             <v-btn
                 class="v-btn-as v-btn-hvit as-margin-right-space-2"
                 prepend-icon="mdi-plus"
@@ -12,6 +12,9 @@
                 Legg til Aktivitet
             </v-btn>
             <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="updateTags"/>
+        </div>
+        <div class="as-padding-left-space-1 as-padding-right-space-1 as-margin-bottom-space-1">
+            <h4>Aktiviteter</h4>
         </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
@@ -129,7 +132,8 @@ export default {
                 '',
                 -1,
                 [],
-                []
+                [],
+                null,
             );
             
             this.aktiviteter.unshift(newAktivitet);
@@ -165,6 +169,7 @@ export default {
                     aktivitet.plId,
                     tidspunkter,
                     aktivitetTags,
+                    aktivitet.image,
                 );
                 this.aktiviteter.push(
                     aktivitetObj

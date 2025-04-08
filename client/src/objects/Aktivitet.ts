@@ -1,5 +1,7 @@
 import AktivitetTidspunkt from './AktivitetTidspunkt';
 import AktivitetTag from "./AktivitetTag";
+import axios from 'axios';
+
 
 class Aktivitet {
     loading : boolean = false;
@@ -16,6 +18,10 @@ class Aktivitet {
 
     tags : AktivitetTag[] = [];
 
+    image : string|null;
+    uploadedImage : any;
+
+
     // Alle tidspunkter
     tidspunkter : AktivitetTidspunkt[] = [];
 
@@ -24,7 +30,7 @@ class Aktivitet {
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[]) {
+    constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
         this.id = id;
         this.navn = navn;
         this.title = navn;
@@ -34,6 +40,7 @@ class Aktivitet {
         this.plId = plId;
         this.tidspunkter = tidspunkter;
         this.tags = tags;
+        this.image = image;
 
         this.addNewTidspubktInTheList();
     }
@@ -109,10 +116,36 @@ class Aktivitet {
         return results;
     }
 
-    public async save(controllerArg : string|null = null) {
-        this.loading = true;
-        // Save to database via API
+    private async uploadImage() {
+        const formData = new FormData()
+        formData.append('imageFile', this.uploadedImage == null ? null : this.uploadedImage)
+        formData.append('action', 'UKMArrangementAdmin_ajax')
+        formData.append('controller', 'aktivitet/uploadImageAktivitet')
+        formData.append('aktivitetId', (<any>this.id))
+
+        let response;
+        try {
+            response = await axios.post((<any>window).ajaxurl, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            if(response.data.imageUrl == null && !response.data.isDeleted) {
+                this.spaInteraction.showMessage('Feil', 'Kunne ikke laste opp bildet. Sjekk filtype eller størrelse.', 'error');
+                this.image = response.data.oldUrl;
+                return;
+            }
+            this.image = response.data.imageUrl;
+        } catch (error) {
+            this.spaInteraction.showMessage('Feil', (<any>error).response.data.result, 'error');
+        }
+
+        return response;
         
+    }
+
+    public async save(controllerArg : string|null = null) {
+        this.loading = true;        
         var data = {
             action: 'UKMArrangementAdmin_ajax',
             controller: controllerArg ?? 'aktivitet/saveAktivitet',
@@ -121,7 +154,7 @@ class Aktivitet {
             sted: this.sted,
             beskrivelse: this.beskrivelse,
         };
-
+        
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
         let tagsResults = null;
         if(results != null) {
@@ -133,7 +166,7 @@ class Aktivitet {
             if(this.id != -1) {
                 this.spaInteraction.showMessage('Lagret', 'Aktiviteten er lagret!', 'success');
             }
-
+            this.uploadImage();
         }
         
         return results;

@@ -20,20 +20,59 @@
             </div>
         </div>
 
-        <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
-            <v-select
-                label="Tagger"
-                multiple
-                variant="outlined" 
-                class="v-autocomplete-arr-sys" 
-                :items="getTags()"
-                v-model="aktivitet.tags"
-                item-text="title"
-                item-value="id" 
-                chips
-                closable-chips
-                >
-            </v-select>
+        <div class="col-xs-12 nop-impt">
+            <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
+                <v-select
+                    label="Tagger"
+                    multiple
+                    variant="outlined" 
+                    class="v-autocomplete-arr-sys" 
+                    :items="getTags()"
+                    v-model="aktivitet.tags"
+                    item-text="title"
+                    item-value="id" 
+                    chips
+                    closable-chips
+                    >
+                </v-select>
+            </div>
+        </div>
+
+        <div class="col-xs-12 nop-impt">
+            <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+                <h5>Aktivitet bilde</h5>
+            </div>
+            <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
+                <div v-if="aktivitet.image != null" class="img-aktivitet as-margin-bottom-space-2">
+                    <img :src="aktivitet.image">
+                    <div  class="aktivitet-image-buttons-floating">
+                        <div class="buttons-inside-floating">
+                            <v-btn
+                                class="v-btn-as v-btn-bla as-margin-right-space-1"
+                                rounded="small"
+                                size="small"
+                                @click="openImage(aktivitet)"
+                                variant="outlined">
+                                Åpne bilde
+                            </v-btn>
+                            <v-btn
+                                class="v-btn-as v-btn-error as-margin-left-space-1"
+                                rounded="small"
+                                size="small"
+                                @click="aktivitet.image = null"
+                                variant="outlined">
+                                Fjern bilde
+                            </v-btn>
+                        </div>
+                    </div>
+                </div>
+                <v-file-input v-show="aktivitet.image == null"
+                    v-model="aktivitet.uploadedImage"
+                    accept="image/*"
+                    label="Last opp aktivitet bilde"
+                    prepend-icon=""
+                ></v-file-input>
+            </div>
         </div>
 
         <div class="col-xs-12 as-margin-top-space-2 nop-impt">
@@ -425,6 +464,11 @@ export default {
             
 
         },
+        openImage(aktivitet : Aktivitet) {
+            if(aktivitet.image) {
+                window.open(aktivitet.image, '_blank');
+            }
+        },
         deleteAktivitet(aktivitet : Aktivitet) {
             aktivitet.delete();
         },
@@ -467,5 +511,40 @@ export default {
     border-radius: var(--radius-high) !important;
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
+}
+.img-aktivitet {
+    position: relative;
+    max-width: 400px;
+    max-height: 300px;
+    display: flex;
+    border-radius: var(--radius-normal) !important;
+    overflow: hidden !important;
+}
+.img-aktivitet img {
+    width: 100%;
+    height: auto;
+    border: solid 1px #dbdbdb;
+}
+.aktivitet-image-buttons-floating {
+    position: absolute;
+    background: #646464bd;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+.buttons-inside-floating {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+.aktivitet-image-buttons-floating {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+.img-aktivitet:hover .aktivitet-image-buttons-floating {
+    opacity: 1;
+    display: flex;
 }
 </style>
