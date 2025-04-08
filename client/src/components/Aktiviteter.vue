@@ -19,7 +19,7 @@
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
                 <div class="">
-                    <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted">
+                    <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted" @click="toggleExpand(aktivitet)">
                         <v-list-item v-if="!aktivitet.deleted"
                         class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
@@ -39,7 +39,7 @@
                             <v-btn 
                             icon 
                             variant="text" 
-                            @click="toggleExpand(aktivitet)"
+                            @click.stop="toggleExpand(aktivitet)"
                             >
                                 <v-icon>{{ aktivitet.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
                             </v-btn>
@@ -49,7 +49,7 @@
                         <!-- Expandable Content BELOW the item -->
                         <v-expand-transition>
                             
-                            <div v-if="aktivitet.expanded" class="as-display-flex">
+                            <div v-if="aktivitet.expanded" class="as-display-flex" @click.stop>
                                 <AktivitetKomponent :aktivitet="aktivitet" :hendelser="hendelser" :tags="tags" :key="tagsKey"/>
                             </div>
                         </v-expand-transition>
@@ -300,6 +300,7 @@ export default {
     border: none;
     box-shadow: none !important;
     min-height: 56px !important;
+    cursor: pointer;
 }
 .aktivitet-list,
 .aktiviteter-buttons {
