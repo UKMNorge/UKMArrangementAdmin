@@ -27,7 +27,7 @@
                             {{ aktivitet.title }}
                         </v-list-item-title>
                         <v-list-item-subtitle>
-                            {{ getAntallTidspunkter(aktivitet) }}
+                            <span>{{ getAntallTidspunkter(aktivitet) }}</span>
                         </v-list-item-subtitle>
                         <template v-slot:prepend>
                             <v-avatar color="grey-lighten-1">
@@ -130,6 +130,7 @@ export default {
                 '', 
                 '', 
                 '',
+                '',
                 -1,
                 [],
                 [],
@@ -166,6 +167,7 @@ export default {
                     aktivitet.navn, 
                     aktivitet.sted, 
                     aktivitet.beskrivelse,
+                    aktivitet.beskrivelseLeder,
                     aktivitet.plId,
                     tidspunkter,
                     aktivitetTags,
@@ -310,4 +312,21 @@ export default {
 
 }
 
+</style>
+<style>
+.ql-toolbar.ql-snow {
+    border-radius: var(--radius-normal) !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    background: #f4f4f4 !important;
+    border: none !important;
+    border-bottom: solid 1px var(--color-primary-grey-light) !important;
+}
+.ql-container.ql-snow {
+    border-radius: var(--radius-normal) !important;
+    background: #f4f4f4 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border: none !important;
+}
 </style>

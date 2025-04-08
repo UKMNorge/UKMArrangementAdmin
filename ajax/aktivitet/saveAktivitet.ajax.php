@@ -10,16 +10,22 @@ $requiredArguments = [
     'aktivitetId',
     'navn',
     'sted',
-    'beskrivelse',
 ];
 
-$handleCall = new HandleAPICall($requiredArguments, [], ['POST'], false);
+$optionalArguments = [
+    'beskrivelse',
+    'beskrivelseLeder',
+];
+
+$handleCall = new HandleAPICall($requiredArguments, $optionalArguments, ['POST'], false);
 
 
 $aktivitetId = $handleCall->getArgument('aktivitetId');
 $navn = $handleCall->getArgument('navn');
 $sted = $handleCall->getArgument('sted');
-$beskrivelse = $handleCall->getArgument('beskrivelse');
+
+$beskrivelse = $handleCall->getOptionalArgument('beskrivelse') ?? ' ';
+$beskrivelseLeder = $handleCall->getOptionalArgument('beskrivelseLeder') ?? ' ';;
 
 try{
     $aktivitet = new Aktivitet($aktivitetId);
@@ -43,6 +49,7 @@ $aktTidspunkt = Write::updateAktivitet(
     $navn,
     $sted,
     $beskrivelse,
+    $beskrivelseLeder,
 );
 
 

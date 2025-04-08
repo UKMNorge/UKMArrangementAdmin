@@ -13,15 +13,39 @@
                 </div>
             </div>
             
-            <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-4 nop-impt">
+            <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-3 nop-impt">
                 <div class="col-xs-12 nop-impt">
-                    <v-textarea class="vue-as-textarea" label="Beskrivelse av aktivitet" v-model="aktivitet.beskrivelse"></v-textarea>
+                    <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+                        <h5>Beskrivelse av aktivitet</h5>
+                    </div>
+                    <quill-editor
+                        v-model:value="aktivitet.beskrivelse"
+                        @blur="() => {}"
+                        @focus="() => {}"
+                        @ready="() => {}"
+                        @change="() => {}"
+                    />   
+                </div>
+            </div>
+
+            <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-3 nop-impt">
+                <div class="col-xs-12 nop-impt">
+                    <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+                        <h5>Beskrivelse av den som leder aktiviteten</h5>
+                    </div>
+                    <quill-editor
+                        v-model:value="aktivitet.beskrivelseLeder"
+                        @blur="() => {}"
+                        @focus="() => {}"
+                        @ready="() => {}"
+                        @change="() => {}"
+                    />   
                 </div>
             </div>
         </div>
 
         <div class="col-xs-12 nop-impt">
-            <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+            <div class="tidspunkt-tittel as-margin-top-space-4 as-margin-bottom-space-3">
                 <h5>Tagger</h5>
             </div>
             <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
@@ -290,10 +314,11 @@
                     </div>
                             
                     </v-window-item>
-                </v-window>
-                    
+                </v-window>    
             </div>
         </template>
+
+        
         
     </div>
 </template>
@@ -307,6 +332,7 @@ import Hendelse from './../../objects/Hendelse';
 import AktivitetTag from './../../objects/AktivitetTag';
 import { nextTick } from 'vue';
 import type { PropType } from 'vue';  // Use type-only import for PropType
+import { quillEditor } from 'vue3-quill'
 
 
 export default {
@@ -326,7 +352,8 @@ export default {
     },
     components: {
         InputTextOverlay : InputTextOverlay,
-        VueDatePicker : VueDatePicker
+        VueDatePicker : VueDatePicker,
+        quillEditor : quillEditor,
     },
     computed: {
         tidspunkter() {
@@ -343,6 +370,7 @@ export default {
             deleteDialog: false,
             selectedTidspunkt: null as AktivitetTidspunkt|null,
             deleting: false,
+            testEditor: '' as string,
         };
     },
     mounted() {

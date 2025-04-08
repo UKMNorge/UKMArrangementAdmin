@@ -14,6 +14,7 @@ class Aktivitet {
     navn : string;
     sted : string;
     beskrivelse : string;
+    beskrivelseLeder : string;
     plId : number;
 
     tags : AktivitetTag[] = [];
@@ -30,13 +31,14 @@ class Aktivitet {
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, navn : string, sted : string, beskrivelse : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
+    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
         this.id = id;
         this.navn = navn;
         this.title = navn;
         this.subtitle = sted;
         this.sted = sted;
-        this.beskrivelse = beskrivelse;
+        this.beskrivelse = decodeURIComponent(beskrivelse);
+        this.beskrivelseLeder = decodeURIComponent(beskrivelseLeder);
         this.plId = plId;
         this.tidspunkter = tidspunkter;
         this.tags = tags;
@@ -58,13 +60,10 @@ class Aktivitet {
     }
 
     public addNewTidspubktInTheList() {
-        console.log(this.tidspunkter);
         // Only if id -1 is not in the list
         if(this.tidspunkter.find(tidspunkt => tidspunkt.id == -1) != null) {
             return;
         }
-
-        console.log('point ALFA');
 
         this.tidspunkter.unshift(new AktivitetTidspunkt(
             -1,     // : number,
@@ -107,6 +106,7 @@ class Aktivitet {
         this.subtitle = results.sted;
         this.sted = results.sted;
         this.beskrivelse = results.beskrivelse;
+        this.beskrivelseLeder = results.beskrivelseLeder;
         this.plId = results.plId;
         this.tidspunkter = []; // Assuming the last parameter
 
@@ -145,14 +145,16 @@ class Aktivitet {
     }
 
     public async save(controllerArg : string|null = null) {
-        this.loading = true;        
+        this.loading = true;
+
         var data = {
             action: 'UKMArrangementAdmin_ajax',
             controller: controllerArg ?? 'aktivitet/saveAktivitet',
             aktivitetId: this.id,
             navn: this.navn,
             sted: this.sted,
-            beskrivelse: this.beskrivelse,
+            beskrivelse: encodeURIComponent(this.beskrivelse),
+            beskrivelseLeder: encodeURIComponent(this.beskrivelseLeder),
         };
         
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);

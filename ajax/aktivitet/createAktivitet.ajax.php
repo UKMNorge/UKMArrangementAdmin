@@ -13,6 +13,7 @@ $requiredArguments = [
 
 $optionalArguments = [
     'beskrivelse',
+    'beskrivelseLeder',
 ];
 
 $handleCall = new HandleAPICall($requiredArguments, $optionalArguments, ['POST'], false);
@@ -22,6 +23,7 @@ $navn = $handleCall->getArgument('navn');
 $sted = $handleCall->getArgument('sted');
 
 $beskrivelse = $handleCall->getOptionalArgument('beskrivelse') ?? ' ';
+$beskrivelseLeder = $handleCall->getOptionalArgument('beskrivelseLeder') ?? ' ';
 
 
 try{
@@ -33,7 +35,7 @@ try{
     $handleCall->sendErrorToClient('Kunne ikke hente arrangementet', 401);
 }
 
-$aktivitet = Write::createAktivitet($navn, $sted, $beskrivelse, $arrangement->getId());
+$aktivitet = Write::createAktivitet($navn, $sted, $beskrivelse, $beskrivelseLeder, $arrangement->getId());
 
 
 $handleCall->sendToClient($aktivitet->getArrObj());
