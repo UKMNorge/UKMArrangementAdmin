@@ -521,9 +521,9 @@ export default {
     overflow: hidden !important;
 }
 .img-aktivitet img {
-    width: 100%;
-    height: auto;
-    border: solid 1px #dbdbdb;
+    width: auto;
+    max-height: 300px;
+    margin: auto;
 }
 .aktivitet-image-buttons-floating {
     position: absolute;
