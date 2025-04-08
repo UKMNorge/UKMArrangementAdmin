@@ -522,6 +522,7 @@ export default {
     display: flex;
     border-radius: var(--radius-normal) !important;
     overflow: hidden !important;
+    background: var(--color-primary-grey-light);
 }
 .img-aktivitet img {
     width: auto;
