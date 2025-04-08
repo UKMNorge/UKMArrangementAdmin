@@ -160,7 +160,7 @@ export default {
 @media(max-width: 767px) {
     .aktivitet-tags-div {
         min-width: 50vw;
-        height: 80vw;
+        height: auto;
         max-height: 1200px;
     }
     .button-tag-item-div {
