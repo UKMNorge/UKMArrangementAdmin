@@ -44,11 +44,11 @@
             </div>
         </div>
 
-        <div class="col-xs-12 nop-impt">
+        <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
             <div class="tidspunkt-tittel as-margin-top-space-4 as-margin-bottom-space-3">
                 <h5>Tagger</h5>
             </div>
-            <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
+            <div class="col-sm-5 nop-impt as-margin-right-space-2">
                 <v-select
                     label="Tagger"
                     multiple
@@ -65,11 +65,11 @@
             </div>
         </div>
 
-        <div class="col-xs-12 nop-impt">
+        <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
             <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                 <h5>Aktivitet bilde</h5>
             </div>
-            <div v-show="aktivitet.id > 0" class="col-sm-5 nop-impt as-margin-right-space-2">
+            <div class="col-sm-5 nop-impt as-margin-right-space-2">
                 <div v-if="aktivitet.image != null" class="img-aktivitet as-margin-bottom-space-2">
                     <img :src="aktivitet.image">
                     <div  class="aktivitet-image-buttons-floating">
@@ -102,8 +102,8 @@
             </div>
         </div>
 
-        <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-            <v-btn v-show="aktivitet.id == -1"
+        <div v-show="aktivitet.id == -1" class="col-xs-12 as-margin-top-space-4 nop-impt">
+            <v-btn 
                 class="v-btn-as v-btn-success"
                 rounded="large"
                 size="large"
@@ -112,8 +112,8 @@
                 Opprett
             </v-btn>
         </div>
-        <div class="col-xs-12 as-margin-top-space-2 nop-impt">
-            <v-btn v-show="aktivitet.id != -1"
+        <div v-show="aktivitet.id != -1" class="col-xs-12 as-margin-top-space-2 nop-impt">
+            <v-btn 
                 class="v-btn-as v-btn-success as-margin-right-space-1"
                 rounded="large"
                 size="large"

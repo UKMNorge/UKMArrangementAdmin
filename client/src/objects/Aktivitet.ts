@@ -13,8 +13,8 @@ class Aktivitet {
     id : number;
     navn : string;
     sted : string;
-    beskrivelse : string;
-    beskrivelseLeder : string;
+    private beskrivelse : string;
+    private beskrivelseLeder : string;
     plId : number;
 
     tags : AktivitetTag[] = [];
@@ -37,14 +37,22 @@ class Aktivitet {
         this.title = navn;
         this.subtitle = sted;
         this.sted = sted;
-        this.beskrivelse = beskrivelse ? decodeURIComponent(beskrivelse) : '';
-        this.beskrivelseLeder = beskrivelseLeder ? decodeURIComponent(beskrivelseLeder) : '';
+        this.setBeskrivelse(beskrivelse);
+        this.setBeskrivelseLeder(beskrivelseLeder);
         this.plId = plId;
         this.tidspunkter = tidspunkter;
         this.tags = tags;
         this.image = image;
 
         this.addNewTidspubktInTheList();
+    }
+
+    public setBeskrivelse(beskrivelse : string) {
+        this.beskrivelse = beskrivelse ? decodeURIComponent(beskrivelse) : '';
+    }
+
+    public setBeskrivelseLeder(beskrivelseLeder : string) {
+        this.beskrivelseLeder = beskrivelseLeder ? decodeURIComponent(beskrivelseLeder) : '';
     }
 
     public openOrClose() {
@@ -105,8 +113,8 @@ class Aktivitet {
         this.title = results.navn;
         this.subtitle = results.sted;
         this.sted = results.sted;
-        this.beskrivelse = results.beskrivelse;
-        this.beskrivelseLeder = results.beskrivelseLeder;
+        this.setBeskrivelse(results.beskrivelse);
+        this.setBeskrivelseLeder(results.beskrivelseLeder);
         this.plId = results.plId;
         this.tidspunkter = []; // Assuming the last parameter
 
@@ -117,6 +125,8 @@ class Aktivitet {
     }
 
     private async uploadImage() {
+        if(this.id == -1) return;
+
         const formData = new FormData()
         formData.append('imageFile', this.uploadedImage == null ? null : this.uploadedImage)
         formData.append('action', 'UKMArrangementAdmin_ajax')
