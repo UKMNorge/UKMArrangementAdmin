@@ -318,15 +318,16 @@ export default {
     border-radius: var(--radius-normal) !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    background: #f4f4f4 !important;
+    background: var(--color-primary-grey-lightest) !important;
     border: none !important;
     border-bottom: solid 1px var(--color-primary-grey-light) !important;
 }
 .ql-container.ql-snow {
     border-radius: var(--radius-normal) !important;
-    background: #f4f4f4 !important;
+    background: #fff !important;
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
-    border: none !important;
+    border: solid 1px var(--color-primary-grey-lightest) !important;
+    
 }
 </style>
