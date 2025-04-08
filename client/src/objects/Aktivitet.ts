@@ -37,8 +37,8 @@ class Aktivitet {
         this.title = navn;
         this.subtitle = sted;
         this.sted = sted;
-        this.beskrivelse = decodeURIComponent(beskrivelse);
-        this.beskrivelseLeder = decodeURIComponent(beskrivelseLeder);
+        this.beskrivelse = beskrivelse ? decodeURIComponent(beskrivelse) : '';
+        this.beskrivelseLeder = beskrivelseLeder ? decodeURIComponent(beskrivelseLeder) : '';
         this.plId = plId;
         this.tidspunkter = tidspunkter;
         this.tags = tags;
