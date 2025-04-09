@@ -357,7 +357,7 @@ export default {
 }
 .finfo-date-picker input {
     border-radius: var(--radius-normal) !important;
-    padding: 14px 16px !important;
+    padding: 18px 16px !important;
     font-size: 14px;
     border-color: #aaaaaa !important;
     margin-left: 36px !important;

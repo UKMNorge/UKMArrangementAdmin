@@ -153,7 +153,7 @@ class AktivitetTidspunkt {
             start: this.start,
             slutt: this.slutt,
             varighet: this.varighetMinutter,
-            maksAntall: false,
+            maksAntall: this.maksAntall,
             aktivitetId: this.aktivitet.id,
             harPaamelding: this.harPaamelding,
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,

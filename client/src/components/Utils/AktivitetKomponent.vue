@@ -6,10 +6,21 @@
                     <h5>Aktivitet data</h5>
                 </div>
                 <div class="col-xs-5 as-margin-right-space-2 nop-impt">
-                    <InputTextOverlay :placeholder="'Aktivitet navn'" v-model="aktivitet.navn" />
+                    <v-text-field
+                        v-model="aktivitet.navn"
+                        variant="outlined"
+                        class="v-text-field-arr-sys"
+                        label="Aktivitet navn"
+                        required
+                    ></v-text-field>
                 </div>
                 <div class="col-xs-5 nop-impt">
-                    <InputTextOverlay :placeholder="'Sted'" v-model="aktivitet.sted" />
+                    <v-text-field
+                        v-model="aktivitet.sted"
+                        variant="outlined"
+                        class="v-text-field-arr-sys"
+                        label="Sted"
+                    ></v-text-field>
                 </div>
             </div>
             
@@ -94,10 +105,12 @@
                     </div>
                 </div>
                 <v-file-input v-show="aktivitet.image == null"
+                    variant="outlined" 
                     v-model="aktivitet.uploadedImage"
                     accept="image/*"
                     label="Last opp aktivitet bilde"
                     prepend-icon=""
+                    class="last-op-bilde"
                 ></v-file-input>
             </div>
         </div>
@@ -190,20 +203,20 @@
                                     </div>
                                     <div class="col-sm-5 nop-impt as-margin-right-space-2">
                                         <v-select
+                                            variant="outlined"
                                             label="Klokkeslett"
                                             class="v-autocomplete-arr-sys" 
                                             :items="getKlokkesletts()"
                                             v-model="tidspunkt.klokkeslett"
                                             item-text="title"
                                             item-value="id"
-                                            chips
-                                            closable-chips
+                                            clearable
                                         ></v-select>
                                     </div>
                                     <div v-show="!tidspunkt.klokkeslett" class="col-sm-1 separator-tidspunkt">
-                                        <span>eller</span>
+                                        <span>eller velg dato</span>
                                     </div>
-                                    <div v-show="!tidspunkt.klokkeslett" class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
+                                    <div v-show="!tidspunkt.klokkeslett" class="col-sm-5 nop-impt finfo-date-picker as-margin-right-space-2">
                                         <VueDatePicker 
                                             :format="(dates) => customFormat(dates)"
                                             :model-value="getStartSluttDate(tidspunkt)" 
@@ -225,7 +238,12 @@
                                         ></v-checkbox>
                                     </div>
                                     <div v-show="!tidspunkt.erSammeStedSomAktivitet" class="col-sm-5 nop-impt as-margin-right-space-2">
-                                            <InputTextOverlay :placeholder="'Sted'" v-model="tidspunkt.sted" />
+                                        <v-text-field
+                                            v-model="tidspunkt.sted"
+                                            variant="outlined"
+                                            class="v-text-field-arr-sys"
+                                            label="Sted"
+                                        ></v-text-field>
                                     </div>
                                 </div>
 
@@ -236,12 +254,14 @@
                                     
                                     <div class="col-sm-5 nop-impt as-margin-right-space-2">
                                         <v-select
+                                            variant="outlined"
                                             label="Hendelse" 
                                             class="v-autocomplete-arr-sys" 
                                             :items="hendelser" 
                                             v-model="tidspunkt.hendelse"
                                             item-text="title"
                                             item-value="id"
+                                            clearable
                                             >
                                         </v-select>
                                     </div>
@@ -251,12 +271,13 @@
                                     <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                                         <h5>Påmelding og deltakere</h5>
                                         <div class="col-xs-12 as-margin-top-space-3 nop-impt">
-                                            <div class="col-sm-4 nop-impt as-margin-right-space-2">
-                                                <InputTextOverlay
-                                                :placeholder="'Begrenset antall deltakere'" 
-                                                :model-value="tidspunkt.maksAntall?.toString()" 
-                                                @update:model-value="val => tidspunkt.maksAntall = Number(val)"
-                                                />
+                                            <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                                <v-text-field
+                                                    v-model="tidspunkt.maksAntall"
+                                                    variant="outlined"
+                                                    class="v-text-field-arr-sys"
+                                                    label="Begrenset antall deltakere"
+                                                ></v-text-field>
                                             </div>
                                         </div>
                                         <div class="col-xs-12 as-margin-top-space-1 nop-impt">
@@ -604,6 +625,9 @@ export default {
 }
 .separator-tidspunkt span {
     margin: auto;
+}
+.last-op-bilde >>> .v-field__outline{
+    border-radius: var(--radius-normal) !important;
 }
 
 </style>
