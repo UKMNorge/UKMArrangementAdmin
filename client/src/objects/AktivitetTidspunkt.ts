@@ -144,6 +144,24 @@ class AktivitetTidspunkt {
     public async save(controllerArg : string|null = null) {
         this.loading = true;
         // Save to database via API
+
+        let hendelseId;
+        if (this.hendelse !== null && (typeof this.hendelse === 'number' || typeof this.hendelse === 'string')) {
+            hendelseId = this.hendelse;
+        } else if (this.hendelse && typeof this.hendelse === 'object' && 'id' in this.hendelse) {
+            hendelseId = this.hendelse.id;
+        } else {
+            hendelseId = -1;
+        }
+
+        let kSlettId;
+        if (this.klokkeslett !== null && (typeof this.klokkeslett === 'number' || typeof this.klokkeslett === 'string')) {
+            kSlettId = this.klokkeslett;
+        } else if (this.klokkeslett && typeof this.klokkeslett === 'object' && 'id' in this.klokkeslett) {
+            kSlettId = this.klokkeslett.id;
+        } else {
+            kSlettId = null;
+        }
         
         var data = {
             action: 'UKMArrangementAdmin_ajax',
@@ -158,8 +176,8 @@ class AktivitetTidspunkt {
             harPaamelding: this.harPaamelding,
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
             kunInterne : this.kunInterne,
-            hendelseId : this.hendelse ?? -1,
-            klokkeslettId: this.klokkeslett != null ? this.klokkeslett : null,
+            hendelseId : hendelseId,
+            klokkeslettId: kSlettId,
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
