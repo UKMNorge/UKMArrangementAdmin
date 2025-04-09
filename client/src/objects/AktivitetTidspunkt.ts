@@ -1,5 +1,6 @@
 import Aktivitet from "./Aktivitet";
 import AktivitetDeltaker from "./AktivitetDeltaker";
+import AktivitetKlokkeslett from "./AktivitetKlokkeslett";
 import Hendelse from "./Hendelse";
 
 class AktivitetTidspunkt {
@@ -20,6 +21,8 @@ class AktivitetTidspunkt {
 
     hendelse : Hendelse|null = null; // Foreign key til Hendelse. Kan være null : string;
    
+    klokkeslett : AktivitetKlokkeslett|null;
+
     aktivitet : Aktivitet; // Foreign key til Aktivite : string;
     
     deltakere : AktivitetDeltaker[] = [];
@@ -40,6 +43,7 @@ class AktivitetTidspunkt {
         harPaamelding : boolean,
         erSammeStedSomAktivitet : boolean,
         kunInterne : boolean,
+        klokkeslett : AktivitetKlokkeslett|null
     ) {
         if(id == -1) {
             this.isReal = false;
@@ -55,6 +59,7 @@ class AktivitetTidspunkt {
         this.harPaamelding = harPaamelding;
         this.erSammeStedSomAktivitet = erSammeStedSomAktivitet;
         this.kunInterne = kunInterne;
+        this.klokkeslett = klokkeslett;
 
         if(maksAntall >= 999999) {
             this.hasMaksAntall = true;
@@ -174,6 +179,7 @@ class AktivitetTidspunkt {
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
         
         if(results != null) {
+            this.saveKlokkeslett();
             this.loading = false;
         }
         
@@ -201,6 +207,24 @@ class AktivitetTidspunkt {
         
         return results;
     }
+
+    private async saveKlokkeslett() {
+        if(this.id == -1) {
+            return;
+        }
+        this.loading = true;
+        
+        var data = {
+            action: 'UKMArrangementAdmin_ajax',
+            controller: 'aktivitet/klokkeslett/updateRelationTidspunkt',
+            tidspunktId: this.id,
+            klokkeslettId: this.klokkeslett != null ? this.klokkeslett : null,
+        };
+
+        var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
+    }
+
+
 }
 
 export default AktivitetTidspunkt;

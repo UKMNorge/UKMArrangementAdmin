@@ -16,6 +16,13 @@
         </div>
         <div class="as-padding-left-space-1 as-padding-right-space-1 as-margin-bottom-space-1">
             <h4>Aktiviteter</h4>
+            <div class="as-margin-top-space-2" v-if="fetched && aktiviteter.length < 1">
+                <PermanentNotification 
+                    typeNotification="info" 
+                    :tittel="`Ingen aktiviteter er lagt til ennå`" 
+                    :description="`Trykk på knappen 'Legg til aktivitet' for å opprette en ny aktivitet.`" 
+                />
+            </div>
         </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
@@ -104,6 +111,7 @@ export default {
     },
     data() {
         return {
+            fetched : false as boolean,
             spaInteraction : (<any>window).spaInteraction, // Definert i main.ts
             savingOngoing: false,
             aktiviteter : [] as Aktivitet[],
@@ -209,8 +217,12 @@ export default {
                     }
                     
                     let hendelse = this.hendelser.find((h) => h.id == tidspunkt.hendelseId);
-                    console.log('aaa');
-                    console.log(hendelse);
+                    
+                    let klokkeslett = null;
+                    if(tidspunkt.klokkeslett != null) {
+                        klokkeslett = this.klokkeslett.find((k) => k.id == tidspunkt.klokkeslett.id);
+                    }
+                    
                     tidspunkter.push(
                         new AktivitetTidspunkt(
                             tidspunkt.id,
@@ -224,10 +236,13 @@ export default {
                             deltakere,
                             tidspunkt.harPaamelding,
                             tidspunkt.erSammeStedSomAktivitet,
-                            tidspunkt.erKunInterne)
+                            tidspunkt.erKunInterne,
+                            klokkeslett != null ? (<AktivitetKlokkeslett>klokkeslett) : null
+                        )
                     );
                 }
             };
+            this.fetched = true;
         },
         async fetchAlleHendelser() {
             var data = {

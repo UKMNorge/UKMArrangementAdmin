@@ -193,17 +193,17 @@
                                             label="Klokkeslett"
                                             class="v-autocomplete-arr-sys" 
                                             :items="getKlokkesletts()"
-                                            v-model="aktivitet.klokkeslett"
+                                            v-model="tidspunkt.klokkeslett"
                                             item-text="title"
-                                            item-value="id" 
+                                            item-value="id"
                                             chips
                                             closable-chips
                                         ></v-select>
                                     </div>
-                                    <div v-show="!aktivitet.klokkeslett" class="col-sm-1 separator-tidspunkt">
+                                    <div v-show="!tidspunkt.klokkeslett" class="col-sm-1 separator-tidspunkt">
                                         <span>Eller</span>
                                     </div>
-                                    <div v-show="!aktivitet.klokkeslett" class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
+                                    <div v-show="!tidspunkt.klokkeslett" class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
                                         <VueDatePicker 
                                             :format="(dates) => customFormat(dates)"
                                             :model-value="getStartSluttDate(tidspunkt)" 
