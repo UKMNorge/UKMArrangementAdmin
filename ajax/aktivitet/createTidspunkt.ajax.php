@@ -1,14 +1,13 @@
 <?php
 
 use UKMNorge\Arrangement\Aktivitet\Aktivitet;
+use UKMNorge\Arrangement\Aktivitet\AktivitetKlokkeslett;
 use UKMNorge\Arrangement\Aktivitet\AktivitetTidspunkt;
 use UKMNorge\Arrangement\Aktivitet\Write;
 use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\OAuth2\HandleAPICall;
 
 $requiredArguments = [  
-    'start', 
-    'slutt',
     'maksAntall', 
     'aktivitetId',
     'harPaamelding', 
@@ -16,14 +15,40 @@ $requiredArguments = [
 ];
 
 $optionalArguments = [
+    'start',
+    'slutt',
     'hendelseId',
     'sted',
+    'klokkeslettId',
 ];
 
 $handleCall = new HandleAPICall($requiredArguments, $optionalArguments, ['POST'], false);
 
-$startDateTime = new DateTime($handleCall->getArgument('start'));
-$slutDateTime = new DateTime($handleCall->getArgument('slutt'));
+$klokkeslettId = $handleCall->getOptionalArgument('klokkeslettId') ?? null;
+
+$startDateTime = null;
+$slutDateTime = null;
+$klokkeslett = null;
+
+if($klokkeslettId != null) {
+    $klokkeslett = AktivitetKlokkeslett::getById($klokkeslettId);
+    
+    // Define start og slutt fra klokkeslett
+    $startDateTime = $klokkeslett->getStart();
+    $slutDateTime = $klokkeslett->getStop();
+} else {
+    $startArg = $handleCall->getOptionalArgument('start') ?? null;
+    $slutArg = $handleCall->getOptionalArgument('slutt') ?? null;
+    
+    if($startArg == null || $slutArg == null) {
+        $handleCall->sendErrorToClient('Dato er ikke gyldig', 401);
+    }
+
+    $startDateTime = new DateTime($startArg);
+    $slutDateTime = new DateTime($slutArg);
+}
+
+
 $maksAntall = (int)$handleCall->getArgument('maksAntall') ?? 0;
 $aktivitetId = $handleCall->getArgument('aktivitetId');
 $harPaamelding = $handleCall->getArgument('harPaamelding') == 'true' ?? false;
