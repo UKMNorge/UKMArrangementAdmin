@@ -129,7 +129,7 @@ class AktivitetTidspunkt {
 
         if(tidspunkt) {
             this.isReal = true;
-
+            
             this.id = tidspunkt.id;
             this.sted = tidspunkt.sted ?? "";
             this.start = tidspunkt.start;
@@ -174,6 +174,7 @@ class AktivitetTidspunkt {
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
             kunInterne : this.kunInterne,
             hendelseId : this.hendelse ?? -1,
+            klokkeslettId: this.klokkeslett != null ? this.klokkeslett : null,
         };
 
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
