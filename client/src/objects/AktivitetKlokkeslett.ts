@@ -10,9 +10,10 @@ class AktivitetKlokkeslett {
     constructor(id : number, navn : string, fra : string, til : string) {
         this.id = id;
         this.navn = navn;
-        this.title = navn;
         this.fra = fra;
         this.til = til;
+
+        this.title = this.getTitle();
     }
 
     public async save() {
@@ -40,6 +41,31 @@ class AktivitetKlokkeslett {
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
 
         return results;
+    }
+
+    private getTitle(): string {
+        if (!this.fra || !this.til) return this.navn;
+
+        let fraDate = new Date(this.fra);
+        let tilDate = new Date(this.til);
+
+        const formatDate = (date: Date, hourOnly: boolean = false) => {
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+
+            const daysOfWeek = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
+
+            if(hourOnly) {
+                return `kl. ${hours}:${minutes}`;
+            }
+            return `${daysOfWeek[date.getDay()]}, kl. ${hours}:${minutes}`;
+        };
+
+        if(fraDate.getDay() == tilDate.getDay()) {
+            let from = formatDate(fraDate).charAt(0).toLocaleLowerCase() + formatDate(fraDate).slice(1);
+            return `${this.navn} (${from} til ${formatDate(tilDate, true)})`;
+        }
+        return `${this.navn} (${formatDate(fraDate)} til ${formatDate(tilDate)})`;
     }
 
     public async create() {
