@@ -201,7 +201,7 @@
                                         ></v-select>
                                     </div>
                                     <div v-show="!tidspunkt.klokkeslett" class="col-sm-1 separator-tidspunkt">
-                                        <span>Eller</span>
+                                        <span>eller</span>
                                     </div>
                                     <div v-show="!tidspunkt.klokkeslett" class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
                                         <VueDatePicker 
@@ -250,7 +250,16 @@
                                 <div class="col-xs-12 as-margin-top-space-2 nop-impt">
                                     <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                                         <h5>Påmelding og deltakere</h5>
-                                        <div class="col-xs-12 nop-impt">
+                                        <div class="col-xs-12 as-margin-top-space-3 nop-impt">
+                                            <div class="col-sm-4 nop-impt as-margin-right-space-2">
+                                                <InputTextOverlay
+                                                :placeholder="'Begrenset antall deltakere'" 
+                                                :model-value="tidspunkt.maksAntall?.toString()" 
+                                                @update:model-value="val => tidspunkt.maksAntall = Number(val)"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 as-margin-top-space-1 nop-impt">
                                             <div class="col-sm-4 nop-impt as-margin-right-space-2">
                                                 <v-checkbox
                                                     v-model="tidspunkt.harPaamelding"
@@ -265,21 +274,6 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-12 nop-impt">
-
-                                            <div v-show="tidspunkt.harPaamelding" class="col-sm-4 nop-impt as-margin-right-space-2">
-                                                <v-checkbox
-                                                    v-model="tidspunkt.hasMaksAntall"
-                                                    label="Ubegrenset antall deltakere"
-                                                ></v-checkbox>
-                                            </div>
-                                            <div v-show="tidspunkt.harPaamelding" class="col-sm-4 nop-impt as-margin-right-space-2">
-                                                <InputTextOverlay v-show="!tidspunkt.hasMaksAntall"
-                                                :placeholder="'Begrenset antall deltakere'" 
-                                                :model-value="tidspunkt.maksAntall?.toString()" 
-                                                @update:model-value="val => tidspunkt.maksAntall = Number(val)"
-                                                />
-                                            </div>
-
                                             <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
                                                 <v-chip-group v-model="tidspunkt.deltakere" selected-class="text-white">
                                                     <v-chip

@@ -14,7 +14,6 @@ class AktivitetTidspunkt {
     slutt : string;
     varighetMinutter : number;
     maksAntall : number;
-    hasMaksAntall : boolean;
     harPaamelding : boolean;
     erSammeStedSomAktivitet : boolean;
     kunInterne : boolean;
@@ -60,13 +59,6 @@ class AktivitetTidspunkt {
         this.erSammeStedSomAktivitet = erSammeStedSomAktivitet;
         this.kunInterne = kunInterne;
         this.klokkeslett = klokkeslett;
-
-        if(maksAntall >= 999999) {
-            this.hasMaksAntall = true;
-        }
-        else {
-            this.hasMaksAntall = false;
-        }
 
         this.hendelse = hendelse;
         this.aktivitet = aktivitet;
@@ -139,13 +131,6 @@ class AktivitetTidspunkt {
     
             this.harPaamelding = tidspunkt.harPaamelding;
             this.erSammeStedSomAktivitet = tidspunkt.erSammeStedSomAktivitet;
-            
-            if(tidspunkt.maksAntall >= 999999) {
-                this.hasMaksAntall = true;
-            }
-            else {
-                this.hasMaksAntall = false;
-            }
     
             this.deltakere = [];
             
@@ -168,7 +153,7 @@ class AktivitetTidspunkt {
             start: this.start,
             slutt: this.slutt,
             varighet: this.varighetMinutter,
-            maksAntall: this.hasMaksAntall ? 999999 : this.maksAntall,
+            maksAntall: false,
             aktivitetId: this.aktivitet.id,
             harPaamelding: this.harPaamelding,
             erSammeStedSomAktivitet: this.erSammeStedSomAktivitet,
