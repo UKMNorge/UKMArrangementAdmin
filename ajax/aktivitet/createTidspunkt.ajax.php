@@ -40,6 +40,7 @@ if($klokkeslettId != null) {
     $startArg = $handleCall->getOptionalArgument('start') ?? null;
     $slutArg = $handleCall->getOptionalArgument('slutt') ?? null;
     
+    // Hvis ingen klokkeslett, da må datoer sendes
     if($startArg == null || $slutArg == null) {
         $handleCall->sendErrorToClient('Dato er ikke gyldig', 401);
     }

@@ -10,7 +10,7 @@ class AktivitetKlokkeslett {
     constructor(id : number, navn : string, fra : string, til : string) {
         this.id = id;
         this.navn = navn;
-        this.title = navn + ' ' + fra + " - " + til;
+        this.title = navn;
         this.fra = fra;
         this.til = til;
     }
