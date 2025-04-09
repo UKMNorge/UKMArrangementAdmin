@@ -51,7 +51,7 @@
                         <v-expand-transition>
                             
                             <div v-if="aktivitet.expanded" class="as-display-flex" @click.stop>
-                                <AktivitetKomponent :aktivitet="aktivitet" :hendelser="hendelser" :tags="tags" :key="tagsKey"/>
+                                <AktivitetKomponent :aktivitet="aktivitet" :hendelser="hendelser" :tags="tags" :klokkeslett="klokkeslett" :key="tagsKey"/>
                             </div>
                         </v-expand-transition>
                     </div>

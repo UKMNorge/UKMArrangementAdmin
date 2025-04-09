@@ -1,5 +1,6 @@
 import AktivitetTidspunkt from './AktivitetTidspunkt';
 import AktivitetTag from "./AktivitetTag";
+import AktivitetKlokkeslett from './AktivitetKlokkeslett';
 import axios from 'axios';
 
 
@@ -13,11 +14,12 @@ class Aktivitet {
     id : number;
     navn : string;
     sted : string;
-    private beskrivelse : string;
-    private beskrivelseLeder : string;
+    beskrivelse : string;
+    beskrivelseLeder : string;
     plId : number;
 
     tags : AktivitetTag[] = [];
+    klokkeslett : AktivitetKlokkeslett;
 
     image : string|null;
     uploadedImage : any;
@@ -31,7 +33,7 @@ class Aktivitet {
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
+    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], klokkeslett : AktivitetKlokkeslett, image : string|null) {
         this.id = id;
         this.navn = navn;
         this.title = navn;
@@ -42,6 +44,7 @@ class Aktivitet {
         this.plId = plId;
         this.tidspunkter = tidspunkter;
         this.tags = tags;
+        this.klokkeslett = klokkeslett;
         this.image = image;
 
         this.addNewTidspubktInTheList();

@@ -188,8 +188,22 @@
                                     <div class="tidspunkt-tittel as-margin-bottom-space-3">
                                         <h5>Velg start og slutt</h5>
                                     </div>
-                                    
-                                    <div class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
+                                    <div class="col-sm-5 nop-impt as-margin-right-space-2">
+                                        <v-select
+                                            label="Klokkeslett"
+                                            class="v-autocomplete-arr-sys" 
+                                            :items="getKlokkesletts()"
+                                            v-model="aktivitet.klokkeslett"
+                                            item-text="title"
+                                            item-value="id" 
+                                            chips
+                                            closable-chips
+                                        ></v-select>
+                                    </div>
+                                    <div v-show="!aktivitet.klokkeslett" class="col-sm-1 separator-tidspunkt">
+                                        <span>Eller</span>
+                                    </div>
+                                    <div v-show="!aktivitet.klokkeslett" class="col-sm-5 nop-impt tidspunkt-date-picker finfo-date-picker as-margin-right-space-2">
                                         <VueDatePicker 
                                             :format="(dates) => customFormat(dates)"
                                             :model-value="getStartSluttDate(tidspunkt)" 
@@ -223,7 +237,6 @@
                                     <div class="col-sm-5 nop-impt as-margin-right-space-2">
                                         <v-select
                                             label="Hendelse" 
-                                            variant="outlined" 
                                             class="v-autocomplete-arr-sys" 
                                             :items="hendelser" 
                                             v-model="tidspunkt.hendelse"
@@ -330,6 +343,7 @@ import { InputTextOverlay } from 'ukm-components-vue3';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import Hendelse from './../../objects/Hendelse';
 import AktivitetTag from './../../objects/AktivitetTag';
+import AktivitetKlokkeslett from './../../objects/AktivitetKlokkeslett';
 import { nextTick } from 'vue';
 import type { PropType } from 'vue';  // Use type-only import for PropType
 import { quillEditor } from 'vue3-quill'
@@ -349,6 +363,10 @@ export default {
             type: Array as PropType<Hendelse[]>,
             required: true
         },
+        klokkeslett: {
+            type: Array as PropType<AktivitetKlokkeslett[]>,
+            required: true
+        }
     },
     components: {
         InputTextOverlay : InputTextOverlay,
@@ -382,6 +400,10 @@ export default {
         getTags() : AktivitetTag[] {
             // Return all but -1 (placeholder for new tag)
             return this.tags.filter((tag : AktivitetTag) => tag.id != -1);
+        },
+        getKlokkesletts() : AktivitetKlokkeslett[] {
+            // Return all but -1 (placeholder for new tag)
+            return this.klokkeslett.filter((tag : AktivitetKlokkeslett) => tag.id != -1);
         },
         getStartSluttDate(tidspunkt: AktivitetTidspunkt): [Date, Date] {
             if (!tidspunkt.start) return [new Date(), new Date()];
@@ -581,4 +603,13 @@ export default {
     opacity: 1;
     display: flex;
 }
+.separator-tidspunkt {
+    display: flex;
+    height: 60px;
+    padding-left: 0;
+}
+.separator-tidspunkt span {
+    margin: auto;
+}
+
 </style>
