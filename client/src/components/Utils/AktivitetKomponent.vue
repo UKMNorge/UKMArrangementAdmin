@@ -1,5 +1,5 @@
 <template>
-    <div class="aktivitet-komponent container main-container">
+    <div class="aktivitet-komponent container nop-impt main-container">
         <div class="col-xs-12 as-margin-top-space-2 nop-impt">
             <div class="col-xs-12 nop-impt">
                 <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">

@@ -27,8 +27,8 @@
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
                 <div class="">
-                    <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted" @click="toggleExpand(aktivitet)">
-                        <v-list-item v-if="!aktivitet.deleted"
+                    <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted">
+                        <v-list-item v-if="!aktivitet.deleted" @click="toggleExpand(aktivitet)"
                         class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
                         <v-list-item-title class="text-h6">
@@ -57,7 +57,7 @@
                         <!-- Expandable Content BELOW the item -->
                         <v-expand-transition>
                             
-                            <div v-if="aktivitet.expanded" class="as-display-flex" @click.stop>
+                            <div v-if="aktivitet.expanded" class="as-display-flex as-padding-space-3" @click.stop>
                                 <AktivitetKomponent :aktivitet="aktivitet" :hendelser="hendelser" :tags="tags" :klokkeslett="klokkeslett" :key="tagsKey"/>
                             </div>
                         </v-expand-transition>
@@ -349,6 +349,7 @@ export default {
     box-shadow: none !important;
 }
 .aktivitet-item {
+    padding: calc(3*var(--initial-space-box)) !important;
     border: none;
     box-shadow: none !important;
     min-height: 56px !important;
