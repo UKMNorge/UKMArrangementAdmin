@@ -128,8 +128,16 @@ class Aktivitet {
     private async uploadImage() {
         if(this.id == -1) return;
 
+        let isDeleted = !this.image && !this.uploadedImage;
+        let isChanged = !this.image && this.uploadedImage != null;
+
+        if(!isDeleted && !isChanged) {
+            console.log('don not send');
+            return;
+        }
+
         const formData = new FormData()
-        formData.append('imageFile', this.uploadedImage == null ? null : this.uploadedImage)
+        formData.append('imageFile', (!this.image && !this.uploadedImage) ? null : (this.uploadedImage ? this.uploadedImage : this.image))
         formData.append('action', 'UKMArrangementAdmin_ajax')
         formData.append('controller', 'aktivitet/uploadImageAktivitet')
         formData.append('aktivitetId', (<any>this.id))
