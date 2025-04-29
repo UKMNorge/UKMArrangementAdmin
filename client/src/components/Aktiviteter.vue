@@ -31,9 +31,15 @@
                         <v-list-item v-if="!aktivitet.deleted" @click="toggleExpand(aktivitet)"
                         class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
-                        <v-list-item-title class="text-h6">
-                            {{ aktivitet.title }}
-                        </v-list-item-title>
+                       
+                        <div class="d-flex justify-space-between align-center">
+                            <v-list-item-title class="text-h6">
+                                {{ aktivitet.title }}
+                            </v-list-item-title>
+                            <v-chip class="chip-on-title ml-2" v-show="pameldingMinstEn(aktivitet)" color="primary" size="small">
+                                Krever påmelding
+                            </v-chip>
+                        </div>
                         <v-list-item-subtitle>
                             <span>{{ getAntallTidspunkter(aktivitet) }}</span>
                         </v-list-item-subtitle>
@@ -124,6 +130,16 @@ export default {
         }
     },
     methods : {
+        pameldingMinstEn(aktivitet : Aktivitet) {
+            for(let tidspunkt of aktivitet.tidspunkter) {
+                if(tidspunkt.isReal && tidspunkt.harPaamelding == true) {
+                    console.log('har paamelding');
+                    console.log(tidspunkt);
+                    return true;
+                }
+            }
+            return false;
+        },
         getAntallTidspunkter(aktivitet : Aktivitet) {
             return 'Antall forekomster: ' + (aktivitet.tidspunkter.length-1);  
         },
@@ -358,6 +374,11 @@ export default {
 .aktivitet-list,
 .aktiviteter-buttons {
     padding: var(--initial-space-box) !important;
+}
+.chip-on-title {
+    position: absolute;
+    right: 81px;
+    top: 43px;
 }
 @media(max-width: 767px) {
 
