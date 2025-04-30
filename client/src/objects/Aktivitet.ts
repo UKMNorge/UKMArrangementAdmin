@@ -15,6 +15,8 @@ class Aktivitet {
     sted : string;
     beskrivelse : string;
     beskrivelseLeder : string;
+    kursholder : string;
+
     plId : number;
 
     tags : AktivitetTag[] = [];
@@ -31,7 +33,7 @@ class Aktivitet {
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
+    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, kursholder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
         this.id = id;
         this.navn = navn;
         this.title = navn;
@@ -39,6 +41,7 @@ class Aktivitet {
         this.sted = sted;
         this.setBeskrivelse(beskrivelse);
         this.setBeskrivelseLeder(beskrivelseLeder);
+        this.kursholder = kursholder;
         this.plId = plId;
         this.tidspunkter = tidspunkter;
         this.tags = tags;
@@ -116,6 +119,7 @@ class Aktivitet {
         this.sted = results.sted;
         this.setBeskrivelse(results.beskrivelse);
         this.setBeskrivelseLeder(results.beskrivelseLeder);
+        this.kursholder = results.kursholder;
         this.plId = results.plId;
         this.tidspunkter = []; // Assuming the last parameter
 
@@ -174,6 +178,7 @@ class Aktivitet {
             sted: this.sted,
             beskrivelse: encodeURIComponent(this.beskrivelse),
             beskrivelseLeder: encodeURIComponent(this.beskrivelseLeder),
+            kursholder : this.kursholder,
         };
         
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);

@@ -44,13 +44,26 @@
                     <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                         <h5>Beskrivelse av den som leder aktiviteten</h5>
                     </div>
-                    <quill-editor
-                        v-model:value="aktivitet.beskrivelseLeder"
-                        @blur="() => {}"
-                        @focus="() => {}"
-                        @ready="() => {}"
-                        @change="() => {}"
-                    />   
+                    <div class="col-xs-12 as-margin-right-space-2 nop-impt">
+                        <div class="col-xs-5 nop-impt">
+                            <v-text-field
+                                v-model="aktivitet.kursholder"
+                                variant="outlined"
+                                class="v-text-field-arr-sys"
+                                label="Med (kursholder)"
+                            ></v-text-field>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 nop-impt">
+                        <quill-editor
+                            v-model:value="aktivitet.beskrivelseLeder"
+                            @blur="() => {}"
+                            @focus="() => {}"
+                            @ready="() => {}"
+                            @change="() => {}"
+                        />   
+                    </div>
                 </div>
             </div>
         </div>
