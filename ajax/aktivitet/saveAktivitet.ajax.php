@@ -15,6 +15,7 @@ $requiredArguments = [
 $optionalArguments = [
     'beskrivelse',
     'beskrivelseLeder',
+    'kursholder',
 ];
 
 $handleCall = new HandleAPICall($requiredArguments, $optionalArguments, ['POST'], false);
@@ -26,6 +27,7 @@ $sted = $handleCall->getArgument('sted');
 
 $beskrivelse = $handleCall->getOptionalArgument('beskrivelse') ?? ' ';
 $beskrivelseLeder = $handleCall->getOptionalArgument('beskrivelseLeder') ?? ' ';;
+$kursholder = $handleCall->getOptionalArgument('kursholder') ?? ' ';
 
 try{
     $aktivitet = new Aktivitet($aktivitetId);
@@ -50,6 +52,7 @@ $aktTidspunkt = Write::updateAktivitet(
     $sted,
     $beskrivelse,
     $beskrivelseLeder,
+    $kursholder,
 );
 
 
