@@ -37,7 +37,7 @@ try{
     $handleCall->sendErrorToClient('Kunne ikke hente arrangementet', 401);
 }
 
-$aktivitet = Write::createAktivitet($navn, $sted, $beskrivelse, $beskrivelseLeder, $kursholder, $arrangement->getId());
+$aktivitet = Write::createAktivitet($navn, $sted, $beskrivelse, $beskrivelseLeder, $arrangement->getId(), $kursholder);
 
 
 $handleCall->sendToClient($aktivitet->getArrObj());
