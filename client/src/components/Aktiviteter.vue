@@ -230,8 +230,6 @@ export default {
                         deltakere.push(
                             new AktivitetDeltaker(
                                 deltaker.mobil,
-                                deltaker.navn ?? '',
-                                deltaker.fylke ?? '' // Fylke brukes som beskrivelse av deltaker. Dette kan endres senere om ønskelig
                             )
                         );
                     }
