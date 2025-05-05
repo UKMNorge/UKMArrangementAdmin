@@ -307,18 +307,31 @@
                                                 ></v-checkbox>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 nop-impt">
+                                        <div class="col-xs-12 nop-impt as-margin-bottom-space-2">
+                                            <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-2">
+                                                <h5>Påmeldte deltakere</h5>
+                                            </div>
                                             <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
-                                                <v-chip-group v-model="tidspunkt.deltakere" selected-class="text-white">
-                                                    <v-chip
-                                                        v-for="deltaker in tidspunkt.deltakere"
-                                                        :key="deltaker.mobil"
-                                                        :value="deltaker.mobil"
-                                                        color="primary"
+                                                <v-list
+                                                    lines="three"
+                                                    item-props
+                                                    class="as-card-1"
                                                     >
-                                                        {{ deltaker.mobil }}
-                                                    </v-chip>
-                                                </v-chip-group>
+                                                    <v-list-item 
+                                                        v-for="(deltaker, index) in tidspunkt.deltakere" :key="deltaker.mobil || index"
+                                                        :title="deltaker.navn.length > 0 ? deltaker.navn : deltaker.mobil"
+                                                        :subtitle="deltaker.navn.length > 0 ? deltaker.mobil : ''"
+                                                        >
+                                                        <template v-slot:prepend>
+                                                            <v-avatar color="grey-lighten-1">
+                                                                <v-icon color="white">mdi-account</v-icon>
+                                                            </v-avatar>
+                                                        </template>
+                                                        <template v-slot:append>
+                                                            <span>{{ deltaker.beskrivelse ?? '' }}</span>
+                                                        </template>
+                                                    </v-list-item>
+                                                </v-list>
                                             </div>
                                         </div>
                                     </div>
