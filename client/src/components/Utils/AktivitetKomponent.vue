@@ -307,12 +307,14 @@
                                                 ></v-checkbox>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 nop-impt as-margin-bottom-space-2">
+                                        <div v-if="tidspunkt.harPaamelding" class="col-xs-12 nop-impt as-margin-bottom-space-2">
                                             <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-2">
-                                                <h5>Påmeldte deltakere</h5>
+                                                <h5>Påmeldte deltakere
+                                                    <span>{{ tidspunkt.deltakere.length }}</span>
+                                                </h5>
                                             </div>
                                             <div v-show="tidspunkt.harPaamelding" class="col-xs-12 nop-impt">
-                                                <v-list
+                                                <v-list v-if="tidspunkt.deltakere.length > 0"
                                                     lines="three"
                                                     item-props
                                                     class="as-card-1"
@@ -332,6 +334,9 @@
                                                         </template>
                                                     </v-list-item>
                                                 </v-list>
+                                                <div v-else>
+                                                    <p>Ingen påmeldte deltakere</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
