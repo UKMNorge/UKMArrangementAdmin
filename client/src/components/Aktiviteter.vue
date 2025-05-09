@@ -24,10 +24,20 @@
                 />
             </div>
         </div>
+        <div class="search-filter-div">
+            <v-text-field
+                variant="outlined"
+                v-model="searchWords"
+                class="v-text-field-arr-sys search-aktiviteter as-margin-top-space-4 as-margin-bottom-space-1"
+                label="Søk etter aktivitetsnavn, aktivitetssted eller kursholder"
+                prepend-inner-icon="mdi-magnify"
+                clearable
+            ></v-text-field>
+        </div>
         <v-card class="mx-auto aktivitet-card">
             <v-list lines="three" class="aktivitet-list">
                 <div class="">
-                    <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="aktivitet in aktiviteter" :key="aktivitet.id" v-show="!aktivitet.deleted">
+                    <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="aktivitet in getFiltrerteAktiviteter()" :key="aktivitet.id" v-show="!aktivitet.deleted">
                         <v-list-item v-if="!aktivitet.deleted" @click="toggleExpand(aktivitet)"
                         class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
                         >
@@ -91,6 +101,8 @@ import Hendelse from './../objects/Hendelse';
 import AktivitetTags from './Utils/AktivitetTags.vue';
 import AktivitetKlokkeslett from '../objects/AktivitetKlokkeslett';
 import AktivitetKlokkesletts from './Utils/AktivitetKlokkesletts.vue';
+import Fuse from 'fuse.js';
+
 
 export default {
     computed: {
@@ -127,9 +139,25 @@ export default {
             klokkeslett : [] as AktivitetKlokkeslett[],
             tagsKey: 0, // Bruker for reaktiving av AktivitetKomponent
             hendelser: [] as Hendelse[],
+            searchWords: '' as string,
         }
     },
     methods : {
+        getFiltrerteAktiviteter() : Aktivitet[] {
+            let filtered = this.aktiviteter;
+
+            if (this.searchWords && this.searchWords.length > 0) {
+                const fuse = new Fuse(filtered, {
+                    keys: ['title', 'sted', 'kursholder'],
+                    threshold: 0.3, // Tweak this for fuzziness
+                });
+
+                const results = fuse.search(this.searchWords);
+                return results.map((r : any) => r.item);
+            }
+
+            return filtered;
+        },
         pameldingMinstEn(aktivitet : Aktivitet) {
             for(let tidspunkt of aktivitet.tidspunkter) {
                 if(tidspunkt.isReal && tidspunkt.harPaamelding == true) {
@@ -383,6 +411,16 @@ export default {
     position: absolute;
     right: 81px;
     top: 43px;
+}
+.search-aktiviteter :deep(.v-input__details) {
+    display: none !important;
+}
+.search-aktiviteter :deep(.v-field__input),
+.search-aktiviteter :deep(.v-field) {
+    background: #fff !important;
+}
+.search-filter-div {
+    padding: 0 8px;
 }
 @media(max-width: 767px) {
 
