@@ -149,12 +149,21 @@
             </v-btn>
 
             <v-btn v-show="tab == null && aktivitet.id != -1"
-                class="v-btn-as v-btn-error"
+                class="v-btn-as v-btn-error as-margin-right-space-1"
                 rounded="large"
                 size="large"
                 @click="deleteAktivitet(aktivitet)"
                 variant="outlined">
                 Slett aktiviteten
+            </v-btn>
+
+            <v-btn v-show="tab == null && aktivitet.id != -1"
+                class="v-btn-as v-btn-bla as-margin-right-space-1"
+                rounded="large"
+                size="large"
+                @click="openAktivitet(aktivitet)"
+                variant="outlined">
+                Åpne aktiviteten
             </v-btn>
         </div>
 
@@ -443,6 +452,10 @@ export default {
         });        
     },
     methods: {
+        openAktivitet(aktivitet : Aktivitet) {
+            // Open new page
+            window.open(aktivitet.getUrl(), '_blank');
+        },
         getTags() : AktivitetTag[] {
             // Return all but -1 (placeholder for new tag)
             return this.tags.filter((tag : AktivitetTag) => tag.id != -1);

@@ -54,6 +54,10 @@ class Aktivitet {
         this.beskrivelse = beskrivelse ? decodeURIComponent(beskrivelse) : '';
     }
 
+    public getUrl() : string {
+        return 'https://ukm.no/festivalen/single-aktivitet/?aktivitet-id=' + this.id;
+    }
+
     public setBeskrivelseLeder(beskrivelseLeder : string) {
         this.beskrivelseLeder = beskrivelseLeder ? decodeURIComponent(beskrivelseLeder) : '';
     }
