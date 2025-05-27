@@ -402,6 +402,7 @@ export default {
     box-shadow: none !important;
     min-height: 56px !important;
     cursor: pointer;
+    border-radius: var(--radius-high) !important;
 }
 .aktivitet-list,
 .aktiviteter-buttons {
