@@ -98,7 +98,7 @@
                                         size="large"
                                         @click="deleteGruppeHendelsen(hendelseGruppe)"
                                         variant="outlined">
-                                        Slett aktiviteten
+                                        Slett gruppen
                                     </v-btn>
                                 </div>
 
@@ -278,6 +278,7 @@ export default {
 }
 .hendelse-gruppe-item {
     box-shadow: none;
+    padding: calc(3 * var(--initial-space-box)) !important;
 }
 .extendable-hendelse,
 .hendelse-gruppe-data {

@@ -28,11 +28,6 @@ try{
 }
 
 try {
-    var_dump($id);
-    var_dump($navn);
-    var_dump($beskrivelse);
-    var_dump($selectedHendelser);
-
     Logger::initWP($arrangement->getId());
 
     Write::createOrUpdateHendelseGruppe($id, $navn, $beskrivelse, $arrangement->getId(), $selectedHendelser);
@@ -44,7 +39,7 @@ try {
 
 $handleCall->sendToClient([
     'success' => true,
-    'message' => 'Arrangementet ble lagret'
+    'message' => 'Gruppen ble lagret'
 ]);
 
 
