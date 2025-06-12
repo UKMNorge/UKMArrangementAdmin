@@ -16,7 +16,17 @@ class HendelseGruppe {
         this.tag = tag;
     }
 
-    public getHendelser(): Hendelse[] {
+    public getHendelser(): Hendelse[] | number[] {
+        if (this.hendelser.length === 0) {
+            return [];
+        }
+
+        // Check if the first hendelse is an object
+        if (this.hendelser[0] && typeof this.hendelser[0] === 'object') {
+            // Return array of IDs
+            return this.hendelser.map(hendelse => hendelse.id);
+        }
+
         return this.hendelser;
     }
 
