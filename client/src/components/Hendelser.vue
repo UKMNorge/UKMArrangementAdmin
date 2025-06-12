@@ -61,6 +61,14 @@
                                             v-model="hendelseGruppe.beskrivelse">
                                         </v-textarea>
                                     </div>
+                                    <div class="col-xs-5 as-margin-right-space-2 nop-impt">
+                                        <v-text-field
+                                            v-model="hendelseGruppe.tag"
+                                            variant="outlined"
+                                            class="v-text-field-arr-sys"
+                                            label="Tag"
+                                        ></v-text-field>
+                                    </div>
                                 </div>
 
                                 <div class="as-margin-bottom-space-2">
@@ -182,6 +190,7 @@ export default {
                 navn: hGruppe.title,
                 beskrivelse: hGruppe.beskrivelse,
                 hendelser: hGruppe.getHendelser(),
+                tag: hGruppe.tag,
             };
 
             var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
@@ -224,7 +233,8 @@ export default {
                 -1, 
                 'Ny gruppe',
                 '',
-                []
+                [],
+                null
             );
             hGruppe.expanded = true;
             this.hendelseGrupper.push(hGruppe);
@@ -258,7 +268,8 @@ export default {
                     hGruppe.id, 
                     hGruppe.navn,
                     hGruppe.beskrivelse,
-                    hendelser
+                    hendelser,
+                    hGruppe.tag,
                 );
 
                 this.hendelseGrupper.push(hG);

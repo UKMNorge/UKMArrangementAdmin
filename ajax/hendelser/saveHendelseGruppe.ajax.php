@@ -8,12 +8,13 @@ use UKMNorge\Log\Logger;
 
 
 
-$handleCall = new HandleAPICall(['id', 'navn'], ['beskrivelse', 'hendelser'], ['GET', 'POST'], false);
+$handleCall = new HandleAPICall(['id', 'navn'], ['beskrivelse', 'hendelser', 'tag'], ['GET', 'POST'], false);
 
 $id = $handleCall->getArgument('id') ? $handleCall->getArgument('id') : null;
 $navn = $handleCall->getArgument('navn');
 $beskrivelse = $handleCall->getOptionalArgument('beskrivelse') ? $handleCall->getOptionalArgument('beskrivelse') : '';
 $selectedHendelser = $handleCall->getOptionalArgument('hendelser') ? $handleCall->getOptionalArgument('hendelser') : [];
+$tag = $handleCall->getOptionalArgument('tag') ? $handleCall->getOptionalArgument('tag') : '';
 
 $arrangement = null;
 
@@ -30,10 +31,9 @@ try{
 try {
     Logger::initWP($arrangement->getId());
 
-    Write::createOrUpdateHendelseGruppe($id, $navn, $beskrivelse, $arrangement->getId(), $selectedHendelser);
+    Write::createOrUpdateHendelseGruppe($id, $navn, $beskrivelse, $arrangement->getId(), $selectedHendelser, $tag);
 
 } catch (Exception $e) {
-    var_dump($e);
     $handleCall->sendErrorToClient('En feil oppsto under lagring av typer. Vennligst prøv igjen eller kontakt support dersom problemet vedvarer.', 500);
 }
 

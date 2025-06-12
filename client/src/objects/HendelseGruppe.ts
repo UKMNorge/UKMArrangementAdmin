@@ -6,12 +6,14 @@ class HendelseGruppe {
     beskrivelse: string;
     expanded: boolean = false;
     hendelser: Hendelse[] = [];
+    tag : string = null;
 
-    constructor(id : number, title : string, beskrivelse : string, hendelser: Hendelse[] = []) {
+    constructor(id : number, title : string, beskrivelse : string, hendelser: Hendelse[] = [], tag: string = null) {
         this.id = id;
         this.title = title;
         this.beskrivelse = beskrivelse;
         this.hendelser = hendelser;
+        this.tag = tag;
     }
 
     public getHendelser(): Hendelse[] {

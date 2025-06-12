@@ -32,6 +32,7 @@ foreach($hendelseGrupper as $gruppe) {
         'id' => $gruppe->getId(),
         'navn' => $gruppe->getNavn(),
         'beskrivelse' => $gruppe->getBeskrivelse(),
+        'tag' => $gruppe->getTag(),
         'hendelser' => $gruppe->getHendelser(),
     ];
 
