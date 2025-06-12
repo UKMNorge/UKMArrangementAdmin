@@ -198,6 +198,12 @@ export default {
             if(results && hGruppe.id == -1) {
                 this.fetch();
             }
+            if(results) {
+                this.spaInteraction.showMessage('Data er lagret!', 'Gruppen er lagret', 'success');
+            } else {
+                this.spaInteraction.showMessage('Noe gikk galt!', 'Noe gikk galt og data er ikke lagret', 'error');
+            }
+
         },
         async deleteGruppeHendelsen(hGruppe : HendelseGruppe) {
             if(!confirm('Er du sikker på at du vil slette denne gruppen?')) {
