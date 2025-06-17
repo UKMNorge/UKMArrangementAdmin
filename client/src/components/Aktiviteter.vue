@@ -238,6 +238,7 @@ export default {
                     tidspunkter,
                     aktivitetTags,
                     aktivitet.image,
+                    aktivitet.isProgramSynlig
                 );
                 this.aktiviteter.push(
                     aktivitetObj

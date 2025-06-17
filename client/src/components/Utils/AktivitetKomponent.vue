@@ -90,6 +90,16 @@
         </div>
 
         <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
+            <div class="tidspunkt-tittel as-margin-top-space-4">
+                <h5>Synlighet</h5>
+            </div>
+               <v-checkbox
+                    v-model="aktivitet.isProgramSynlig"
+                    label="Synlighet på workshops/aktiviteter liste på nettsiden"
+                ></v-checkbox>
+        </div>
+
+        <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
             <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                 <h5>Aktivitet bilde</h5>
             </div>

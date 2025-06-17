@@ -20,6 +20,7 @@ class Aktivitet {
     plId : number;
 
     tags : AktivitetTag[] = [];
+    isProgramSynlig : boolean = true;
 
     image : string|null;
     uploadedImage : any;
@@ -33,7 +34,7 @@ class Aktivitet {
 
     private spaInteraction = (<any>window).spaInteraction; // Definert i main.ts
 
-    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, kursholder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null) {
+    constructor(id : number, navn : string, sted : string, beskrivelse : string, beskrivelseLeder : string, kursholder : string, plId : number, tidspunkter : AktivitetTidspunkt[], tags : AktivitetTag[], image : string|null, isProgramSynlig : boolean = true) {
         this.id = id;
         this.navn = navn;
         this.title = navn;
@@ -46,6 +47,7 @@ class Aktivitet {
         this.tidspunkter = tidspunkter;
         this.tags = tags;
         this.image = image;
+        this.isProgramSynlig = isProgramSynlig;
 
         this.addNewTidspubktInTheList();
     }
@@ -183,6 +185,7 @@ class Aktivitet {
             beskrivelse: encodeURIComponent(this.beskrivelse),
             beskrivelseLeder: encodeURIComponent(this.beskrivelseLeder),
             kursholder : this.kursholder,
+            isProgramSynlig : this.isProgramSynlig
         };
         
         var results = await this.spaInteraction.runAjaxCall('/', 'POST', data);
