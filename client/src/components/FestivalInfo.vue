@@ -91,7 +91,7 @@
         <div class="col-sm-4 col-xs-12">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Vis nettsiden</h4>
+                    <h4 class="">Nettside (offentlig visning)</h4>
                 </div>
                 <v-btn
                     class="v-btn-as v-btn-bla"
@@ -225,9 +225,6 @@ export default {
                 this.arrangement.save();
         },
         gaaTilNettsiden() {
-            console.log('---------');
-            console.log(this.arrangement);
-            console.log('Går til nettsiden: ' + this.arrangement.nettsideUrl);
             window.open(this.arrangement.nettsideUrl, '_blank');
         },
         getTimelineItems() {
