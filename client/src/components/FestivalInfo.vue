@@ -91,7 +91,10 @@
         <div class="col-sm-4 col-xs-12">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
-                    <h4 class="">Nettside (offentlig visning)</h4>
+                    <h4 class="">Nettside</h4>
+                </div>
+                <div class="as-margin-bottom-space-2">
+                    <span>Den offentlige siden der deltakere og publikum finner informasjon om arrangementet.</span>
                 </div>
                 <v-btn
                     class="v-btn-as v-btn-bla"
