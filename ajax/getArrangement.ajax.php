@@ -31,6 +31,7 @@ $retArr = [
     "openVideresending" => $arrangement->harVideresending(),
     "viseFrist" => $arrangement->getFrist1()->getTimestamp(),
     "jobbeFrist" => $arrangement->getFrist2()->getTimestamp(),
+    "nettsideUrl" => $arrangement->getArrangementNettsideURL(),
     // Spesifikk til landsfestivalen
     "kvote_deltakere" => $arrangement->getMetaValue("kvote_deltakere"),
     "kvote_ledere" => $arrangement->getMetaValue("kvote_ledere"),

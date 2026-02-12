@@ -12,6 +12,7 @@ class Arrangement {
     openVideresending: boolean;
     viseFrist: Date;
     jobbeFrist: Date;
+    nettsideUrl: string;
 
     // Spesialfelt for landsfestivalen
     kvote_deltakere : string|null = null;
@@ -35,7 +36,8 @@ class Arrangement {
             openPamelding: boolean,
             openVideresending: boolean,
             viseFrist: number,
-            jobbeFrist: number
+            jobbeFrist: number,
+            nettsideUrl: string
         ) {
 
         this.id = id;
@@ -51,6 +53,7 @@ class Arrangement {
         this.jobbeFrist = new Date(jobbeFrist * 1000);
         this.statusKortText = statusKortText ?? "";
         this.statusLangText = statusLangText ?? "";
+        this.nettsideUrl = nettsideUrl ?? "";
     }
 
     static createEmpty(): Arrangement {
@@ -68,6 +71,7 @@ class Arrangement {
             false,         // Default for openVideresending
             0,
             0,
+            "",
         );
     }
     public static async load() : Promise<Arrangement> {
@@ -95,6 +99,7 @@ class Arrangement {
                 results.openVideresending,
                 results.viseFrist,
                 results.jobbeFrist,
+                results.nettsideUrl,
             );
 
             // Spesialfelt for landsfestivalen

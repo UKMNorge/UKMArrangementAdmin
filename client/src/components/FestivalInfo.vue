@@ -90,6 +90,19 @@
         </div>
         <div class="col-sm-4 col-xs-12">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
+                <div class="as-margin-bottom-space-3 as-margin-bottom-space-2">
+                    <h4 class="">Vis nettsiden</h4>
+                </div>
+                <v-btn
+                    class="v-btn-as v-btn-bla"
+                    rounded="large"
+                    size="large"
+                    @click="gaaTilNettsiden()"
+                    variant="outlined">
+                    Gå til nettsiden
+                </v-btn>
+            </div>
+            <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
 
                 <v-timeline v-if="arrangement.isActive()" density="compact" side="end">
                      <template v-for="tlItem in getTimelineItems()" v-bind:key="tlItem.id">
@@ -210,6 +223,12 @@ export default {
         },
         save() {
                 this.arrangement.save();
+        },
+        gaaTilNettsiden() {
+            console.log('---------');
+            console.log(this.arrangement);
+            console.log('Går til nettsiden: ' + this.arrangement.nettsideUrl);
+            window.open(this.arrangement.nettsideUrl, '_blank');
         },
         getTimelineItems() {
             this.timelineItems = [];
