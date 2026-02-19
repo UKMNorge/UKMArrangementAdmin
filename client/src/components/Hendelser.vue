@@ -14,7 +14,7 @@
         </div>
 
         <div class="">
-            <h4>Gruppering av hendelser</h4>
+            <h4>Gruppering av hendelser og andre aktiviteter</h4>
         </div>
 
         <v-card class="mx-auto h-g-card as-margin-top-space-4">

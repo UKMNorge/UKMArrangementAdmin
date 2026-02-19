@@ -9,12 +9,12 @@
                 <v-tab text="Festivalinfo"></v-tab>
                 <v-tab text="Innstillinger"></v-tab>
                 <v-tab text="Påmelding"></v-tab>
-                <v-tab text="Ledere/sykerom"></v-tab>
-                <v-tab text="Videresending oversikt"></v-tab>
+                <v-tab text="Kontaktpersoner"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
                 <v-tab text="Aktiviteter"></v-tab>
-                <v-tab text="Hendelser"></v-tab>
-                <!-- <v-tab text="Kontaktpersoner"></v-tab> -->
+                <v-tab text="Gruppering"></v-tab>
+                <v-tab text="Videresending oversikt"></v-tab>
+                <v-tab text="Ledere/sykerom"></v-tab>
             </v-tabs>
         </div>
         <div class="as-container">
@@ -42,17 +42,9 @@
                             </div>
                         </v-tabs-window-item>
 
-                        <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <Ledere :arrangement="arrangement" />
-                            </div>
-                        </v-tabs-window-item>
-
-                        <!--  -->
-                        <v-tabs-window-item v-if="arrangementLoaded">
-                            <div class="as-containercontainer">
-                                <VideresendteArrangementer :arrangement="arrangement" />
+                                <Kontaktpersoner :arrangement="arrangement" />
                             </div>
                         </v-tabs-window-item>
 
@@ -78,11 +70,19 @@
                         </v-tabs-window-item>
 
                         <!--  -->
-                        <!-- <v-tabs-window-item v-if="arrangementLoaded">
+                        <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
-                                <h1>Kontaktpersoner</h1>
+                                <VideresendteArrangementer :arrangement="arrangement" />
                             </div>
-                        </v-tabs-window-item> -->
+                        </v-tabs-window-item>
+
+
+                        <!--  -->
+                        <v-tabs-window-item v-if="arrangementLoaded">
+                            <div class="as-containercontainer">
+                                <Ledere :arrangement="arrangement" />
+                            </div>
+                        </v-tabs-window-item>
 
                     </v-tabs-window>
                 </div>
@@ -103,6 +103,7 @@ import Pamelding from "./components/Pamelding.vue";
 import Ledere from "./components/Ledere.vue";
 import Aktiviteter from "./components/Aktiviteter.vue";
 import Hendelser from "./components/Hendelser.vue";
+import Kontaktpersoner from "./components/Kontaktpersoner.vue";
 import VideresendteArrangementer from "./components/VideresendteArrangementer.vue";
 import ArrangementKvoter from "./components/ArrangementKvoter.vue";
 import { Director } from 'ukm-spa/Director';
@@ -136,6 +137,7 @@ export default {
         ArrangementKvoter : ArrangementKvoter,
         Aktiviteter : Aktiviteter,
         Hendelser : Hendelser,
+        Kontaktpersoner : Kontaktpersoner,
         // FylkeStatistikk : FylkeStatistikk,
         // GenerellStatistikk : GenerellStatistikk,
     },
