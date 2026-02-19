@@ -8,8 +8,8 @@
 
                 <div class="switch-item-select as-margin-top-space-1 as-padding-bottom-space-1">
                     <div class="text-switch">
-                        <label class="">Antall deltakere synlighet</label>
-                        <span class="beskrivelse-switch">Aktiver for å vise antall deltakere som har meldt seg på arrangementet på din landsside. Skru av hvis du ikke ønsker at dette skal vises.</span>
+                        <label class="">Skal påmeldte være synlig på nettsiden?</label>
+                        <span class="beskrivelse-switch">Aktiver hvis du vil at besøkende på nett skal se hvor mange personer, og hvilke innslag som er påmeldt.</span>
                     </div>
                     <div class="switch">
                         <v-switch
