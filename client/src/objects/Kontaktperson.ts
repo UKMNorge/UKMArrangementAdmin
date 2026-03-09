@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 class Kontaktperson {
     id: number;
     fornavn: string;
@@ -12,6 +14,12 @@ class Kontaktperson {
     profile_image_url: string|null;
     wp_user_id: number|null;
     editing: boolean = false;
+    uploadedImage: File|null = null;
+    deletedProfileImage: boolean = false;
+    isAddedToArrangement: boolean = false;
+    foundMobil: boolean = false;
+
+    private spaInteraction = (<any>window).spaInteraction;
 
     constructor(
         id: number,
@@ -39,10 +47,11 @@ class Kontaktperson {
         this.eier_omrade_type = eier_omrade_type;
         this.profile_image_url = profile_image_url ?? null;
         this.wp_user_id = wp_user_id ?? null;
+        this.isAddedToArrangement = true;
     }
 
-    static createEmpty(): Kontaktperson {
-        return new Kontaktperson(
+    static createEmpty(eier_omrade_id: number = -1, eier_omrade_type: string = 'monstring'): Kontaktperson {
+        let kp = new Kontaktperson(
             -1,
             '',
             '',
@@ -56,22 +65,65 @@ class Kontaktperson {
             null,
             null,
         );
+        kp.eier_omrade_type = eier_omrade_type;
+        kp.isAddedToArrangement = false;
+
+        return kp;
     }
 
     public getNavn(): string {
         return `${this.fornavn} ${this.etternavn}`.trim();
     }
 
-    public save() : Promise<any> {
-        const data = {
-            action: 'UKMArrangementAdmin_ajax',
-            controller: 'saveKontaktperson',
-            kontaktperson: this,
-        };
+    public async save() : Promise<any> {
+        const formData = new FormData();
+        formData.append('action', 'UKMArrangementAdmin_ajax');
+        formData.append('controller', 'kontaktperson/saveKontaktperson');
+        formData.append('omradeId', String(this.eier_omrade_id));
+        formData.append('omradeType', this.eier_omrade_type);
+        formData.append('okpId', String(this.id));
+        formData.append('fornavn', this.fornavn);
+        formData.append('etternavn', this.etternavn);
+        formData.append('epost', this.epost ?? '');
+        formData.append('beskrivelse', this.beskrivelse);
+        formData.append('deletedProfileImage', this.deletedProfileImage ? 'true' : 'false');
 
-        let res = (<any>window).spaInteraction.runAjaxCall('/', 'POST', data);
-        
-        return res;
+        if (this.uploadedImage) {
+            formData.append('profile_picture', this.uploadedImage);
+        }
+
+        try {
+            const response = await axios.post((<any>window).ajaxurl, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            if (this.deletedProfileImage && !this.uploadedImage) {
+                this.profile_image_url = null;
+            }
+
+            this.resetImageState();
+            return response.data;
+        } catch (error: any) {
+            this.spaInteraction.showMessage('Feil', error?.response?.data?.result ?? 'Kunne ikke lagre kontaktperson', 'error');
+            throw error;
+        }
+    }
+
+    public setUploadedImage(file: File) : void {
+        this.uploadedImage = file;
+        this.deletedProfileImage = false;
+        this.profile_image_url = URL.createObjectURL(file);
+    }
+
+    public deleteImage() : void {
+        this.deletedProfileImage = true;
+        this.uploadedImage = null;
+        this.profile_image_url = null;
+    }
+
+    private resetImageState() : void {
+        this.uploadedImage = null;
+        this.deletedProfileImage = false;
     }
 
 }
