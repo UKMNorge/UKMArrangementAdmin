@@ -474,15 +474,9 @@ export default {
     gap: calc(var(--initial-space-box) * 2);
 }
 .kontakt-gruppe-item {
-    flex: 0 0 calc(25% - var(--initial-space-box));
-    max-width: calc(25% - var(--initial-space-box));
+    flex: 0 0 calc(24% - var(--initial-space-box));
+    max-width: calc(24% - var(--initial-space-box));
     box-sizing: border-box;
-}
-@media (max-width: 576px) {
-    .kontakt-gruppe-item {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
 }
 .hendelse-item {
     background-color: var(--color-primary-grey-lightest);
@@ -518,5 +512,18 @@ export default {
 }
 .kontaktperson-card:hover .kontaktperson-remove-btn {
     opacity: 1;
+}
+@media (max-width: 1200px) {
+    .kontakt-gruppe-item {
+        flex: 0 0 calc(50% - var(--initial-space-box));
+        max-width: calc(50% - var(--initial-space-box));
+        box-sizing: border-box;
+    }
+}
+@media (max-width: 576px) {
+    .kontakt-gruppe-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }
 </style>
