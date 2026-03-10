@@ -11,8 +11,8 @@
                 variant="outlined" >
                 Legg til Aktivitet
             </v-btn>
-            <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="updateTags"/>
-            <AktivitetKlokkesletts :dialogVisible="klokkeslettDialogVisible" :klokkeslett="klokkeslett" @update:klokkeslett="updateKlokkeslett"/>
+            <!-- <AktivitetTags :dialogVisible="tagsDialogVisible" :tags="tags" @update:tags="updateTags"/>
+            <AktivitetKlokkesletts :dialogVisible="klokkeslettDialogVisible" :klokkeslett="klokkeslett" @update:klokkeslett="updateKlokkeslett"/> -->
         </div>
         <div class="as-padding-left-space-1 as-padding-right-space-1 as-margin-bottom-space-1">
             <h4>Aktiviteter</h4>
@@ -46,13 +46,13 @@
                             <v-list-item-title class="text-h6">
                                 {{ aktivitet.title }}
                             </v-list-item-title>
-                            <v-chip class="chip-on-title ml-2" v-show="pameldingMinstEn(aktivitet)" color="primary" size="small">
+                            <!-- <v-chip class="chip-on-title ml-2" v-show="pameldingMinstEn(aktivitet)" color="primary" size="small">
                                 Krever påmelding
-                            </v-chip>
+                            </v-chip> -->
                         </div>
-                        <v-list-item-subtitle>
+                        <!-- <v-list-item-subtitle>
                             <span>{{ getAntallTidspunkter(aktivitet) }}</span>
-                        </v-list-item-subtitle>
+                        </v-list-item-subtitle> -->
                         <template v-slot:prepend>
                             <v-avatar color="grey-lighten-1">
                             <v-icon color="white">mdi-calendar-star</v-icon>
@@ -148,7 +148,7 @@ export default {
 
             if (this.searchWords && this.searchWords.length > 0) {
                 const fuse = new Fuse(filtered, {
-                    keys: ['title', 'sted', 'kursholder'],
+                    keys: ['title', 'sted', 'aktivitetsholder'],
                     threshold: 0.3, // Tweak this for fuzziness
                 });
 

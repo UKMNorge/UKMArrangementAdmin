@@ -12,7 +12,7 @@
                 <v-tab text="Kontaktpersoner"></v-tab>
                 <v-tab text="Kvoter"></v-tab>
                 <v-tab text="Aktiviteter"></v-tab>
-                <v-tab text="Gruppering"></v-tab>
+                <!-- <v-tab text="Gruppering"></v-tab> -->
                 <v-tab text="Videresending oversikt"></v-tab>
                 <v-tab text="Ledere/sykerom"></v-tab>
             </v-tabs>
@@ -63,11 +63,11 @@
                         </v-tabs-window-item>
                         
                         <!-- Hendelser -->
-                        <v-tabs-window-item v-if="arrangementLoaded">
+                        <!-- <v-tabs-window-item v-if="arrangementLoaded">
                             <div class="as-containercontainer">
                                 <Hendelser :arrangement="arrangement" />
                             </div>
-                        </v-tabs-window-item>
+                        </v-tabs-window-item> -->
 
                         <!--  -->
                         <v-tabs-window-item v-if="arrangementLoaded">

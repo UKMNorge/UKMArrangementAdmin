@@ -1,6 +1,6 @@
 <template>
     <div class="aktivitet-komponent container nop-impt main-container">
-        <div class="col-xs-12 as-margin-top-space-2 nop-impt">
+        <div class="col-xs-12 nop-impt">
             <div class="col-xs-12 nop-impt">
                 <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
                     <h5>Aktivitet data</h5>
@@ -24,40 +24,14 @@
                 </div>
             </div>
             
-            <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-3 nop-impt">
-                <div class="col-xs-12 nop-impt">
-                    <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
-                        <h5>Beskrivelse av aktivitet</h5>
-                    </div>
-                    <quill-editor
-                        v-model:value="aktivitet.beskrivelse"
-                        @blur="() => {}"
-                        @focus="() => {}"
-                        @ready="() => {}"
-                        @change="() => {}"
-                    />   
-                </div>
-            </div>
-
-            <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-3 nop-impt">
-                <div class="col-xs-12 nop-impt">
-                    <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
-                        <h5>Beskrivelse av den som leder aktiviteten</h5>
-                    </div>
-                    <div class="col-xs-12 as-margin-right-space-2 nop-impt">
-                        <div class="col-xs-5 nop-impt">
-                            <v-text-field
-                                v-model="aktivitet.kursholder"
-                                variant="outlined"
-                                class="v-text-field-arr-sys"
-                                label="Med (kursholder)"
-                            ></v-text-field>
-                        </div>
-                    </div>
-
+            <div>
+                <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-3 nop-impt">
                     <div class="col-xs-12 nop-impt">
+                        <div class="tidspunkt-tittel as-margin-bottom-space-3">
+                            <h5>Beskrivelse av aktivitet</h5>
+                        </div>
                         <quill-editor
-                            v-model:value="aktivitet.beskrivelseLeder"
+                            v-model:value="aktivitet.beskrivelse"
                             @blur="() => {}"
                             @focus="() => {}"
                             @ready="() => {}"
@@ -65,9 +39,39 @@
                         />   
                     </div>
                 </div>
+    
+                <div class="col-xs-10 col-xs-10-with-margin as-margin-top-space-3 nop-impt">
+                    <div class="col-xs-12 nop-impt">
+                        <div class="tidspunkt-tittel as-margin-bottom-space-3">
+                            <h5>Beskrivelse av den som leder aktiviteten</h5>
+                        </div>
+
+                        <div class="col-xs-12 nop-impt">
+                            <quill-editor
+                                v-model:value="aktivitet.beskrivelseLeder"
+                                @blur="() => {}"
+                                @focus="() => {}"
+                                @ready="() => {}"
+                                @change="() => {}"
+                            />   
+                        </div>
+
+                        <div class="col-xs-12 as-margin-right-space-2 as-margin-top-space-5 nop-impt">
+                            <div class="col-xs-5 nop-impt">
+                                <v-text-field
+                                    v-model="aktivitet.kursholder"
+                                    variant="outlined"
+                                    class="v-text-field-arr-sys white-background-input"
+                                    label="Med (aktivitetsholder)"
+                                ></v-text-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- DEAKTIVERER FRA MARS 2026
         <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
             <div class="tidspunkt-tittel as-margin-top-space-4 as-margin-bottom-space-3">
                 <h5>Tagger</h5>
@@ -87,20 +91,10 @@
                     >
                 </v-select>
             </div>
-        </div>
+        </div> -->
 
         <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
-            <div class="tidspunkt-tittel as-margin-top-space-4">
-                <h5>Synlighet</h5>
-            </div>
-               <v-checkbox
-                    v-model="aktivitet.isProgramSynlig"
-                    label="Synlighet på workshops/aktiviteter liste på nettsiden"
-                ></v-checkbox>
-        </div>
-
-        <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
-            <div class="tidspunkt-tittel as-margin-top-space-2 as-margin-bottom-space-3">
+            <div class="tidspunkt-tittel as-margin-top-space-4 as-margin-bottom-space-3">
                 <h5>Aktivitet bilde</h5>
             </div>
             <div class="col-sm-5 nop-impt as-margin-right-space-2">
@@ -138,6 +132,16 @@
             </div>
         </div>
 
+        <div v-show="aktivitet.id > 0" class="col-xs-12 nop-impt">
+            <div class="tidspunkt-tittel as-margin-top-space-2">
+                <h5>Synlighet</h5>
+            </div>
+               <v-checkbox
+                    v-model="aktivitet.isProgramSynlig"
+                    label="Synlighet på nettsiden under program"
+                ></v-checkbox>
+        </div>
+
         <div v-show="aktivitet.id == -1" class="col-xs-12 as-margin-top-space-4 nop-impt">
             <v-btn 
                 class="v-btn-as v-btn-success"
@@ -167,16 +171,17 @@
                 Slett aktiviteten
             </v-btn>
 
-            <v-btn v-show="tab == null && aktivitet.id != -1"
+            <!-- <v-btn v-show="tab == null && aktivitet.id != -1"
                 class="v-btn-as v-btn-bla as-margin-right-space-1"
                 rounded="large"
                 size="large"
                 @click="openAktivitet(aktivitet)"
                 variant="outlined">
                 Åpne aktiviteten
-            </v-btn>
+            </v-btn> -->
         </div>
 
+        <!-- DEAKTIVERER FRA MARS 2026
         <template v-if="aktivitet.id != -1">
             <div class="col-xs-12 as-margin-top-space-2 nop-impt">
                 <hr>
@@ -186,7 +191,6 @@
                 <div class="as-margin-top-space-2 as-margin-bottom-space-2">
                     <h4>Forekomster</h4>
                 </div>
-                <!-- Chip Group to Replace Tabs -->
                 <v-chip-group v-model="tab" class="all-chips" selected-class="text-white">
                     <v-chip
                         v-for="tidspunkt in tidspunkter"
@@ -211,7 +215,6 @@
                     </v-chip>
                 </v-chip-group>
 
-                <!-- Vuetify Delete Confirmation Dialog -->
                 <v-dialog v-model="deleteDialog" max-width="400">
                     <v-card>
                         <v-card-title>Bekreft sletting</v-card-title>
@@ -226,7 +229,6 @@
                     </v-card>
                 </v-dialog>
 
-                <!-- Content Display for Selected Chip -->
                 <v-window v-model="tab" class="aktivitet-window" :class="{'no-tab-open': tab == null}">
                     <v-window-item v-if="tidspunkter.length > 0" v-for="tidspunkt in tidspunkter" :key="tidspunkt.id" :value="tidspunkt.id">
                                 <div class="col-xs-12 nop-impt">
@@ -394,9 +396,8 @@
                     </v-window-item>
                 </v-window>    
             </div>
-        </template>
-
-        
+        </template> 
+        -->        
         
     </div>
 </template>
@@ -464,7 +465,7 @@ export default {
     methods: {
         openAktivitet(aktivitet : Aktivitet) {
             // Open new page
-            window.open(aktivitet.getUrl(), '_blank');
+            // window.open(aktivitet.getUrl(), '_blank');
         },
         getTags() : AktivitetTag[] {
             // Return all but -1 (placeholder for new tag)
@@ -600,6 +601,19 @@ export default {
     },
 };
 </script>
+<style>
+.white-background-input .v-field__overlay,
+.white-background-input .v-field__input {
+    background-color: #fff !important;
+}
+.white-background-input .v-input__details {
+    display: none !important;
+}
+.ql-editor {
+    border-radius: 0 !important;
+    background: #fff;
+}
+</style>
 
 <style scoped>
 .aktivitet-komponent {
@@ -616,6 +630,9 @@ export default {
     position: sticky;
 }
 .col-xs-10-with-margin {
+    background: var(--color-primary-grey-lightest) !important;
+    padding: 30px 20px !important;
+    border-radius: var(--radius-normal) !important;
     width: calc(83.3% + calc(var(--initial-space-box) * 2)) !important;
 }
 .all-chips {
@@ -683,5 +700,6 @@ export default {
 .last-op-bilde >>> .v-field__outline{
     border-radius: var(--radius-normal) !important;
 }
+
 
 </style>
