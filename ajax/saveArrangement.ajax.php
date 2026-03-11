@@ -19,6 +19,7 @@ $handleCall = new HandleAPICall(
     ], 
     // optional arguments
     [
+        "beskrivelse",
         "kvote_deltakere",
         "kvote_ledere",
         "avgift_ordinar",
@@ -36,6 +37,7 @@ $status = $handleCall->getArgument('status');
 $antallDeltakere = $handleCall->getArgument('antallDeltakere');
 $openPamelding = $handleCall->getArgument('openPamelding');
 $openVideresending = $handleCall->getArgument('openVideresending');
+$beskrivelse = $handleCall->getOptionalArgument('beskrivelse') ?? '';
 // Spesifikk til landsfestivalen
 $kvote_deltakere = (int)$handleCall->getOptionalArgument('kvote_deltakere') ?? null;
 $kvote_ledere = (int)$handleCall->getOptionalArgument('kvote_ledere') ?? null;
@@ -62,6 +64,7 @@ try{
 try {
     $arrangement->setNavn($name);
     $arrangement->setSted($place);
+    $arrangement->setBeskrivelse($beskrivelse);
     $arrangement->setStart(DateTime::createFromFormat('Y-m-d H:i:s', $startDate));
     $arrangement->setStop(DateTime::createFromFormat('Y-m-d H:i:s', $endDate));
 

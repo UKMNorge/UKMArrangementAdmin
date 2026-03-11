@@ -21,6 +21,7 @@ $retArr = [
     "id" => $arrangement->getId(),
     "name" => $arrangement->getNavn(),
     "place" => $arrangement->getSted(),
+    "beskrivelse" => $arrangement->getBeskrivelse(),
     "startDate" => $arrangement->getStart()->getTimestamp(),
     "endDate" => $arrangement->getStop()->getTimestamp(),
     "status" => $arrangement->getMetaValue('avlys'),

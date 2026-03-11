@@ -15,6 +15,15 @@
                     variant="outlined">
                 </v-text-field>
 
+                <v-textarea 
+                    prepend-icon="mdi-text-long"
+                    class="v-text-field-arr-sys" 
+                    label="Beskrivelse" 
+                    variant="outlined"
+                    v-model="arrangement.beskrivelse"
+                >
+                </v-textarea>
+
                 <div class="as-margin-top-space-2">
                     <v-text-field 
                         v-model="arrangement.place"

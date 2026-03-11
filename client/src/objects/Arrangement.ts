@@ -2,6 +2,7 @@ class Arrangement {
     id: string;
     name: string;
     place: string;
+    beskrivelse: string;
     startDate: Date;
     endDate: Date;
     status: number;
@@ -27,6 +28,7 @@ class Arrangement {
     constructor(id: string,
             name: string,
             place: string,
+            beskrivelse: string,
             startDate: number,
             endDate: number,
             status: number,
@@ -43,6 +45,7 @@ class Arrangement {
         this.id = id;
         this.name = name;
         this.place = place;
+        this.beskrivelse = beskrivelse ?? "";
         this.startDate = new Date(startDate * 1000);
         this.endDate = new Date(endDate * 1000);
         this.status = status;
@@ -61,6 +64,7 @@ class Arrangement {
             "",           // Empty string for id
             "",           // Empty string for name
             "",           // Empty string for place
+            "",           // Empty string for beskrivelse
             0,            // Epoch time for startDate
             0,            // Epoch time for endDate
             0,            // Default status
@@ -89,6 +93,7 @@ class Arrangement {
                 results.id,
                 results.name,
                 results.place,
+                results.beskrivelse,
                 results.startDate,
                 results.endDate,
                 status,
@@ -129,6 +134,7 @@ class Arrangement {
             
             name: this.name,
             place: this.place,
+            beskrivelse: this.beskrivelse,
             startDate: this.startDate.getTime() / 1000,
             endDate: this.endDate.getTime() / 1000,
             status: this.status,
