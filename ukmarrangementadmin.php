@@ -58,8 +58,8 @@ class UKMArrangementAdmin extends Modul
         // Placeholder for menu rendering
         $page = add_submenu_page(
             'index.php',
-            'Home Landsfestivalen', 
-            'Home Landsfestivalen', 
+            'Avansert admin', 
+            'Avansert admin', 
             'editor', 
             'UKMArrangementAdmin', 
             ['UKMArrangementAdmin', 'renderAdmin']
