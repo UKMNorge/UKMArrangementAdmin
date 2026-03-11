@@ -21,6 +21,7 @@ $retArr = [
     "id" => $arrangement->getId(),
     "name" => $arrangement->getNavn(),
     "place" => $arrangement->getSted(),
+    "type" => $arrangement->getType(),
     "beskrivelse" => $arrangement->getBeskrivelse(),
     "startDate" => $arrangement->getStart()->getTimestamp(),
     "endDate" => $arrangement->getStop()->getTimestamp(),

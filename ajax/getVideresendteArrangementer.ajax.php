@@ -27,6 +27,7 @@ foreach($arrangement->getVideresending()->getAvsendere() as $arrangAvsender) {
     $retArr[] = array(
         'fylkeName' => $fylke->getNavn(),
         'fylkeId' => $fylke->getId(), 
+        'kommuner' => $arrang->getKommuner()->getKeyValArray(),
         'arrangementName' => $arrang->getNavn(),
         'festivalId' => $arrang->getId(),
         'link' => $arrang->getLink(),

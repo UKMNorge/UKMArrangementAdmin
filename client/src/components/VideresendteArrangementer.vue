@@ -4,7 +4,7 @@
             <div v-if="arrangement != undefined" class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="">
                     <div class="as-margin-bottom-space-4">
-                        <h4>Arrangementer som er klarert for å videresende</h4>
+                        <h4>Arrangementer du har åpnet for videresending</h4>
                     </div>
     
                     <div v-if="videresendteArrangementer.length < 1" class="as-card-2 videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
@@ -16,7 +16,14 @@
                             <div class="as-card-2 as-display-flex videresendt-arrangement nosh-impt as-padding-space-2 as-margin-top-space-2">
                                 <div class="left-side-arrangement as-margin-right-space-1">
                                     <h5>{{ vArr.arrangementName }}</h5>
-                                    <p>{{ vArr.fylkeName }}</p>
+                                    <template v-if="arrangement.type == 'land'">
+                                        <p>{{ vArr.fylkeName }}</p>
+                                    </template>
+                                    <template v-else>
+                                        <span v-for="(kommuneName, idx) in Object.values(vArr.kommuner)" :key="idx">
+                                            {{ kommuneName }}<span v-if="idx < Object.values(vArr.kommuner).length - 1">, </span>
+                                        </span>
+                                    </template>
                                 </div>
                                 <div class="middle-side-arrangement">
                                     <v-chip
@@ -66,7 +73,7 @@
         <div class="col-lg-4 col-sm-12">
             <div class="as-card-1 as-padding-space-3">
                 <div class="as-margin-bottom-space-4 as-display-flex">
-                    <h4>Fylkesoversikt</h4>
+                    <h4>Videresending oversikt</h4>
                     <div class="as-margin-auto as-margin-right-none">
                         <v-btn @click="fylkeInfo = !fylkeInfo" class="vuetify-icon-button as-margin-auto as-margin-right-none" density="compact" icon variant="tonal">
                             <v-icon>mdi-information-slab-symbol</v-icon>
@@ -81,34 +88,71 @@
                         :description="`<p><b>Tall 1</b>= Arr. i fylket som har startet videresending</p><p><b>Tall 2</b>= Arr. i fylket klarert for videresending</p>`" 
                     />
                 </div>
-                <div v-for="fylke in alleFylker" :key="fylke.fylkeId" class="as-display-flex fylke-arr as-padding-bottom-space-1 as-margin-bottom-space-1">
-                    <div class="as-margin-auto as-margin-left-none">
-                        <p>{{ fylke.fylkeName }}</p>
-                    </div>
-                    <div class="as-margin-auto as-margin-right-none">
-                        <v-chip 
-                            v-bind="props"
-                            :color="fylkeColor(fylke.fylkeId)">
-                            {{ faktiskeAntallVideresendte(fylke.fylkeId) + ' av ' + antallFylkeVideresendt(fylke.fylkeId) }}
-                            <v-tooltip open-delay="200" activator="parent" location="start">
-                                <template v-if="antallFylkeVideresendt(fylke.fylkeId) > 0">
-                                    <template v-if="faktiskeAntallVideresendte(fylke.fylkeId) == antallFylkeVideresendt(fylke.fylkeId)">
-                                        Alle arrangementer har videresendt innslag
-                                    </template>
-                                    <template v-else-if="faktiskeAntallVideresendte(fylke.fylkeId) == 0">
-                                        Ingen av arrangementene har videresendt innslag
+                
+                <!-- Landsfestivalen -->
+                <template v-if="arrangement.type == 'land'">
+                    <div v-for="fylke in alleFylker" :key="fylke.fylkeId" class="as-display-flex fylke-arr as-padding-bottom-space-1 as-margin-bottom-space-1">
+                        <div class="as-margin-auto as-margin-left-none">
+                            <p>{{ fylke.fylkeName }}</p>
+                        </div>
+                        <div class="as-margin-auto as-margin-right-none">
+                            <v-chip 
+                                v-bind="props"
+                                :color="fylkeColor(fylke.fylkeId)">
+                                {{ faktiskeAntallVideresendte(fylke.fylkeId) + ' av ' + antallFylkeVideresendt(fylke.fylkeId) }}
+                                <v-tooltip open-delay="200" activator="parent" location="start">
+                                    <template v-if="antallFylkeVideresendt(fylke.fylkeId) > 0">
+                                        <template v-if="faktiskeAntallVideresendte(fylke.fylkeId) == antallFylkeVideresendt(fylke.fylkeId)">
+                                            Alle arrangementer har videresendt innslag
+                                        </template>
+                                        <template v-else-if="faktiskeAntallVideresendte(fylke.fylkeId) == 0">
+                                            Ingen av arrangementene har videresendt innslag
+                                        </template>
+                                        <template v-else>
+                                            {{ faktiskeAntallVideresendte(fylke.fylkeId) + ' av ' + antallFylkeVideresendt(fylke.fylkeId) + ' arrangementer har videresendt innslag' }}
+                                        </template>
                                     </template>
                                     <template v-else>
-                                        {{ faktiskeAntallVideresendte(fylke.fylkeId) + ' av ' + antallFylkeVideresendt(fylke.fylkeId) + ' arrangementer har videresendt innslag' }}
+                                        Du har ikke åpnet videresending for {{ fylke.fylkeName }}
                                     </template>
-                                </template>
-                                <template v-else>
-                                    Du har ikke åpnet videresending for {{ fylke.fylkeName }}
-                                </template>
-                            </v-tooltip>
-                        </v-chip>
+                                </v-tooltip>
+                            </v-chip>
+                        </div>
                     </div>
-                </div>
+                </template>
+
+                <!-- Fylkefestivaler -->
+                <template v-if="arrangement.type == 'fylke'">
+                    <div v-for="kommune in alleKommuner" :key="kommune.kommuneId" class="as-display-flex fylke-arr as-padding-bottom-space-1 as-margin-bottom-space-1">
+                        <div class="as-margin-auto as-margin-left-none">
+                            <p>{{ kommune.kommuneName }}</p>
+                        </div>
+                        <div class="as-margin-auto as-margin-right-none">
+                            <v-chip 
+                                v-bind="props"
+                                :color="faktiskeAntallVideresendteKommune(kommune.kommuneId) == antallKommuneVideresendt(kommune.kommuneId) && antallKommuneVideresendt(kommune.kommuneId) > 0 ? 'success' : antallKommuneVideresendt(kommune.kommuneId) == 0 ? 'error' : 'warning'">
+                                {{ faktiskeAntallVideresendteKommune(kommune.kommuneId) + ' av ' + antallKommuneVideresendt(kommune.kommuneId) }}
+                                <v-tooltip open-delay="200" activator="parent" location="start">
+                                    <template v-if="antallKommuneVideresendt(kommune.kommuneId) > 0">
+                                        <template v-if="faktiskeAntallVideresendteKommune(kommune.kommuneId) == antallKommuneVideresendt(kommune.kommuneId)">
+                                            Alle arrangementer har videresendt innslag
+                                        </template>
+                                        <template v-else-if="faktiskeAntallVideresendteKommune(kommune.kommuneId) == 0">
+                                            Ingen av arrangementene har videresendt innslag
+                                        </template>
+                                        <template v-else>
+                                            {{ faktiskeAntallVideresendteKommune(kommune.kommuneId) + ' av ' + antallKommuneVideresendt(kommune.kommuneId) + ' arrangementer har videresendt innslag' }}
+                                        </template>
+                                    </template>
+                                    <template v-else>
+                                        Du har ikke åpnet videresending for {{ kommune.kommuneName }}
+                                    </template>
+                                </v-tooltip>
+                            </v-chip>
+                        </div>
+                    </div>
+                </template>
+                
             </div>
         </div>
     </div>
@@ -124,6 +168,7 @@ import { PermanentNotification } from 'ukm-components-vue3';
 
 const videresendteArrangementer = ref([] as any);
 const alleFylker = ref([] as any);
+const alleKommuner = ref([] as any);
 const fylkeInfo = ref(false);
 
 const props = defineProps({ 
@@ -135,6 +180,15 @@ const props = defineProps({
 
 const antallFylkeVideresendt = (fylkeId : number) : number => {
     return videresendteArrangementer.value.filter((arrangement : any) => arrangement.fylkeId == fylkeId).length;
+}
+
+const antallKommuneVideresendt = (kommuneId : number) : number => {
+    return videresendteArrangementer.value.filter((arrangement : any) => arrangement.kommuner && kommuneId in arrangement.kommuner).length;
+}
+
+const faktiskeAntallVideresendteKommune = (kommuneId : number) : number => {
+    console.log(kommuneId);
+    return videresendteArrangementer.value.filter((arrangement : any) => arrangement.kommuner && kommuneId in arrangement.kommuner && arrangement.antallVideresendteInnslag > 0).length;
 }
 
 const faktiskeAntallVideresendte = (fylkeId : number) : number => {
@@ -173,6 +227,23 @@ const fetchFylker = async () => {
     }
 }
 
+const fetchKommuner = async () => {
+    var data = {
+        action: 'UKMArrangementAdmin_ajax',
+        controller: 'getAlleKommunerForArrangement',
+    };
+
+    var results = await (<any>window).spaInteraction.runAjaxCall('/', 'POST', data);
+
+    if(results.length == 0) {
+        return;
+    }
+    
+    for(let kommune of results) {
+        alleKommuner.value.push(kommune);
+    }
+}
+
 const goTilArrangement = (link : string) => {
     window.open(link + 'wp-admin', '_blank');
 };
@@ -197,6 +268,7 @@ const fetchData = async () => {
 }
 
 fetchFylker();
+fetchKommuner();
 fetchData();
    
 </script>
