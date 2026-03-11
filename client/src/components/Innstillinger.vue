@@ -43,7 +43,7 @@
                 <div class="switch-item-select no-border-item as-margin-top-space-1 as-padding-bottom-space-1">
                     <div class="text-switch">
                         <label class="">Åpen videresending</label>
-                        <span class="beskrivelse-switch">Når videresending er åpen, kan fylkene sende innslag og deltakere videre til dette arrangementet.</span>
+                        <span class="beskrivelse-switch">Når videresending er åpen, kan kommunene eller fylkene sende innslag og deltakere videre til dette arrangementet.</span>
                     </div>
                     <div class="switch">
                         <v-switch
