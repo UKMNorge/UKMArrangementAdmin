@@ -19,8 +19,8 @@
             <div class="as-margin-top-space-2" v-if="fetched && aktiviteter.length < 1">
                 <PermanentNotification 
                     typeNotification="info" 
-                    :tittel="`Ingen aktiviteter er lagt til ennå`" 
-                    :description="`Trykk på knappen 'Legg til aktivitet' for å opprette en ny aktivitet.`" 
+                    :tittel="`Hva er en aktivitet?`" 
+                    :description="`En aktivitet er noe som skjer under festivalen, men som ikke registreres som et innslag, og som kan vises i programmet. Eksempler på aktiviteter kan være: Matservering, workshop, nattkino, osv.`" 
                 />
             </div>
         </div>
