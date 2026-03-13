@@ -3,7 +3,7 @@
         <div v-if="arrangement != undefined" class="col-sm-8 col-xs-12">
             <div class="as-card-1 as-padding-space-3 as-margin-bottom-space-2">
                 <div class="as-margin-bottom-space-4">
-                    <h4 class="">Økonomi og kvoter for den nasjonale UKM-festivalen</h4>
+                    <h4 class="">Økonomi og kvoter</h4>
                 </div>
                 
                 <div class="kvote-item as-margin-top-space-2">
