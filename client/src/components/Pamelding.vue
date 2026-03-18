@@ -7,14 +7,14 @@
                     <h4 class="">Kreative og kulturelle typer</h4>
                 </div>
 
-                <!-- <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
-                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
+                <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
+                    <div class="col-xs-12 nop-impt finfo-date-picker">
                         <div class="as-margin-bottom-space-2">
-                            <p class="v-label title-dato">Påmeldingsfrist for de som vil vise frem noe</p>
+                            <p class="v-label title-dato">Påmeldingsfrist</p>
                         </div>
-                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.viseFrist" />
+                        <VueDatePicker :format="customFormat" :calendar-icon="'mdi-clock-end'" @update:model-value="handleDateChange" v-model="arrangement.viseFrist" />
                     </div>
-                </div> -->
+                </div>
 
                 <div>
                     <div v-for="type in availableTypesViseFrem" class="type-item-innslag-checkbox" :key="type.id">
@@ -60,14 +60,14 @@
                     <h4 class="">Bidrag og organisering typer</h4>
                 </div>
 
-                <!-- <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
-                    <div class="col-xs-6 nop-impt finfo-date-picker as-margin-right-space-2">
+                <div class="as-display-flex as-margin-top-space-2 as-margin-bottom-space-4">
+                    <div class="col-xs-12 nop-impt finfo-date-picker">
                         <div class="as-margin-bottom-space-2">
-                            <p class="v-label">Påmeldingsfrist for de som vil bidra som noe</p>
+                            <p class="v-label title-dato">Påmeldingsfrist</p>
                         </div>
-                        <VueDatePicker @update:model-value="handleDateChange" :calendar-icon="'mdi-clock-end'" v-model="arrangement.jobbeFrist" />
+                        <VueDatePicker :format="customFormat" :calendar-icon="'mdi-clock-end'" @update:model-value="handleDateChange" v-model="arrangement.jobbeFrist" />
                     </div>
-                </div> -->
+                </div>
 
                 <div>            
                     <div v-for="type in availableTypesJobbe" class="type-item-innslag-checkbox" :key="type.id">
@@ -147,8 +147,22 @@ export default {
         }
     },
     methods : {
-        handleDateChange() {
+        customFormat(date : Date) {
+            // Format date as "DD-MM-YYYY HH:mm"
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const year = date.getFullYear();
 
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+
+            return `${day}.${month}.${year}, kl. ${hours}:${minutes}`;
+        },
+        handleDateChange() {
+            setTimeout(() => {
+                this.arrangement.save();
+            }, 50); // Wait 50ms to prevent save without object change
         },
         handleCheckboxChange(type : InnslagType, isViseFrem : boolean) {
             let key = type.key;
@@ -246,9 +260,6 @@ export default {
     margin-left: 10px;
 }
 .title-dato {
-    margin-left: 36px;
-    font-weight: 700;
-    margin-bottom: 8px;
 }
 </style>
 

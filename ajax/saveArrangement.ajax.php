@@ -16,6 +16,8 @@ $handleCall = new HandleAPICall(
         "antallDeltakere", 
         "openPamelding", 
         "openVideresending",
+        "viseFrist",
+        "jobbeFrist",
     ], 
     // optional arguments
     [
@@ -38,6 +40,8 @@ $antallDeltakere = $handleCall->getArgument('antallDeltakere');
 $openPamelding = $handleCall->getArgument('openPamelding');
 $openVideresending = $handleCall->getArgument('openVideresending');
 $beskrivelse = $handleCall->getOptionalArgument('beskrivelse') ?? '';
+$viseFrist = date("Y-m-d H:i:s", $handleCall->getArgument('viseFrist'));
+$jobbeFrist = date("Y-m-d H:i:s", $handleCall->getArgument('jobbeFrist'));
 // Spesifikk til landsfestivalen
 $kvote_deltakere = (int)$handleCall->getOptionalArgument('kvote_deltakere') ?? null;
 $kvote_ledere = (int)$handleCall->getOptionalArgument('kvote_ledere') ?? null;
@@ -47,7 +51,6 @@ $avgift_reise = (int)$handleCall->getOptionalArgument('avgift_reise') ?? null;
 
 $statusLangText = $handleCall->getOptionalArgument('statusLangText') ?? null;
 $statusKortText = $handleCall->getOptionalArgument('statusKortText') ?? null;
-
 
 $arrangement = null;
 
@@ -71,6 +74,9 @@ try {
     $arrangement->setDeltakereSynlig($antallDeltakere == 'true');
     $arrangement->setPamelding($openPamelding == 'true' ? 'apen' : 'ingen');
     $arrangement->setHarVideresending($openVideresending == 'true');
+
+    $arrangement->setFrist1(DateTime::createFromFormat('Y-m-d H:i:s', $viseFrist));
+    $arrangement->setFrist2(DateTime::createFromFormat('Y-m-d H:i:s', $jobbeFrist));
 
     if($kvote_deltakere) {
         $arrangement->getMeta('kvote_deltakere')->set($kvote_deltakere);
