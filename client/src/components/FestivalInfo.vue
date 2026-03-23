@@ -207,11 +207,15 @@ export default {
             return this.antallVideresendtInnslag + ' innslag ('+ this.antallVideresendtPersoner +' person'+ (this.antallVideresendtPersoner != 1 ? "er" : "") +')';
         },
         antallPameldtePersoner(): number {
-            let antallPersoner = 0;
+            let personerSet = new Set();
             for(let innslag of this.pameldteData.pameldte) {
-                antallPersoner += innslag.personer ? innslag.personer.length : 0;
+                if (innslag.personer) {
+                    for (let person of innslag.personer) {
+                        personerSet.add(person.id);
+                    }
+                }
             }
-            return antallPersoner;
+            return personerSet.size;
         },
         pameldteText(): string {
             return this.antallPameldtePersoner +' person'+ (this.antallPameldtePersoner != 1 ? "er" : "");
