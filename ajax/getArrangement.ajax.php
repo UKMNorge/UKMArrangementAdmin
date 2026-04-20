@@ -40,6 +40,7 @@ $retArr = [
     "avgift_ordinar" => $arrangement->getMetaValue("avgift_ordinar"),
     "avgift_subsidiert" => $arrangement->getMetaValue("avgift_subsidiert"),
     "avgift_reise" => $arrangement->getMetaValue("avgift_reise"),
+    "har_videresending_nominasjon" => $arrangement->harVideresendingNominasjon(),
 
 ];
 

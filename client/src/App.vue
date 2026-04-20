@@ -15,6 +15,7 @@
                 <!-- <v-tab text="Gruppering"></v-tab> -->
                 <v-tab text="Videresending oversikt"></v-tab>
                 <v-tab text="Ledere/sykerom"></v-tab>
+                <v-tab v-if="arrangement.har_videresending_nominasjon" text="Videresending nominasjoner"></v-tab>
             </v-tabs>
         </div>
         <div class="as-container">
@@ -84,6 +85,12 @@
                             </div>
                         </v-tabs-window-item>
 
+                        <v-tabs-window-item v-if="arrangementLoaded && arrangement.har_videresending_nominasjon">
+                            <div class="as-containercontainer">
+                                <VideresendingNominasjoner :arrangement="arrangement" />
+                            </div>
+                        </v-tabs-window-item>
+
                     </v-tabs-window>
                 </div>
             </div>
@@ -101,6 +108,7 @@ import FestivalInfo from "./components/FestivalInfo.vue";
 import Innstillinger from "./components/Innstillinger.vue";
 import Pamelding from "./components/Pamelding.vue";
 import Ledere from "./components/Ledere.vue";
+import VideresendingNominasjoner from "./components/VideresendingNominasjoner.vue";
 import Aktiviteter from "./components/Aktiviteter.vue";
 import Hendelser from "./components/Hendelser.vue";
 import Kontaktpersoner from "./components/Kontaktpersoner.vue";
@@ -134,6 +142,7 @@ export default {
         Pamelding : Pamelding,
         Ledere : Ledere,
         VideresendteArrangementer : VideresendteArrangementer,
+        VideresendingNominasjoner : VideresendingNominasjoner,
         ArrangementKvoter : ArrangementKvoter,
         Aktiviteter : Aktiviteter,
         Hendelser : Hendelser,

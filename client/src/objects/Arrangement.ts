@@ -23,6 +23,8 @@ class Arrangement {
     avgift_subsidiert : string|null = null;
     avgift_reise : string|null = null;
 
+    har_videresending_nominasjon: boolean;
+
     saveOngoing: boolean = false;
     spaInteraction: any = (<any>window).spaInteraction; // Definert i main.ts
 
@@ -41,7 +43,8 @@ class Arrangement {
             openVideresending: boolean,
             viseFrist: number,
             jobbeFrist: number,
-            nettsideUrl: string
+            nettsideUrl: string,
+            har_videresending_nominasjon: boolean
         ) {
 
         this.id = id;
@@ -60,6 +63,7 @@ class Arrangement {
         this.statusKortText = statusKortText ?? "";
         this.statusLangText = statusLangText ?? "";
         this.nettsideUrl = nettsideUrl ?? "";
+        this.har_videresending_nominasjon = har_videresending_nominasjon;
     }
 
     static createEmpty(): Arrangement {
@@ -80,6 +84,7 @@ class Arrangement {
             0,
             0,
             "",
+            false,
         );
     }
     public static async load() : Promise<Arrangement> {
@@ -110,6 +115,7 @@ class Arrangement {
                 results.viseFrist,
                 results.jobbeFrist,
                 results.nettsideUrl,
+                results.har_videresending_nominasjon,
             );
 
             // Spesialfelt for landsfestivalen
