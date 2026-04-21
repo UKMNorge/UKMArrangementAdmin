@@ -1,13 +1,17 @@
 <template>
     <div class="innslag-tittel">
-        <div class="text-h6 innslag-tittel__navn">
+        <h5>Tittel</h5>
+        <div class="innslag-tittel__navn">
             Navn: {{ title?.navn }}
         </div>
-        <div class="text-body-2 text-medium-emphasis innslag-tittel__meta">
-            Varighet: {{ title?.varighet }}
+        <div class="text-medium-emphasis innslag-tittel__meta">
+            Varighet: 
+            <template v-if="typeof title?.varighet === 'number'">
+                {{ Math.floor(title.varighet / 60) }} min {{ title.varighet % 60 }} sek
+            </template>
         </div>
-        <div class="text-body-2 text-medium-emphasis innslag-tittel__meta">
-            Selvlaget: {{ title?.selvlaget }}
+        <div class="text-medium-emphasis innslag-tittel__meta">
+            Selvlaget: {{ title?.selvlaget ? 'Ja' : 'Nei' }}
         </div>
     </div>
 </template>

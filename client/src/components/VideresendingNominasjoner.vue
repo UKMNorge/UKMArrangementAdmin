@@ -69,13 +69,10 @@
                             </v-list-item>
 
                             <v-expand-transition>
-                                <div v-show="gruppe.expanded" class="as-margin-top-space-1">
+                                <div v-show="gruppe.expanded" class="as-margin-top-space-1 nominasjon-list-expanded">
                                     <div class="innslag-detaljer as-padding-left-space-2 as-padding-right-space-2">
-                                        <div class="as-margin-bottom-space-1">
-                                            <strong>Innslag-ID:</strong> {{ gruppe.innslag.id }}
-                                        </div>
                                         <div v-if="gruppe.innslag.type_key" class="as-margin-bottom-space-1">
-                                            <strong>Type (nøkkel):</strong> {{ gruppe.innslag.type_key }}
+                                            <strong>Innslagstype:</strong> {{ gruppe.innslag.type_key }}
                                         </div>
                                         <div v-if="gruppe.innslag.omrade_navn" class="as-margin-bottom-space-1">
                                             <strong>Område:</strong> {{ gruppe.innslag.omrade_navn }}
@@ -84,29 +81,59 @@
                                             <strong>Sjanger:</strong> {{ gruppe.innslag.sjanger }}
                                         </div>
                                         <div class="as-margin-bottom-space-1">
-                                            <strong>Har titler (innslagstype):</strong>
+                                            <strong>Har titler:</strong>
                                             {{ gruppe.innslag.har_titler ? 'Ja' : 'Nei' }}
                                         </div>
-                                        <div
-                                            v-if="gruppe.innslag.beskrivelse"
-                                            class="as-margin-bottom-space-1 innslag-beskrivelse"
-                                        >
+                                        <div v-if="gruppe.innslag.beskrivelse" class="as-margin-bottom-space-1 innslag-beskrivelse">
                                             <strong>Beskrivelse:</strong>
-                                            <span class="d-block text-body-2">{{ gruppe.innslag.beskrivelse }}</span>
+                                            <span class="d-block">{{ gruppe.innslag.beskrivelse }}</span>
                                         </div>
                                     </div>
 
                                     <template v-if="gruppe.titler.length">
                                         <div class="as-padding-bottom-space-1 as-padding-left-space-2">
-                                            <div v-for="tittel in gruppe.titler" :key="tittel.id" class="as-margin-bottom-space-2 as-padding-space-2 tittel-blokk">
+                                            <div v-for="tittel in gruppe.titler" :key="tittel.id" class="as-margin-bottom-space-2 as-margin-top-space-2 as-padding-left-space-2 as-padding-right-space-2 tittel-blokk">
                                                 <Tittel :title="tittel" class="as-margin-bottom-space-1" />
 
                                                 <Nominasjon
                                                     v-for="nominasjon in tittel.nominasjoner"
                                                     :key="nominasjon.id"
-                                                    class="as-margin-bottom-space-1 as-padding-left-space-2"
+                                                    class="as-margin-bottom-space-1"
                                                     :nominasjon="nominasjon"
                                                 />
+
+                                                <!-- Spørsmål fra avsender og svar fra motaker -->
+                                                <template v-if="hasSporsmalInNominasjoner(tittel.nominasjoner) != null">
+                                                    <hr>
+                                                    <div class="">
+                                                        <PermanentNotification 
+                                                            class="arrangement-kvoter-msg"
+                                                            typeNotification="warning" 
+                                                            :tittel="`Spørsmål fra avsender`" 
+                                                            :isHTML="true"
+                                                            :description="hasSporsmalInNominasjoner(tittel.nominasjoner).sporsmal" 
+                                                        />
+                                                    </div>
+                                                    <div class="text-body-2 as-margin-top-space-2">
+                                                        <div>
+                                                            <v-textarea 
+                                                                class="v-text-field-arr-sys" 
+                                                                label="Din svar" 
+                                                                variant="outlined"
+                                                                v-model="hasSporsmalInNominasjoner(tittel.nominasjoner).svar"
+                                                            >
+                                                            </v-textarea>
+                                                        </div>
+                                                    </div>
+                                                    <v-btn
+                                                        class="v-btn-as v-btn-bla"
+                                                        rounded="small"
+                                                        size="small"
+                                                        @click="sendSvar(hasSporsmalInNominasjoner(tittel.nominasjoner))"
+                                                        variant="outlined">
+                                                        Send svar
+                                                    </v-btn>
+                                                </template>
                                             </div>
                                         </div>
                                     </template>
@@ -114,12 +141,7 @@
                                     <template v-if="gruppe.nominasjonerUtenTitler.length">
                                         <div class="as-padding-bottom-space-1 as-padding-left-space-2">
                                             <div class="as-margin-bottom-space-1 "><strong>Uten tittel</strong></div>
-                                            <Nominasjon
-                                                v-for="nominasjon in gruppe.nominasjonerUtenTitler"
-                                                :key="nominasjon.id"
-                                                class="as-margin-bottom-space-1 as-padding-left-space-2"
-                                                :nominasjon="nominasjon" 
-                                            />
+                                            <Nominasjon :nominasjon="nominasjon" v-for="nominasjon in gruppe.nominasjonerUtenTitler" :key="nominasjon.id" class="as-margin-bottom-space-1" />
                                         </div>
                                     </template>
                                 </div>
@@ -145,6 +167,7 @@ import VideresendingNominasjon from '../objects/VideresendingNominasjon';
 import VideresendingNominasjonerFilter from './VideresendingNominasjonerFilter.vue';
 import Nominasjon from './VideresendingNominasjoner/Nominasjon.vue';
 import Tittel from './VideresendingNominasjoner/Tittel.vue';
+import type TittelType from './VideresendingNominasjoner/Tittel.vue';
 
 export default {
     extends : MainComponent,
@@ -212,6 +235,16 @@ export default {
                     return 'Venter på avsender';
             }
             return 'Ukjent';
+        },
+        hasSporsmalInNominasjoner(TittelMedNominasjoner: any[]): any {
+            for(let nominasjon of TittelMedNominasjoner) {
+                if(nominasjon.sporsmal != null && nominasjon.sporsmal.trim() != '') {
+                    return nominasjon;
+                }
+            }
+
+            return null
+            
         },
         // handleSwitchChange(leder: Leder|any) {
         //     // Do not allow saving if a save is ongoing
@@ -289,6 +322,9 @@ export default {
 }
 .nominasjon-list :deep(.v-list-item__content) {
     display: flex;
+}
+.nominasjon-list-expanded {
+    font-size: 14px;
 }
 
 @media(max-width: 767px) {

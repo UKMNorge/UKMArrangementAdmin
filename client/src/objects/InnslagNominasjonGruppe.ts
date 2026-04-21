@@ -74,6 +74,8 @@ export class InnslagNominasjonGruppe {
             const titler: TittelMedVideresendingNominasjoner[] = titlerRå.map((t: any) => ({
                 id: Number(t.id) || 0,
                 navn: (t.navn ?? '') as string,
+                varighet: Number(t.varighet.sekunder) || 0,
+                selvlaget: Boolean(t.selvlaget) || false,
                 nominasjoner: (Array.isArray(t.nominasjoner) ? t.nominasjoner : []).map((n: any) =>
                     VideresendingNominasjon.fromAjax(n, innslag)
                 ),
