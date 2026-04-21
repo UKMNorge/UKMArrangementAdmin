@@ -5,21 +5,13 @@
                 <h4>Videresending nominasjoner</h4>
             </div>
 
-            <div class="nominasjoner-filter-div">
-                <v-select
-                    v-model="selectedFylkeId"
-                    label="Velg fylke for filtrering" 
-                    variant="outlined" 
-                    class="v-autocomplete-arr-sys" 
-                    :items="fylker.map(f => ({ title: f.navn, value: f.id }))"
-                    >
-                </v-select>
-            </div>
+            
+            <VideresendingNominasjonerFilter v-model="selectedFylkeId" :fylker="fylker" />
 
             <div class="">
                 <v-list lines="three" class="nominasjon-list">
                     <div class="">
-                        <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="gruppe in getFiltrerteNominasjoner()" :key="gruppe.id">
+                        <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="gruppe in getFiltrerteNominasjoner()" :key="gruppe.innslag.id">
 
                             <v-list-item @click="toggleExpandGruppe(gruppe)" class="nominasjon-item nop-impt as-card-1 as-padding-space-3">
                                 <div class="d-flex justify-space-between align-center">
@@ -62,8 +54,8 @@
                             </v-list-item>
 
                             <v-expand-transition>
-                                <div v-show="gruppe.expanded" class="as-padding-space-2 as-margin-top-space-1">
-                                    <div class="innslag-detaljer as-margin-bottom-space-2">
+                                <div v-show="gruppe.expanded" class="as-margin-top-space-1">
+                                    <div class="innslag-detaljer as-padding-left-space-2 as-padding-right-space-2">
                                         <div class="as-margin-bottom-space-1">
                                             <strong>Innslag-ID:</strong> {{ gruppe.innslag.id }}
                                         </div>
@@ -90,30 +82,32 @@
                                     </div>
 
                                     <template v-if="gruppe.titler.length">
-                                        <div
-                                            v-for="tittel in gruppe.titler"
-                                            :key="tittel.id"
-                                            class="as-margin-bottom-space-2 tittel-blokk"
-                                        >
-                                            <div class="as-margin-bottom-space-1">
-                                                <strong>Tittel:</strong> {{ tittel.navn }}
-                                            </div>
-                                            <div class="as-margin-bottom-space-1 as-padding-left-space-2 text-body-2">
-                                                <strong>Tittel-ID:</strong> {{ tittel.id }}
-                                            </div>
+                                        <div class="as-padding-bottom-space-1 as-padding-left-space-2">
                                             <div
-                                                v-for="nominasjon in tittel.nominasjoner"
-                                                :key="nominasjon.id"
-                                                class="as-margin-bottom-space-1 as-padding-left-space-2"
+                                                v-for="tittel in gruppe.titler"
+                                                :key="tittel.id"
+                                                class="as-margin-bottom-space-2 as-padding-space-2 tittel-blokk"
                                             >
-                                                <span class="text-medium-emphasis">Nominasjon #{{ nominasjon.id }}</span>
-                                                — {{ nominasjon.getStatus() }}
+                                                <div class="as-margin-bottom-space-1">
+                                                    <strong>Tittel:</strong> {{ tittel.navn }}
+                                                </div>
+                                                <div class="as-margin-bottom-space-1 as-padding-left-space-2 text-body-2">
+                                                    <strong>Tittel-ID:</strong> {{ tittel.id }}
+                                                </div>
+                                                <div
+                                                    v-for="nominasjon in tittel.nominasjoner"
+                                                    :key="nominasjon.id"
+                                                    class="as-margin-bottom-space-1 as-padding-left-space-2"
+                                                >
+                                                    <span class="text-medium-emphasis">Nominasjon #{{ nominasjon.id }}</span>
+                                                    — {{ nominasjon.getStatus() }}
+                                                </div>
                                             </div>
                                         </div>
                                     </template>
 
                                     <template v-if="gruppe.nominasjonerUtenTitler.length">
-                                        <div class="as-margin-bottom-space-1"><strong>Uten tittel</strong></div>
+                                        <div class="as-padding-bottom-space-1 as-padding-left-space-2"><strong>Uten tittel</strong></div>
                                         <div
                                             v-for="nominasjon in gruppe.nominasjonerUtenTitler"
                                             :key="nominasjon.id"
@@ -143,6 +137,7 @@ import type Innslag from '../objects/Innslag';
 import Fylke from '../objects/Fylke';
 import { PermanentNotification } from 'ukm-components-vue3';
 import VideresendingNominasjon from '../objects/VideresendingNominasjon';
+import VideresendingNominasjonerFilter from './VideresendingNominasjonerFilter.vue';
 
 export default {
     extends : MainComponent,
@@ -154,7 +149,8 @@ export default {
     },
     components: {
         VueDatePicker : VueDatePicker,
-        PermanentNotification : PermanentNotification
+        PermanentNotification : PermanentNotification,
+        VideresendingNominasjonerFilter: VideresendingNominasjonerFilter
     },
     mounted() {
         this.fetchNominasjoner();
