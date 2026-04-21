@@ -4,6 +4,8 @@ import VideresendingNominasjon from './VideresendingNominasjon';
 export type TittelMedVideresendingNominasjoner = {
     id: number;
     navn: string;
+    varighet: number;
+    selvlaget: boolean;
     nominasjoner: VideresendingNominasjon[];
 };
 

@@ -1,4 +1,5 @@
 import Innslag from './Innslag';
+import VideresendingPerson from './VideresendingPerson';
 
 export type VideresendingNominasjonStatus =
     | 'hos-avsender'
@@ -29,6 +30,7 @@ class VideresendingNominasjon {
     svar: string;
     innslag: Innslag;
     expanded: boolean = false;
+    person: VideresendingPerson | null;
 
     constructor(
         id: number,
@@ -62,6 +64,7 @@ class VideresendingNominasjon {
         this.sporsmal = sporsmal ?? '';
         this.svar = svar ?? '';
         this.innslag = innslag;
+        this.person = null;
     }
 
     static getGyldigeStatuser(): Array<
@@ -97,7 +100,7 @@ class VideresendingNominasjon {
             innslagValgfritt ??
             (row.innslag != null ? Innslag.fromAjax(row.innslag) : new Innslag(toInt(row.b_id) ?? 0, '', row.innslag_type ?? ''));
 
-        return new VideresendingNominasjon(
+        const nominasjon = new VideresendingNominasjon(
             toInt(row.id) ?? 0,
             toNullableInt(row.p_id),
             toNullableInt(row.b_id),
@@ -114,6 +117,8 @@ class VideresendingNominasjon {
             row.svar,
             innslag
         );
+        nominasjon.person = VideresendingPerson.fromAjax(row.person);
+        return nominasjon;
     }
 
     public getStatus(): VideresendingNominasjonStatus {

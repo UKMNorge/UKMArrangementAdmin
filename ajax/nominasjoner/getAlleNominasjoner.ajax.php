@@ -54,7 +54,9 @@ foreach (VideresendingNominasjon::getAlleTilArrangement($arrangement->getId())->
                     $retArr[$innslagId]['titler'][$tittelId] = [
                         'id' => $tittelId,
                         'navn' => $tittel->getNavn(),
+                        'varighet' => $tittel->getVarighet(),
                         'nominasjoner' => [],
+                        'selvlaget' => $tittel->erSelvlaget(),
                     ];
                 }
                 $retArr[$innslagId]['titler'][$tittelId]['nominasjoner'][] = $objNominasjon;

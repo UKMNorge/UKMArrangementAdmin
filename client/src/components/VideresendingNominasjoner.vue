@@ -34,15 +34,30 @@
                                 
                                 <template v-slot:append>
                                     <div class="innslag-type-chip">
-                                        <v-chip class="as-margin-left-space-1" size="small" color="primary" variant="outlined" v-if="gruppe.innslag.innslag_type">
-                                            {{ gruppe.innslag.innslag_type }}
-                                        </v-chip>
-                                        <v-chip class="as-margin-left-space-1" size="small" color="warning" variant="outlined" v-if="gruppe.innslag.fylke_fra">
-                                            {{ gruppe.innslag.fylke_fra }}
-                                        </v-chip>
-                                        <v-chip class="as-margin-left-space-1" size="small" :color="getStatusColor(gruppe.getStatusPerGruppe())" variant="outlined" v-if="gruppe.innslag.fylke_fra">
-                                            {{ convertStatusToReadable(gruppe.getStatusPerGruppe()) }}
-                                        </v-chip>
+                                        <div class="">
+                                            <v-chip
+                                                class="as-margin-left-space-1"
+                                                v-if="gruppe.innslag.innslag_type"
+                                                color="">
+                                                {{ gruppe.innslag.innslag_type }}
+                                            </v-chip>
+
+                                            <v-chip
+                                                class="as-margin-left-space-1"
+                                                v-if="gruppe.innslag.fylke_fra"
+                                                append-icon="mdi-map-marker-multiple"
+                                                color="primary">
+                                                {{ gruppe.innslag.fylke_fra }}
+                                            </v-chip>
+                                            
+                                            <v-chip
+                                                class="as-margin-left-space-1"
+                                                v-if="gruppe.innslag.fylke_fra"
+                                                append-icon="mdi-list-status"
+                                                :color="getStatusColor(gruppe.getStatusPerGruppe())">
+                                                {{ convertStatusToReadable(gruppe.getStatusPerGruppe()) }}
+                                            </v-chip>
+                                        </div>
                                     </div>
                                     <v-btn 
                                     icon 
@@ -83,38 +98,28 @@
 
                                     <template v-if="gruppe.titler.length">
                                         <div class="as-padding-bottom-space-1 as-padding-left-space-2">
-                                            <div
-                                                v-for="tittel in gruppe.titler"
-                                                :key="tittel.id"
-                                                class="as-margin-bottom-space-2 as-padding-space-2 tittel-blokk"
-                                            >
-                                                <div class="as-margin-bottom-space-1">
-                                                    <strong>Tittel:</strong> {{ tittel.navn }}
-                                                </div>
-                                                <div class="as-margin-bottom-space-1 as-padding-left-space-2 text-body-2">
-                                                    <strong>Tittel-ID:</strong> {{ tittel.id }}
-                                                </div>
-                                                <div
+                                            <div v-for="tittel in gruppe.titler" :key="tittel.id" class="as-margin-bottom-space-2 as-padding-space-2 tittel-blokk">
+                                                <Tittel :title="tittel" class="as-margin-bottom-space-1" />
+
+                                                <Nominasjon
                                                     v-for="nominasjon in tittel.nominasjoner"
                                                     :key="nominasjon.id"
                                                     class="as-margin-bottom-space-1 as-padding-left-space-2"
-                                                >
-                                                    <span class="text-medium-emphasis">Nominasjon #{{ nominasjon.id }}</span>
-                                                    — {{ nominasjon.getStatus() }}
-                                                </div>
+                                                    :nominasjon="nominasjon"
+                                                />
                                             </div>
                                         </div>
                                     </template>
 
                                     <template v-if="gruppe.nominasjonerUtenTitler.length">
-                                        <div class="as-padding-bottom-space-1 as-padding-left-space-2"><strong>Uten tittel</strong></div>
-                                        <div
-                                            v-for="nominasjon in gruppe.nominasjonerUtenTitler"
-                                            :key="nominasjon.id"
-                                            class="as-margin-bottom-space-1 as-padding-left-space-2"
-                                        >
-                                            <span class="text-medium-emphasis">Nominasjon #{{ nominasjon.id }}</span>
-                                            — {{ nominasjon.getStatus() }}
+                                        <div class="as-padding-bottom-space-1 as-padding-left-space-2">
+                                            <div class="as-margin-bottom-space-1 "><strong>Uten tittel</strong></div>
+                                            <Nominasjon
+                                                v-for="nominasjon in gruppe.nominasjonerUtenTitler"
+                                                :key="nominasjon.id"
+                                                class="as-margin-bottom-space-1 as-padding-left-space-2"
+                                                :nominasjon="nominasjon" 
+                                            />
                                         </div>
                                     </template>
                                 </div>
@@ -138,6 +143,8 @@ import Fylke from '../objects/Fylke';
 import { PermanentNotification } from 'ukm-components-vue3';
 import VideresendingNominasjon from '../objects/VideresendingNominasjon';
 import VideresendingNominasjonerFilter from './VideresendingNominasjonerFilter.vue';
+import Nominasjon from './VideresendingNominasjoner/Nominasjon.vue';
+import Tittel from './VideresendingNominasjoner/Tittel.vue';
 
 export default {
     extends : MainComponent,
@@ -150,7 +157,9 @@ export default {
     components: {
         VueDatePicker : VueDatePicker,
         PermanentNotification : PermanentNotification,
-        VideresendingNominasjonerFilter: VideresendingNominasjonerFilter
+        VideresendingNominasjonerFilter: VideresendingNominasjonerFilter,
+        Nominasjon: Nominasjon,
+        Tittel: Tittel
     },
     mounted() {
         this.fetchNominasjoner();
