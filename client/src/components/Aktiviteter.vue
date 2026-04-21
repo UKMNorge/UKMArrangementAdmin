@@ -38,36 +38,33 @@
             <v-list lines="three" class="aktivitet-list">
                 <div class="">
                     <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="aktivitet in getFiltrerteAktiviteter()" :key="aktivitet.id" v-show="!aktivitet.deleted">
-                        <v-list-item v-if="!aktivitet.deleted" @click="toggleExpand(aktivitet)"
-                        class="aktivitet-item nop-impt as-card-1 as-padding-space-3"
-                        >
-                       
-                        <div class="d-flex justify-space-between align-center">
-                            <v-list-item-title class="text-h6">
-                                {{ aktivitet.title }}
-                            </v-list-item-title>
-                            <!-- <v-chip class="chip-on-title ml-2" v-show="pameldingMinstEn(aktivitet)" color="primary" size="small">
-                                Krever påmelding
-                            </v-chip> -->
-                        </div>
-                        <!-- <v-list-item-subtitle>
-                            <span>{{ getAntallTidspunkter(aktivitet) }}</span>
-                        </v-list-item-subtitle> -->
-                        <template v-slot:prepend>
-                            <v-avatar color="grey-lighten-1">
-                            <v-icon color="white">mdi-calendar-star</v-icon>
-                            </v-avatar>
-                        </template>
+                        <v-list-item v-if="!aktivitet.deleted" @click="toggleExpand(aktivitet)" class="aktivitet-item nop-impt as-card-1 as-padding-space-3">
+                            <div class="d-flex justify-space-between align-center">
+                                <v-list-item-title class="text-h6">
+                                    {{ aktivitet.title }}
+                                </v-list-item-title>
+                                <!-- <v-chip class="chip-on-title ml-2" v-show="pameldingMinstEn(aktivitet)" color="primary" size="small">
+                                    Krever påmelding
+                                </v-chip> -->
+                            </div>
+                            <!-- <v-list-item-subtitle>
+                                <span>{{ getAntallTidspunkter(aktivitet) }}</span>
+                            </v-list-item-subtitle> -->
+                            <template v-slot:prepend>
+                                <v-avatar color="grey-lighten-1">
+                                <v-icon color="white">mdi-calendar-star</v-icon>
+                                </v-avatar>
+                            </template>
 
-                        <template v-slot:append>
-                            <v-btn 
-                            icon 
-                            variant="text" 
-                            @click.stop="toggleExpand(aktivitet)"
-                            >
-                                <v-icon>{{ aktivitet.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                            </v-btn>
-                        </template>
+                            <template v-slot:append>
+                                <v-btn 
+                                icon 
+                                variant="text" 
+                                @click.stop="toggleExpand(aktivitet)"
+                                >
+                                    <v-icon>{{ aktivitet.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                                </v-btn>
+                            </template>
                         </v-list-item>
 
                         <!-- Expandable Content BELOW the item -->

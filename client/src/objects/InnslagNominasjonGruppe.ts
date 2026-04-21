@@ -27,6 +27,41 @@ export class InnslagNominasjonGruppe {
         this.nominasjonerUtenTitler = nominasjonerUtenTitler;
     }
 
+    getStatusPerGruppe(): string {
+        const rank: Record<string, number> = {
+            [VideresendingNominasjon.STATUS_HOS_MOTTAKER]: 0,
+            [VideresendingNominasjon.STATUS_HOS_DELTAKER]: 1,
+            [VideresendingNominasjon.STATUS_HOS_AVSENDER]: 2,
+            [VideresendingNominasjon.STATUS_GODKJENT]: 3,
+        };
+
+        let bestStatus = 'Ukjent';
+        let bestRank = Number.POSITIVE_INFINITY;
+
+        const consider = (status: string) => {
+            const r = rank[status];
+            if (r === undefined) {
+                return;
+            }
+            if (r < bestRank) {
+                bestRank = r;
+                bestStatus = status;
+            }
+        };
+
+        for (const nominasjon of this.nominasjonerUtenTitler) {
+            consider(nominasjon.getStatus());
+        }
+
+        for (const titel of this.titler) {
+            for (const nominasjon of titel.nominasjoner) {
+                consider(nominasjon.getStatus());
+            }
+        }
+
+        return bestStatus;
+    }
+
     static parseAlleNominasjonerResponse(raw: unknown): InnslagNominasjonGruppe[] {
         const r = raw as Record<string, unknown> | unknown[] | null | undefined;
         const list: unknown[] = Array.isArray(r) ? r : Object.values(r ?? {});

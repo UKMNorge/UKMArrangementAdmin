@@ -16,26 +16,31 @@
                 </v-select>
             </div>
 
-            <div class="mx-auto aktivitet-card">
-                <v-list lines="three" class="aktivitet-list">
+            <div class="">
+                <v-list lines="three" class="nominasjon-list">
                     <div class="">
-                        <div
-                            class="as-card-1 card-nominasjon-item nop-impt as-margin-bottom-space-2"
-                            v-for="gruppe in getFiltrerteNominasjoner()"
-                            :key="gruppe.innslag.id"
-                        >
-                            <v-list-item
-                                @click="toggleExpandGruppe(gruppe)"
-                                class="videresending-nominasjon-item"
-                            >
-                                <template #prepend>
-                                    <v-icon size="small">mdi-folder-outline</v-icon>
+                        <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="gruppe in getFiltrerteNominasjoner()" :key="gruppe.id">
+
+                            <v-list-item @click="toggleExpandGruppe(gruppe)" class="nominasjon-item nop-impt as-card-1 as-padding-space-3">
+                                <div class="d-flex justify-space-between align-center">
+                                    <v-list-item-title class="text-h6">
+                                        {{ gruppe.innslag.navn }}
+                                    </v-list-item-title>
+                                    <!-- <v-chip class="chip-on-title ml-2" v-show="pameldingMinstEn(aktivitet)" color="primary" size="small">
+                                        Krever påmelding
+                                    </v-chip> -->
+                                </div>
+                                <!-- <v-list-item-subtitle>
+                                    <span>{{ getAntallTidspunkter(aktivitet) }}</span>
+                                </v-list-item-subtitle> -->
+                                <template v-slot:prepend>
+                                    <v-avatar color="grey-lighten-1">
+                                    <v-icon color="white">mdi-calendar-star</v-icon>
+                                    </v-avatar>
                                 </template>
 
-                                <v-list-item-title class="d-flex align-center justify-space-between">
-                                    <span class="text-truncate">
-                                        {{ gruppe.innslag.navn }}
-                                    </span>
+                                
+                                <template v-slot:append>
                                     <div class="innslag-type-chip">
                                         <v-chip class="as-margin-left-space-1" size="small" color="primary" variant="outlined" v-if="gruppe.innslag.innslag_type">
                                             {{ gruppe.innslag.innslag_type }}
@@ -43,17 +48,17 @@
                                         <v-chip class="as-margin-left-space-1" size="small" color="warning" variant="outlined" v-if="gruppe.innslag.fylke_fra">
                                             {{ gruppe.innslag.fylke_fra }}
                                         </v-chip>
+                                        <v-chip class="as-margin-left-space-1" size="small" :color="getStatusColor(gruppe.getStatusPerGruppe())" variant="outlined" v-if="gruppe.innslag.fylke_fra">
+                                            {{ convertStatusToReadable(gruppe.getStatusPerGruppe()) }}
+                                        </v-chip>
                                     </div>
-                                    <v-icon size="small">
-                                        {{ gruppe.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                                    </v-icon>
-                                </v-list-item-title>
-                                <v-list-item-subtitle
-                                    v-if="innslagUndertekst(gruppe.innslag)"
-                                    class="text-truncate mt-1"
-                                >
-                                    {{ innslagUndertekst(gruppe.innslag) }}
-                                </v-list-item-subtitle>
+                                    <v-btn 
+                                    icon 
+                                    variant="text" 
+                                    >
+                                        <v-icon>{{ gruppe.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                                    </v-btn>
+                                </template>
                             </v-list-item>
 
                             <v-expand-transition>
@@ -137,6 +142,7 @@ import InnslagNominasjonGruppe from '../objects/InnslagNominasjonGruppe';
 import type Innslag from '../objects/Innslag';
 import Fylke from '../objects/Fylke';
 import { PermanentNotification } from 'ukm-components-vue3';
+import VideresendingNominasjon from '../objects/VideresendingNominasjon';
 
 export default {
     extends : MainComponent,
@@ -175,6 +181,32 @@ export default {
         innslagUndertekst(innslag: Innslag): string {
             const parts = [innslag.omrade_navn, innslag.sjanger].filter((s) => (s ?? '').trim().length > 0);
             return parts.join(' · ');
+        },
+        getStatusColor(status: string): string {
+            switch(status) {
+                case VideresendingNominasjon.STATUS_GODKJENT:
+                    return 'success';
+                case VideresendingNominasjon.STATUS_HOS_DELTAKER:
+                    return 'warning';
+                case VideresendingNominasjon.STATUS_HOS_MOTTAKER:
+                    return 'red';
+                case VideresendingNominasjon.STATUS_HOS_AVSENDER:
+                    return 'info';
+            }
+            return 'warning';
+        },
+        convertStatusToReadable(status: string): string {
+            switch(status) {
+                case VideresendingNominasjon.STATUS_GODKJENT:
+                    return 'Godkjent';
+                case VideresendingNominasjon.STATUS_HOS_DELTAKER:
+                    return 'Venter på deltaker';
+                case VideresendingNominasjon.STATUS_HOS_MOTTAKER:
+                    return 'Venter på deg';
+                case VideresendingNominasjon.STATUS_HOS_AVSENDER:
+                    return 'Venter på avsender';
+            }
+            return 'Ukjent';
         },
         // handleSwitchChange(leder: Leder|any) {
         //     // Do not allow saving if a save is ongoing
@@ -226,14 +258,35 @@ export default {
     overflow: hidden;
     box-shadow: none !important;
 }
-.aktivitet-list {
+.nominasjon-list {
     background: none !important;
 }
 .innslag-type-chip {
     margin: auto;
     margin-right: 50px;
 }
+
+.nominasjon-list {
+    background: transparent;
+    box-shadow: none !important;
+}
+.nominasjon-item {
+    padding: calc(3*var(--initial-space-box)) !important;
+    border: none;
+    box-shadow: none !important;
+    min-height: 56px !important;
+    cursor: pointer;
+    border-radius: var(--radius-high) !important;
+}
+.nominasjon-list,
+.aktiviteter-buttons {
+    padding: var(--initial-space-box) !important;
+}
+.nominasjon-list :deep(.v-list-item__content) {
+    display: flex;
+}
+
 @media(max-width: 767px) {
-    
+
 }
 </style>
