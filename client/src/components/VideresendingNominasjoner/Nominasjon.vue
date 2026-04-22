@@ -18,12 +18,8 @@
                 </v-chip>
             </div>
 
-            <div v-if="nominasjon.beskrivelse" class="text-body-2 as-margin-top-space-1">
-                {{ nominasjon.beskrivelse }}
-            </div>
-
             <div class="nominasjon-person as-margin-top-space-2">
-                <div class="text-medium-emphasis">Deltaker</div>
+                <div class="text-medium-emphasis">Deltakerinfo</div>
                 <div class="as-padding-left-space-2">
                     <div class="text-body-2">
                         Navn:{{ nominasjon.person?.fornavn }} {{ nominasjon.person?.etternavn }}
@@ -37,18 +33,24 @@
                 </div>
             </div>
 
-
-                <div class="as-margin-top-space-2">
-                    <v-btn
-                        class="v-btn-as v-btn-success"
-                        rounded="small"
-                        size="small"
-                        :disabled="!isGodkjenningPossible"
-                        @click="godkjennNominasjon()"
-                        variant="outlined">
-                        Godkjenn
-                    </v-btn>
+            <div v-if="nominasjon.beskrivelse" class="as-margin-top-space-1">
+                <div class="text-medium-emphasis">Begrunnelse for at denne deltakeren nomineres</div>
+                <div class="text-body-2">
+                    {{ nominasjon.beskrivelse }}
                 </div>
+            </div>
+
+            <div class="as-margin-top-space-3">
+                <v-btn
+                    class="v-btn-as v-btn-success"
+                    rounded="small"
+                    size="small"
+                    :disabled="!isGodkjenningPossible"
+                    @click="godkjennNominasjon()"
+                    variant="outlined">
+                    Godkjenn
+                </v-btn>
+            </div>
         </div>
     </div>
 </template>
