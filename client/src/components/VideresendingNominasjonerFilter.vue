@@ -11,10 +11,10 @@
                 :items="fylker.map((f) => ({ title: f.navn, value: f.id }))"
             />
             <div class="as-margin-top-space-1">
-                Antall nominerte innslag: {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallInnslagNominasjonerForFylke() }}
+                Antall nominerte innslag {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallInnslagNominasjonerForFylke() }}
             </div>
             <div class="as-margin-top-space-1 as-margin-bottom-space-3">
-                Antall nominerte deltakere: {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallNominasjonerForFylke() }}
+                Antall nominerte deltakere {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallNominasjonerForFylke() }}
             </div>
         </div>
     </div>
