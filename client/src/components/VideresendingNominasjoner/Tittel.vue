@@ -1,5 +1,5 @@
 <template>
-    <div class="innslag-tittel">
+    <div class="innslag-tittel as-margin-bottom-space-2">
         <h5>Tittel</h5>
         <div class="innslag-tittel__navn">
             Navn: {{ title?.navn }}

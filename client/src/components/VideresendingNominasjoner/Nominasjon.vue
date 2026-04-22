@@ -37,16 +37,18 @@
                 </div>
             </div>
 
-            <div class="as-margin-top-space-2">
-                <v-btn
-                    class="v-btn-as v-btn-success"
-                    rounded="small"
-                    size="small"
-                    @click="godkjennNominasjon()"
-                    variant="outlined">
-                    Godkjenn
-                </v-btn>
-            </div>
+            <template v-if="isGodkjenningPossible">
+                <div class="as-margin-top-space-2">
+                    <v-btn
+                        class="v-btn-as v-btn-success"
+                        rounded="small"
+                        size="small"
+                        @click="godkjennNominasjon()"
+                        variant="outlined">
+                        Godkjenn
+                    </v-btn>
+                </div>
+            </template>
 
         </div>
     </div>
@@ -63,7 +65,15 @@ export default {
             required: true,
         },
     },
+    data() {
+        return {
+            spaInteraction: (<any>window).spaInteraction, // Definert i main.ts
+        };
+    },
     computed: {
+        isGodkjenningPossible(): boolean {
+            return this.nominasjon.getStatus() == VideresendingNominasjon.STATUS_HOS_MOTTAKER;
+        },
         statusReadable(): string {
             switch (this.nominasjon.getStatus()) {
                 case VideresendingNominasjon.STATUS_GODKJENT:
@@ -90,8 +100,18 @@ export default {
             }
             return 'warning';
         },
-        godkjennNominasjon() {
-            console.log('godkjennNominasjon');
+    },
+    methods: {
+        async godkjennNominasjon() {
+            let res = await this.spaInteraction.runAjaxCall('/', 'POST', {
+                action: 'UKMArrangementAdmin_ajax',
+                controller: 'nominasjoner/sendTilDeltaker',
+                nominasjonId: this.nominasjon?.id,
+            });
+            
+            if (res?.success) {
+                this.nominasjon.status = VideresendingNominasjon.STATUS_HOS_DELTAKER;
+            }
         },
     },
 };

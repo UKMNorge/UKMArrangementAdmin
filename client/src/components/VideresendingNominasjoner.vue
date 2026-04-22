@@ -103,45 +103,22 @@
                                                 />
 
                                                 <!-- Spørsmål fra avsender og svar fra motaker -->
-                                                <template v-if="hasSporsmalInNominasjoner(tittel.nominasjoner) != null">
-                                                    <hr>
-                                                    <div class="">
-                                                        <PermanentNotification 
-                                                            class="arrangement-kvoter-msg"
-                                                            typeNotification="warning" 
-                                                            :tittel="`Spørsmål fra avsender`" 
-                                                            :isHTML="true"
-                                                            :description="hasSporsmalInNominasjoner(tittel.nominasjoner).sporsmal" 
-                                                        />
-                                                    </div>
-                                                    <div class="text-body-2 as-margin-top-space-2">
-                                                        <div>
-                                                            <v-textarea 
-                                                                class="v-text-field-arr-sys" 
-                                                                label="Din svar" 
-                                                                variant="outlined"
-                                                                v-model="hasSporsmalInNominasjoner(tittel.nominasjoner).svar"
-                                                            >
-                                                            </v-textarea>
-                                                        </div>
-                                                    </div>
-                                                    <v-btn
-                                                        class="v-btn-as v-btn-bla"
-                                                        rounded="small"
-                                                        size="small"
-                                                        @click="sendSvar(hasSporsmalInNominasjoner(tittel.nominasjoner))"
-                                                        variant="outlined">
-                                                        Send svar
-                                                    </v-btn>
-                                                </template>
+                                                <SporsmaalSvar
+                                                    :nominasjoner="tittel.nominasjoner"
+                                                    :spaInteraction="spaInteraction"
+                                                />
                                             </div>
                                         </div>
                                     </template>
 
                                     <template v-if="gruppe.nominasjonerUtenTitler.length">
-                                        <div class="as-padding-bottom-space-1 as-padding-left-space-2">
+                                        <div class="as-padding-bottom-space-1 as-padding-space-2">
                                             <div class="as-margin-bottom-space-1 "><strong>Uten tittel</strong></div>
                                             <Nominasjon :nominasjon="nominasjon" v-for="nominasjon in gruppe.nominasjonerUtenTitler" :key="nominasjon.id" class="as-margin-bottom-space-1" />
+                                            <SporsmaalSvar
+                                                :nominasjoner="gruppe.nominasjonerUtenTitler"
+                                                :spaInteraction="spaInteraction"
+                                            />
                                         </div>
                                     </template>
                                 </div>
@@ -167,6 +144,7 @@ import VideresendingNominasjon from '../objects/VideresendingNominasjon';
 import VideresendingNominasjonerFilter from './VideresendingNominasjonerFilter.vue';
 import Nominasjon from './VideresendingNominasjoner/Nominasjon.vue';
 import Tittel from './VideresendingNominasjoner/Tittel.vue';
+import SporsmaalSvar from './VideresendingNominasjoner/SporsmaalSvar.vue';
 import type TittelType from './VideresendingNominasjoner/Tittel.vue';
 
 export default {
@@ -182,7 +160,8 @@ export default {
         PermanentNotification : PermanentNotification,
         VideresendingNominasjonerFilter: VideresendingNominasjonerFilter,
         Nominasjon: Nominasjon,
-        Tittel: Tittel
+        Tittel: Tittel,
+        SporsmaalSvar: SporsmaalSvar
     },
     mounted() {
         this.fetchNominasjoner();
