@@ -64,6 +64,22 @@ export class InnslagNominasjonGruppe {
         return bestStatus;
     }
 
+    getAntallNominasjoner(): number {
+        let antall = 0;
+
+        for (const nominasjon of this.nominasjonerUtenTitler) {
+            antall++;
+        }
+
+        for (const titel of this.titler) {
+            for (const nominasjon of titel.nominasjoner) {
+                antall++;
+            }
+        }
+
+        return antall;
+    }
+
     static parseAlleNominasjonerResponse(raw: unknown): InnslagNominasjonGruppe[] {
         const r = raw as Record<string, unknown> | unknown[] | null | undefined;
         const list: unknown[] = Array.isArray(r) ? r : Object.values(r ?? {});

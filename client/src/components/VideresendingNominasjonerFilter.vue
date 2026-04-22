@@ -10,8 +10,11 @@
                 clearable
                 :items="fylker.map((f) => ({ title: f.navn, value: f.id }))"
             />
-            <div class="as-margin-top-space-1 as-margin-bottom-space-2">
-                Antall innslag nominiasjoner {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallNominasjonerForFylke() }}
+            <div class="as-margin-top-space-1">
+                Antall nominerte innslag: {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallInnslagNominasjonerForFylke() }}
+            </div>
+            <div class="as-margin-top-space-1 as-margin-bottom-space-3">
+                Antall nominerte deltakere: {{ modelValue ? 'for ' + fylker.find(f => f.id === modelValue)?.navn : 'for alle fylker' }}: {{ getAntallNominasjonerForFylke() }}
             </div>
         </div>
     </div>
@@ -50,12 +53,28 @@ export default defineComponent({
         };
     },
     methods: {
-        getAntallNominasjonerForFylke(): number {
+        getAntallInnslagNominasjonerForFylke(): number {
             if(!this.modelValue || this.modelValue === null) {
                 // Returner antall nominiasjoner for alle fylker
                 return this.innslaggrupper.length;
             }
             return this.innslaggrupper.filter(gruppe => gruppe.innslag.fylke_fra_id === this.modelValue).length;
+        },
+        getAntallNominasjonerForFylke(): number {
+            let antall = 0;
+            if(!this.modelValue || this.modelValue === null) {
+                for (const gruppe of this.innslaggrupper) {
+                    antall += gruppe.getAntallNominasjoner();
+                }
+                return antall;
+            }
+            
+            for (const gruppe of this.innslaggrupper) {
+                if(gruppe.innslag.fylke_fra_id === this.modelValue) {
+                    antall += gruppe.getAntallNominasjoner();
+                }
+            }
+            return antall;
         },
     },
 });
