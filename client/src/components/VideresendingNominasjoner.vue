@@ -6,10 +6,10 @@
             </div>
 
             
-            <VideresendingNominasjonerFilter v-model="selectedFylkeId" :fylker="fylker" />
+            <VideresendingNominasjonerFilter v-model="selectedFylkeId" :fylker="fylker" :innslaggrupper="innslagGrupper" />
 
             <div class="">
-                <v-list lines="three" class="nominasjon-list">
+                <v-list lines="three" class="nominasjon-list nop nom">
                     <div class="">
                         <div class="as-card-1 nop-impt as-margin-bottom-space-2" v-for="gruppe in getFiltrerteNominasjoner()" :key="gruppe.innslag.id">
 
@@ -277,6 +277,7 @@ export default {
 }
 .nominasjon-list {
     background: none !important;
+    padding: 0 !important;
 }
 .innslag-type-chip {
     margin: auto;
@@ -295,7 +296,6 @@ export default {
     cursor: pointer;
     border-radius: var(--radius-high) !important;
 }
-.nominasjon-list,
 .aktiviteter-buttons {
     padding: var(--initial-space-box) !important;
 }
