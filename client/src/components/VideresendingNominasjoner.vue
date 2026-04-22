@@ -27,7 +27,7 @@
                                 </v-list-item-subtitle> -->
                                 <template v-slot:prepend>
                                     <v-avatar color="grey-lighten-1">
-                                    <v-icon color="white">mdi-calendar-star</v-icon>
+                                    <v-icon color="white">mdi-account-arrow-right-outline</v-icon>
                                     </v-avatar>
                                 </template>
 
