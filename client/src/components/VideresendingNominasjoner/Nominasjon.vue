@@ -37,19 +37,18 @@
                 </div>
             </div>
 
-            <template v-if="isGodkjenningPossible">
+
                 <div class="as-margin-top-space-2">
                     <v-btn
                         class="v-btn-as v-btn-success"
                         rounded="small"
                         size="small"
+                        :disabled="!isGodkjenningPossible"
                         @click="godkjennNominasjon()"
                         variant="outlined">
                         Godkjenn
                     </v-btn>
                 </div>
-            </template>
-
         </div>
     </div>
 </template>
@@ -108,7 +107,7 @@ export default {
                 controller: 'nominasjoner/sendTilDeltaker',
                 nominasjonId: this.nominasjon?.id,
             });
-            
+
             if (res?.success) {
                 this.nominasjon.status = VideresendingNominasjon.STATUS_HOS_DELTAKER;
             }

@@ -22,7 +22,7 @@
             />
         </div>
 
-        <div class="">
+        <div class="as-margin-bottom-space-1">
             <v-btn
                 class="v-btn-as v-btn-bla"
                 rounded="small"
@@ -35,7 +35,7 @@
             </v-btn>
         </div>
 
-        <div v-if="statusMessage" class="as-margin-top-space-1">
+        <div v-if="statusMessage" class="as-margin-top-space-1 as-margin-bottom-space-1">
             <PermanentNotification
                 class="arrangement-kvoter-msg"
                 :typeNotification="statusType"
