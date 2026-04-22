@@ -21,21 +21,21 @@
             <div class="nominasjon-person as-margin-top-space-2">
                 <div class="text-medium-emphasis">Deltakerinfo</div>
                 <div class="as-padding-left-space-2">
-                    <div class="text-body-2">
-                        Navn:{{ nominasjon.person?.fornavn }} {{ nominasjon.person?.etternavn }}
+                    <div class="text-body-3">
+                        <b>Navn:</b>{{ nominasjon.person?.fornavn }} {{ nominasjon.person?.etternavn }}
                     </div>
-                    <div class="text-body-2">
-                        Mobil:{{ nominasjon.person?.mobil }}
+                    <div class="text-body-3">
+                        <b>Mobil:</b>{{ nominasjon.person?.mobil }}
                     </div>
-                    <div class="text-body-2">
-                        Alder:{{ nominasjon.person?.alder }}
+                    <div class="text-body-3">
+                        <b>Alder:</b>{{ nominasjon.person?.alder }}
                     </div>
                 </div>
             </div>
 
             <div v-if="nominasjon.beskrivelse" class="as-margin-top-space-1">
                 <div class="text-medium-emphasis">Begrunnelse for at denne deltakeren nomineres</div>
-                <div class="text-body-2">
+                <div class="text-body-3">
                     {{ nominasjon.beskrivelse }}
                 </div>
             </div>

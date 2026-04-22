@@ -12,7 +12,7 @@
             />
         </div>
 
-        <div class="text-body-2 as-margin-top-space-2">
+        <div class="text-body-3 as-margin-top-space-2">
             <v-textarea
                 class="v-text-field-arr-sys"
                 label="Ditt svar"
