@@ -22,13 +22,13 @@
                 <div class="text-medium-emphasis">Deltakerinfo</div>
                 <div class="as-padding-left-space-2">
                     <div class="text-body-3">
-                        <b>Navn:</b>{{ nominasjon.person?.fornavn }} {{ nominasjon.person?.etternavn }}
+                        <b>Navn: </b>{{ nominasjon.person?.fornavn }} {{ nominasjon.person?.etternavn }}
                     </div>
                     <div class="text-body-3">
-                        <b>Mobil:</b>{{ nominasjon.person?.mobil }}
+                        <b>Mobil: </b>{{ nominasjon.person?.mobil }}
                     </div>
                     <div class="text-body-3">
-                        <b>Alder:</b>{{ nominasjon.person?.alder }}
+                        <b>Alder: </b>{{ nominasjon.person?.alder }}
                     </div>
                 </div>
             </div>
