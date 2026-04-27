@@ -5,8 +5,7 @@
                 <h4>Videresending nominasjoner</h4>
             </div>
 
-            
-            <VideresendingNominasjonerFilter v-model="selectedFylkeId" :fylker="fylker" :innslaggrupper="innslagGrupper" />
+            <VideresendingNominasjonerFilter v-model="selectedFylkeId" @update:innslagTypeValue="innslagTypeValue = $event" :fylker="fylker" :innslaggrupper="innslagGrupper" :innslagTypeValue="innslagTypeValue" />
 
             <div class="">
                 <v-list lines="three" class="nominasjon-list nop nom">
@@ -172,15 +171,23 @@ export default {
             savingOngoing: false,
             innslagGrupper: [] as InnslagNominasjonGruppe[],
             fylker: [] as Fylke[],
-            selectedFylkeId: null as number | null
+            selectedFylkeId: null as number | null,
+            innslagTypeValue: null as string | null,
         }
     },
     methods : {
         getFiltrerteNominasjoner(): InnslagNominasjonGruppe[] {
-            if(!this.selectedFylkeId || this.selectedFylkeId === null) {
-                return this.innslagGrupper;
+            let list = this.innslagGrupper;
+            if (this.selectedFylkeId != null) {
+                list = list.filter((gruppe) => gruppe.innslag.fylke_fra_id === this.selectedFylkeId);
             }
-            return this.innslagGrupper.filter(gruppe => {console.log(gruppe.innslag.fylke_fra_id +' === '+ this.selectedFylkeId); return gruppe.innslag.fylke_fra_id === this.selectedFylkeId});
+            if (this.innslagTypeValue != null && this.innslagTypeValue !== '') {
+                list = list.filter((gruppe) => {
+                    const typeId = (gruppe.innslag.type_key || gruppe.innslag.innslag_type || '').trim();
+                    return typeId === this.innslagTypeValue;
+                });
+            }
+            return list;
         },
         toggleExpandGruppe(gruppe: InnslagNominasjonGruppe) {
             gruppe.expanded = !gruppe.expanded;
@@ -244,8 +251,7 @@ export default {
 
             this.innslagGrupper = InnslagNominasjonGruppe.parseAlleNominasjonerResponse(results);
 
-            for(let gruppe of this.innslagGrupper) {
-                console.log(gruppe);
+            for (const gruppe of this.innslagGrupper) {
                 this.addFylkeIfDoesntExist(new Fylke(gruppe.innslag.fylke_fra_id, gruppe.innslag.fylke_fra));
             }
 
