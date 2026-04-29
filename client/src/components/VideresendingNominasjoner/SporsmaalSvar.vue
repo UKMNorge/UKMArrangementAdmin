@@ -4,6 +4,7 @@
 
         <div>
             <PermanentNotification
+                v-if="nominasjonMedSporsmal.sporsmal != null && String(nominasjonMedSporsmal.sporsmal).trim() !== ''"
                 class="arrangement-kvoter-msg"
                 typeNotification="warning"
                 :tittel="`Spørsmål fra avsender`"
@@ -15,7 +16,7 @@
         <div class="text-body-3 as-margin-top-space-2">
             <v-textarea
                 class="v-text-field-arr-sys"
-                label="Ditt svar"
+                label="Ditt svar eller din kommentar"
                 variant="outlined"
                 v-model="svar"
                 :disabled="saving"
@@ -81,12 +82,14 @@ export default defineComponent({
     },
     computed: {
         nominasjonMedSporsmal(): VideresendingNominasjon | null {
+            let nominasjonMS = null;
             for (const nominasjon of this.nominasjoner ?? []) {
                 if (nominasjon?.sporsmal != null && String(nominasjon.sporsmal).trim() !== '') {
                     return nominasjon;
                 }
+                nominasjonMS = nominasjon;
             }
-            return null;
+            return nominasjonMS;
         },
         canSend(): boolean {
             if (!this.nominasjonMedSporsmal) {
