@@ -47,7 +47,7 @@ foreach (VideresendingNominasjon::getAlleTilArrangement($arrangement->getId())->
     }
 
     if ($innslag->getType()->harTitler()) {
-        foreach ($innslag->getTitler()->getAll() as $tittel) {
+        foreach ($innslag->getTitler()->getAllInkludertIkkePameldte() as $tittel) {
             if ($tittel->getId() == $objNominasjon['t_id']) {
                 $tittelId = $tittel->getId();
                 if (!isset($retArr[$innslagId]['titler'][$tittelId])) {
